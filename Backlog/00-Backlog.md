@@ -5,6 +5,18 @@
 
 ---
 
+## 🟡 In Progress — PiPhone Update Phase (started 2026-03-19)
+
+| Item | Owner | Notes |
+|------|-------|-------|
+| Xcode license accept | Jader (manual) | `sudo xcodebuild -license accept` — gate for all below |
+| `xcodegen generate` on awesomepie-ios | Pi | After Xcode license |
+| Add OpenAI API key to auth.json | Jader (manual) | Activates GPT-4o-mini (tier 5) |
+| Test GPT-4o-mini vs local Ollama on device | Pi | After key is set |
+| Verify full fallback chain on iPhone | Pi | Tiers 1→8 coverage test |
+
+---
+
 ## 🔴 Needs User Action
 
 | Item | Blocker | Next |

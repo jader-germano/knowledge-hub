@@ -211,7 +211,7 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | 8 | knowledge-hub-app: k8s deploy + add hub.jpglabs.com.br DNS | ⛔ After VPS SSH |
 | 9 | Mobile: `npm install` in `jpglabs-portifolio-mobile` | ⏳ Ready |
 | 10 | Mobile: add EAS project ID to `app.json` | ⏳ Ready |
-| 11 | AwesomePie iOS: add OpenAI API key → test GPT-4o-mini vs local | ⏳ Next session |
+| 11 | AwesomePie iOS: add OpenAI API key → test GPT-4o-mini vs local | 🟡 In Progress (PiPhone update phase — 2026-03-19) |
 | 12 | memory-sync extension: test `/memory-status` after `/reload` | ⏳ Ready |
 | 13 | Vault: push knowledge-hub to private GitHub repo → enable vault-sync CronJob | ⏳ Ready |
 | 14 | Add hub-secrets block to k8s `02-secrets.yaml` | ⛔ After VPS SSH |
@@ -279,4 +279,4 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 
 ---
 
-_Last updated: 2026-03-13 13/03/2026, 10:41:06 by Pi_
+_Last updated: 2026-03-19 by Claude (piphone-update-roadmap session)_
