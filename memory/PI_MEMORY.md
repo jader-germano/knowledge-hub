@@ -48,13 +48,26 @@
 - **Connects to:** jpglabs.com.br + hub.jpglabs.com.br
 - **Status:** ✅ Scaffolded — needs `npm install`, EAS project ID in app.json
 
-### 5. AwesomePie iOS
+### 5. AwesomePie iOS (PiPhone)
 - **Repo:** `~/code/pessoal/awesomepie-ios`
 - **Stack:** Swift + SFSpeechRecognizer + AVAudioEngine (Apple Intelligence)
 - **Deploy:** Device ID `00008140-00163C303EE1801C` (iPhone do Jader, iOS 26.4)
 - **Team ID:** `RYJN4S9W4U`
-- **Provider fallback:** Local Ollama → VPS deepseek-r1:7b → OpenAI 4o → Claude
-- **Status:** ✅ Deployed — needs OpenAI API key for GPT-4o-mini tier
+- **UX Design:** [[Projects/PiPhone-UX-Design]] (full design system, tokens, wireframes)
+- **Status:** ✅ Deployed v2.1 — PiPhone update phase 🟡 In Progress (2026-03-19)
+
+#### Provider Fallback Chain (8-tier)
+
+| Tier | Provider | Endpoint | Model | Status | Color |
+|------|----------|----------|-------|--------|-------|
+| 1 | Local Ollama | localhost:3131 | qwen2.5-coder:7b | ✅ Active | `#34C759` green |
+| 2 | Local Ollama | localhost:3131 | llama3.2:3b | ✅ Active | `#34C759` green |
+| 3 | VPS | api.jpglabs.com.br | deepseek-r1:7b | ❌ VPS SSH blocked | `#FF9F0A` amber |
+| 4 | OpenAI | api.openai.com | gpt-4o | ❌ Key missing | `#10A37F` teal |
+| 5 | OpenAI | api.openai.com | gpt-4o-mini | ❌ Key missing | `#10A37F` teal |
+| 6 | Gemini | googleapis.com | gemini-2.0-flash | ❌ Key missing | `#4285F4` blue |
+| 7 | Gemini | googleapis.com | gemini-1.5-pro | ❌ Key missing | `#4285F4` blue |
+| 8 | Anthropic | api.anthropic.com | claude-sonnet-4-6 | ✅ Active | `#D97706` gold |
 
 ### 6. VPS — jpglabs.com.br
 - **IP:** `187.77.227.151` (Hostinger, Ubuntu 24.04.3 LTS)
@@ -177,6 +190,11 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | Knowledge hub | Next.js 15 app at hub.jpglabs.com.br + Obsidian vault sync via git |
 | Finance data | Supabase with RLS per user_id — income_sources / transactions / financial_goals |
 | Auth strategy | NextAuth (GitHub OAuth owner-gate + Credentials) shared across portfolio + hub |
+| PiPhone: native first | Pure Apple SDK — no Electron, no React Native. UIKit + SwiftUI only |
+| PiPhone: dark by default | Dark theme primary. Light theme is opt-in, not afterthought |
+| PiPhone: glassmorphism restraint | Only on overlays and settings panels. Never on primary content |
+| PiPhone: voice first-class | Waveform maps real amplitude. Never decorative |
+| PiPhone: intelligence visible | Active AI tier + latency always surfaced. Never hidden |
 
 ---
 
@@ -195,6 +213,57 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 - **Scope rule:** Confirm target file/component when ambiguous. Break into steps. Show plan. No lateral redesigns without approval.
 - **Tests:** Update or add for every behavior change. State if no test applies.
 - **Version-sensitive:** Check official current docs before asserting patterns.
+
+---
+
+## PiPhone Design System (ThemeKit)
+
+> Full spec: [[Projects/PiPhone-UX-Design]]
+
+### Color Tokens (dark-first)
+```
+Background:   #0A0A0F (primary) · #111118 (card) · #1A1A26 (elevated)
+Glass:        rgba(20, 20, 35, 0.72) + blur(24px)
+Accent:       #4F8EF7 (Pi Blue) · rgba(79,142,247,0.15) (soft) · rgba(79,142,247,0.08) (glow)
+Text:         #F2F2F7 (primary) · #8E8E98 (secondary) · #48484F (muted)
+Border:       rgba(255,255,255,0.06) (subtle) · rgba(79,142,247,0.40) (active)
+```
+
+### Components
+| Component | Purpose |
+|-----------|---------|
+| TierIndicatorView | Pill: colored dot + model name + latency — always visible top-right |
+| WaveformView | 32 bars, real amplitude, glow on active — Pi Blue |
+| BubbleShape | User: accent-soft bg, right-aligned. Pi: bg-secondary, left-aligned + tier badge |
+| QuickChipView | Horizontal scroll chips on WelcomeView — accent-soft bg |
+| GlassSettingsPanel | Bottom sheet: provider picker, API key status, voice/theme toggles |
+| InlineMarkdownText | Renders **bold**, `code`, lists inside Pi bubbles |
+
+### Screen Flow
+```
+SplashView (0.6s) → WelcomeView (first run) / ChatView (returning)
+ChatView → VoiceOverlayView (hold mic) → back to ChatView
+ChatView → GlassSettingsPanel (swipe up)
+```
+
+### ThemeKit (Swift)
+```swift
+ThemeKit.Color.bgPrimary / .accentPrimary / .tierLocal / .tierVPS / .tierOpenAI / .tierGemini / .tierClaude
+ThemeKit.Radius.pill (999) / .card (16) / .modal (24)
+ThemeKit.Spacing.xs (4) / .sm (8) / .md (16) / .lg (24) / .xl (32)
+```
+
+### Typography
+SF Pro system scale — Dynamic Type compatible. No custom fonts. Caption (12pt) for tier labels/timestamps.
+
+### Motion
+| Element | Animation | Duration |
+|---------|-----------|----------|
+| Logo | Scale 0.8→1.0 + fade | 400ms easeOut |
+| Bubble | Slide up 8pt + fade | 280ms spring(0.7) |
+| Waveform bars | Height lerp | 60fps linear |
+| Voice overlay | Sheet slide up | 350ms spring(0.8) |
+| Quick chips | Staggered fade | 40ms/chip easeOut |
 
 ---
 
@@ -250,6 +319,59 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | 2026-03-09 | Portfolio route + access control refactor — centralized routes, RBAC, legacy redirects |
 | 2026-03-09 | Roadmap board in Hub page (RoadmapBoard.tsx + roadmap.ts) |
 | 2026-03-09 | VPS deploy parity on port 8082 confirmed |
+
+---
+
+## Session Startup Protocol
+Before doing anything else in a new session:
+1. Read this file (`PI_MEMORY.md`) — single source of truth
+2. Read `memory/sessions/00-owner-core.md` — constitutional layer
+3. Read `Backlog/00-Backlog.md` — current work state
+4. Read relevant `Projects/*.md` for the session task
+5. If daily note `memory/sessions/YYYY-MM-DD-*.md` exists for today/yesterday — read for recent context
+
+Don't ask permission. Just do it.
+
+---
+
+## Memory Maintenance
+- **Daily notes:** `memory/sessions/YYYY-MM-DD-*.md` — raw logs of what happened each session
+- **Long-term:** `PI_MEMORY.md` (this file) — curated, distilled, permanent
+- **Write it down:** "Mental notes" don't survive sessions. If you want to remember something → update a file
+- When someone says "remember this" → update the relevant session file or PI_MEMORY
+- When you learn a lesson → document it in this file
+- Periodically review recent session files and update PI_MEMORY with what's worth keeping
+- Remove outdated info that's no longer relevant
+
+---
+
+## Heartbeat & Proactive Work
+
+### When to check (2–4× per day, rotate through):
+- **Backlog** — any status changes or unblocked items?
+- **Git repos** — pending commits, stale branches?
+- **VPS status** — services up/down?
+- **Memory files** — anything to distill into PI_MEMORY?
+
+### Proactive work (no permission needed):
+- Read and organize memory files
+- Check on projects (`git status`, etc.)
+- Update documentation
+- Commit and push own changes to knowledge-hub
+- Review and update PI_MEMORY.md
+
+### Stay quiet when:
+- Late night (23:00–08:00) unless urgent
+- Nothing new since last check
+- Human is clearly busy
+
+---
+
+## Red Lines
+- Don't exfiltrate private data. Ever.
+- Don't run destructive commands without asking. `trash` > `rm`.
+- Anything that leaves the machine → ask first (emails, posts, messages).
+- When in doubt, ask.
 
 ---
 
