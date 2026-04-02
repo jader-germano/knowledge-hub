@@ -3,6 +3,33 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Canonical Update - 2026-04-02 01:29 -0300
+
+- A remoção do naming ativo `knowledge-hub` avançou além do contrato de
+  sessão:
+  - `jpglabs/docs/memory/` passou a concentrar a memória incorporada do
+    workspace
+  - `memory/sessions/` permaneceu como ledger de working memories
+  - `memory/logs/` passou a concentrar a antiga trilha `pi-agent-log`
+- O namespace `reports/memory/` saiu do fluxo canônico e foi absorvido por
+  `memory/`, reduzindo dispersão entre memória, sessões e logs técnicos.
+- O snapshot físico `archive/legacy-repos/jpglabs-knowledge-hub/` foi removido
+  do workspace local depois da incorporação da superfície útil ao hub
+  canônico.
+- O stub `/Users/philipegermano/code/jpglabs-knowledge-hub` foi removido da
+  árvore local, mas continua com risco de reaparecer por algum watcher ou
+  cliente que ainda tenta materializar `.codex/docker-mcp-config.yaml` nesse
+  path.
+- `pi-local-app` passou a publicar `PI_DOCS_ROOT` como nome canônico do hub
+  documental e manteve `PI_KNOWLEDGE_HUB_ROOT` apenas como alias de
+  compatibilidade.
+- `projects/infrastructure/llms/*`, `llms/CODEX.md`, `llms/CLAUDE.md` e o
+  `agents/SESSION_CLOSE_TEMPLATE.md` foram alinhados para apontar
+  explicitamente para `jpglabs/docs`.
+- Validação executada:
+  - `node --test test/service-registry.test.js test/server.e2e.test.js`
+    passou com `16/16` testes verdes em `pi-local-app`.
+
 ## Canonical Update - 2026-04-02 00:59 -0300
 
 - O contrato canônico de sessões foi reafirmado no conteúdo ativo:

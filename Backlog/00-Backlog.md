@@ -50,7 +50,7 @@
 |------|------|---------|
 | AwesomePie Mac | `~/code/pessoal/awesomepie/` | Xcode license |
 | AwesomePie iOS | `~/code/pessoal/awesomepie-ios/` | Xcode license + xcodegen |
-| knowledge-hub git | `~/code/pessoal/knowledge-hub/` | Xcode license (git) |
+| workspace docs git | `~/code/jpglabs/docs/` | git/Xcode runtime check |
 
 ---
 
@@ -71,7 +71,7 @@
 | PAY_ON_DELIVERY.md | Codementor · Fiverr · Upwork · Contra |
 | Job app AI rules | Local Ollama only — brutal-triad at end |
 | pi-voice v2.1 | `~/bin/pi-voice` updated |
-| Obsidian vault | knowledge-hub structure with connections |
+| workspace memory hub | docs + memory structure with connections |
 
 ---
 

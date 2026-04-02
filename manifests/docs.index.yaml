@@ -84,12 +84,18 @@ docs:
     class: session-template
   - path: jpglabs/docs/reports/sessions/_template/prototype.md
     class: session-template
-  - path: jpglabs/docs/reports/memory/README.md
-    class: imported-memory-contract
-  - path: jpglabs/docs/reports/memory/PI_MEMORY.md
-    class: imported-memory-ledger
-  - path: jpglabs/docs/reports/memory/sessions/**
-    class: imported-memory-session
+  - path: jpglabs/docs/memory/README.md
+    class: shared-memory-contract
+  - path: jpglabs/docs/memory/AGENTS.md
+    class: shared-memory-governance
+  - path: jpglabs/docs/memory/PI_MEMORY.md
+    class: shared-memory-ledger
+  - path: jpglabs/docs/memory/sessions/**
+    class: shared-memory-session
+  - path: jpglabs/docs/memory/logs/README.md
+    class: shared-memory-log-index
+  - path: jpglabs/docs/memory/logs/*.md
+    class: shared-memory-log
   - path: CODEX.md
     class: provider-bootstrap
   - path: CLAUDE.md

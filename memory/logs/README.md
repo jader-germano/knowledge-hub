@@ -3,6 +3,9 @@
 All technical actions executed by Pi on behalf of Jader Philipe Germano.
 Updated after every work session.
 
+This log now lives under the canonical workspace memory namespace:
+`/Users/philipegermano/code/jpglabs/docs/memory/logs/`.
+
 ---
 
 ## Log Index

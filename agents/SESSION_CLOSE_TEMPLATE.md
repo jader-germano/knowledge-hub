@@ -88,7 +88,7 @@ Inclua a menor árvore útil para localizar as mudanças no Git ou no projeto.
 Se a lista for extensa, trunque e priorize a localização.
 
 ```text
-knowledge-hub
+jpglabs/docs
 ├── agents
 │   └── SESSION_CLOSE_TEMPLATE.md [modified]
 ├── manifests

@@ -8,7 +8,7 @@ Classificação atual dos documentos no workspace.
 - `WORKSPACE_BOOTSTRAP.md` — bootstrap compartilhado entre providers e agentes
 - `AGENTS.md` — shim do fluxo Codex/AGENTS
 
-## Global / Knowledge Hub
+## Global / Workspace Docs
 
 - `jpglabs/docs/README.md` — entrada global
 - `jpglabs/docs/ROADMAP.md` — roadmap de plataforma MCP e agent teams
@@ -30,7 +30,7 @@ Classificação atual dos documentos no workspace.
 - `jpglabs/docs/llms/CLAUDE.md` — contexto do Claude
 - `jpglabs/docs/llms/GEMINI.md` — contexto do Gemini
 
-## References / Knowledge Hub
+## References / Workspace Docs
 
 - `jpglabs/docs/reference/design/design-system-extraction-4-sites.md` — análise de referência para design system
 - `jpglabs/docs/reference/design/design-system-claude-codex.html` — comparação visual entre Claude.app e Codex.app
@@ -38,13 +38,13 @@ Classificação atual dos documentos no workspace.
 - `jpglabs/docs/reference/web-captures/jpglabs-pi-products-and-services.html` — captura web de referência da superfície Pi/JPGLabs
 - `jpglabs/docs/reference/web-captures/monkeytype-typing-test.html` — captura web de referência Monkeytype
 
-## Reports / Knowledge Hub
+## Reports
 
 - `jpglabs/docs/reports/claude-code/claude-code-daily-report-2026-03-21.md` — relatório diário consolidado do Claude Code
 - `jpglabs/docs/reports/claude-code/claude-code-daily-report-2026-03-21.html` — versão HTML do relatório diário
 - `jpglabs/docs/reports/claude-code/claude-code-report-template.html` — template HTML reutilizável para novos relatórios
 
-## Research / Knowledge Hub
+## Research
 
 - `jpglabs/docs/research/roadmap-pressure-tests/brutal-critic-triad-pressure-test-2026-03-21.json` — artefato bruto do teste de pressão de roadmap
 - `jpglabs/docs/research/claude-shared-capabilities-audit.md` — audit do Claude para separar o que é compartilhável no workspace
@@ -53,7 +53,6 @@ Classificação atual dos documentos no workspace.
 
 - `jpglabs/docs/archive/root-docs/DOCS_INDEX.legacy-2026-03-27.md` — índice anterior à unificação final
 - `jpglabs/docs/archive/legacy-repos/ai-orchestration-hub/` — recorte legado absorvido
-- `jpglabs/docs/archive/legacy-repos/jpglabs-knowledge-hub/` — snapshot do antigo hub documental
 - `jpglabs/docs/archive/legacy-repos/jpglabs-infra-repo/` — snapshot do repositório legado `jpglabs`
 - `_archive/` no root do workspace foi aposentado após auditoria; o material
   útil já estava refletido em `context/`, `infrastructure/docs/` e no
@@ -103,15 +102,17 @@ Contrato:
 - `.claude/settings.json` — runtime local do Claude
 - `.claude/skills/README.md` — wrappers locais gerados a partir de `/.agents/skills/`
 
-## Imported Legacy Memory
+## Shared Memory
 
-- `jpglabs/docs/reports/memory/PI_MEMORY.md` — memória importada do ambiente legado
-- `jpglabs/docs/reports/memory/sessions/` — working memories importadas do legado
+- `jpglabs/docs/memory/PI_MEMORY.md` — ledger canônico de memória incorporada
+- `jpglabs/docs/memory/AGENTS.md` — governança operacional do agente Pi
+- `jpglabs/docs/memory/sessions/` — working memories incorporadas
+- `jpglabs/docs/memory/logs/` — logs técnicos e trilha operacional do Pi
 
 Contrato:
 
-- `jpglabs/docs/reports/memory/` é namespace legado importado
-- até existir um namespace dedicado fora de `reports/`, não criar variantes paralelas para o mesmo conteúdo
+- `jpglabs/docs/memory/` é o namespace canônico e gravável de memória
+- não criar variantes paralelas em `reports/`, mirrors antigos ou raízes legadas
 
 ## Regras De Classificação
 
@@ -121,6 +122,6 @@ Contrato:
 - contexto por provider vai para `jpglabs/docs/projects/<repo>/llms/`
 - histórico de sessão fica em `jpglabs/docs/projects/<repo>/sessions/`
 - `reports/` não compete com o ledger; serve para template, render derivado e relatórios auxiliares
-- `reports/memory/` permanece legado importado até migração explícita
+- `memory/` concentra memória persistente, sessões incorporadas e logs técnicos
 - runtime local continua fora do repositório documental canônico
 - bootstrap compartilhado da raiz vive em `WORKSPACE_BOOTSTRAP.md`

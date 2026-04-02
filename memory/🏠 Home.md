@@ -1,4 +1,4 @@
-# 🏠 JPGLabs — Knowledge Hub
+# 🏠 JPGLabs — Workspace Docs And Memory
 
 > **Owner:** Jader Philipe Germano  
 > **Updated:** auto-synced by session-logger  
@@ -22,8 +22,8 @@
 - [[Backlog/00-Backlog]] — All open items with status
 
 ### 🧠 Memory
-- [[memory/PI_MEMORY.md]] — Persistent agent memory
-- [[memory/AGENTS.md]] — Agent governance
+- [[PI_MEMORY.md]] — Persistent agent memory
+- [[AGENTS.md]] — Agent governance
 
 ---
 
@@ -38,7 +38,7 @@
 | pi-local-app | ✅ VPS-ready (server.js updated) |
 | iOS SettingsView | ✅ Written |
 | Mac ChatService | ✅ Direct API calls (no subprocess) |
-| knowledge-hub git | 🔴 Blocked — `git` needs Xcode license |
+| workspace docs git | 🔴 Blocked — `git` needs Xcode license |
 
 ---
 
