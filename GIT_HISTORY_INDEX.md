@@ -9,7 +9,7 @@ Snapshot classificado do histórico Git dos contextos ativos em `2026-03-31`.
   - `2026-03-27 33c6194 docs: add derivative attribution for personal origin`
   - `2026-03-27 fca942a docs: restructure vault for codex claude and hub history`
 
-- `knowledge-hub`
+- `docs` (linhagem pré-incorporação)
   - `2026-03-21 ffb5c34 ci: remove Kubesec workflow — no K8s manifests in repo`
   - `2026-03-20 0a5a5ae Merge pull request #2 from jader-germano/jader-germano-patch-1`
   - `2026-03-20 5219652 Add Kubesec workflow for security scanning`
@@ -48,7 +48,7 @@ Snapshot classificado do histórico Git dos contextos ativos em `2026-03-31`.
   - `2026-03-22 154650d ci(validate): inject release build env for next build`
   - `2026-03-22 5c0d4de ci(flow): align release deploy workflow`
 
-- `knowledge-hub`
+- `docs` (linhagem pré-incorporação)
   - `2026-03-21 ffb5c34 ci: remove Kubesec workflow — no K8s manifests in repo`
   - `2026-03-20 0a5a5ae Merge pull request #2 from jader-germano/jader-germano-patch-1`
   - `2026-03-20 5219652 Add Kubesec workflow for security scanning`

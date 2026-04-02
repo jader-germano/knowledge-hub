@@ -44,5 +44,5 @@ cd ~/code/pessoal/awesomepie-ios && xcodegen generate
 ```
 
 ## Links
-- [[Projects/VPS-Infrastructure]] — VPS tier 3
-- [[Projects/Pi-Agent]] — local tiers 1-2
+- `legacy-project-notes/VPS-Infrastructure.md` — VPS tier 3
+- `projects/pi-local-app/PROJECT_CONTEXT.md` — local tiers 1-2

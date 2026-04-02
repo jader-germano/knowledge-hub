@@ -34,6 +34,6 @@ ssh root@187.77.227.151 "bash /k8s/apply-all.sh"
 ```
 
 ## Links
-- [[Projects/AwesomePie]] — uses api.jpglabs.com.br as VPS tier
-- [[Projects/Pi-Agent]] — memory synced via sync-memory.sh
-- [[Backlog/00-Backlog]] — deploy items
+- `legacy-project-notes/AwesomePie.md` — uses api.jpglabs.com.br as VPS tier
+- `projects/pi-local-app/PROJECT_CONTEXT.md` — memory synced via sync-memory.sh
+- `Backlog/00-Backlog.md` — deploy items

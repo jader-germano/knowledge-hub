@@ -1571,3 +1571,15 @@ Glossário mínimo:
   página, não substituída por outra subpágina do mesmo dia.
 - O maior risco residual do workspace segue sendo governança estrutural do hub,
   não ausência de código novo.
+
+## Addendum - 2026-04-02 09:41:11 -0300
+
+- A duplicação estrutural `Projects/` vs `projects/` no índice Git de
+  `jpglabs/docs` foi normalizada.
+- Os notes legados `AwesomePie` e `VPS-Infrastructure` foram reclassificados em
+  `legacy-project-notes/` e deixaram de competir com `projects/` como trilha
+  ativa.
+- A superfície ativa (`memory/`, `projects/`, `legacy-project-notes/`) não
+  mantém mais referências `Projects/...`.
+- O risco remanescente passou a ser só histórico, concentrado em `daily/`,
+  `reports/` e `archive/`, preservados por escolha deliberada.

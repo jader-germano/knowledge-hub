@@ -9,21 +9,21 @@
 ## 🗺️ Map of Content
 
 ### 🚀 Active Projects
-- [[Projects/AwesomePie]] — Native Swift macOS + iOS AI assistant
-- [[Projects/JPGLabs-Portfolio]] — jpglabs.com.br (Next.js + Supabase)
-- [[Projects/Pi-Agent]] — Local AI agent (pi CLI + Ollama)
-- [[Projects/VPS-Infrastructure]] — k3s on Hostinger VPS
+- `legacy-project-notes/AwesomePie.md` — Native Swift macOS + iOS AI assistant
+- `projects/portfolio-backend/PROJECT_CONTEXT.md` — jpglabs.com.br (backend and platform context)
+- `projects/pi-local-app/PROJECT_CONTEXT.md` — Local AI agent runtime
+- `legacy-project-notes/VPS-Infrastructure.md` — k3s on Hostinger VPS
 
 ### 💰 Income
 - [[Income/Pay-On-Delivery]] — Codementor · Fiverr · Upwork · Contra
 - [[Income/Job-Applications]] — Daily pipeline (local AI → brutal-critic-triad)
 
 ### 📋 Backlog
-- [[Backlog/00-Backlog]] — All open items with status
+- `Backlog/00-Backlog.md` — All open items with status
 
 ### 🧠 Memory
-- [[PI_MEMORY.md]] — Persistent agent memory
-- [[AGENTS.md]] — Agent governance
+- `memory/PI_MEMORY.md` — Persistent agent memory
+- `AGENTS.md` — Agent governance
 
 ---
 
