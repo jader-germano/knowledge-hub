@@ -8,7 +8,7 @@
 
 - Remote canônico: `origin`
 - URL: `git@github.com:jader-germano/knowledge-hub.git`
-- Path real: `/Users/philipegermano/code/jpglabs/docs`
+- Path real: `$WORKSPACE_ROOT/jpglabs/docs`
 
 ## Papel
 
@@ -21,6 +21,7 @@
 
 - `README.md` — posição do repositório e regra de uso
 - `MCP_SETUP.md` — baseline MCP do workspace
+- `llms/SHARED_CONTEXT_TEMPLATE.md`
 - `llms/CODEX.md`
 - `llms/CLAUDE.md`
 - `llms/GEMINI.md`

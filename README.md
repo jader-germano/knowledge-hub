@@ -4,7 +4,11 @@ Repositório privado canônico de documentação do workspace JPG Labs.
 
 - Remote canônico: `origin`
 - Repositório: `git@github.com:jader-germano/knowledge-hub.git`
-- Path real no workspace: `/Users/philipegermano/code/jpglabs/docs`
+- Path real no workspace: `$WORKSPACE_ROOT/jpglabs/docs`
+
+Defina `WORKSPACE_ROOT` apenas no runtime local privado ou em override não
+versionado. A documentação canônica do hub não deve embutir paths absolutos de
+máquina.
 
 ## Estrutura Atual
 

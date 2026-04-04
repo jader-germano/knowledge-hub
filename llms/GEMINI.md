@@ -1,19 +1,14 @@
 # Gemini Shared Context
 
-Objetivo: dar ao Gemini uma entrada curta e estável no `Knowledge Hub`.
+Objetivo: dar ao Gemini uma entrada curta e estável no `Knowledge Hub` sem
+duplicar o conteúdo compartilhado entre providers.
 
 Consulta obrigatória:
 
-1. `README.md`
-2. `MCP_SETUP.md`
-3. `Projects/Knowledge-Hub.md`
-4. `memory/PI_MEMORY.md`
-5. `memory/AGENTS.md`
+1. `GEMINI.md`
+2. `llms/SHARED_CONTEXT_TEMPLATE.md`
 
 Ao atuar neste repositório:
 
-- tratar `origin` como remoto canônico do `Knowledge Hub`
-- usar `Projects/Knowledge-Hub.md` como contexto estável do repo privado
-- usar `MCP_SETUP.md` como referência MCP transversal
-- registrar mudanças transversais aqui antes de espalhar bootstrap para outros
-  runtimes
+- usar `GEMINI.md` do workspace root como bootstrap específico do provider
+- usar `llms/SHARED_CONTEXT_TEMPLATE.md` para o contexto transversal comum

@@ -4,10 +4,10 @@ Referência canônica de MCP para o workspace JPG Labs.
 
 ## Entrypoints
 
-- Workspace root: `/Users/philipegermano/code`
-- Cliente MCP: `/Users/philipegermano/code/.mcp.json`
-- Config compartilhada: `/Users/philipegermano/code/config/mcp/docker-mcp-config.yaml`
-- Catálogo compartilhado: `/Users/philipegermano/code/config/mcp/docker-mcp-shared-catalog.yaml`
+- Workspace root: `$WORKSPACE_ROOT`
+- Cliente MCP: `$WORKSPACE_ROOT/.mcp.json`
+- Config compartilhada: `$WORKSPACE_ROOT/config/mcp/docker-mcp-config.yaml`
+- Catálogo compartilhado: `$WORKSPACE_ROOT/config/mcp/docker-mcp-shared-catalog.yaml`
 
 ## Baseline Validada
 
