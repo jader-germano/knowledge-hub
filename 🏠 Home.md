@@ -10,6 +10,7 @@
 
 ### 🚀 Active Projects
 - [[Projects/AwesomePie]] — Native Swift macOS + iOS AI assistant
+- [[Projects/Knowledge-Hub]] — Private canonical repo for MCP, LLM bootstrap, and shared docs
 - [[Projects/JPGLabs-Portfolio]] — jpglabs.com.br (Next.js + Supabase)
 - [[Projects/Pi-Agent]] — Local AI agent (pi CLI + Ollama)
 - [[Projects/VPS-Infrastructure]] — k3s on Hostinger VPS
