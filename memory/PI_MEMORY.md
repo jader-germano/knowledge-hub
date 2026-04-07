@@ -60,7 +60,7 @@
 ### 6. VPS — jpglabs.com.br
 - **IP:** `187.77.227.151` (Hostinger, Ubuntu 24.04.3 LTS)
 - **SSH:** `root@187.77.227.151` — `~/.ssh/id_ed25519`
-- **Stack:** Docker Compose (Traefik, n8n, mailserver) + k3s (portfolio, ollama, open-webui)
+- **Stack:** Docker Compose (Traefik, n8n, mailserver) + k3s (portfolio-backend, ollama)
 - **Compose dirs:** `/docker/n8n/` · `/docker/portfolio/` · `/docker/chat/` · `/docker/mailserver/`
 - **Status:** ⚠️ SSH key not authorized · portfolio/n8n down · mailserver never started
 
@@ -111,6 +111,40 @@
 |------|---------|
 | `~/.pi/agent/extensions/session-logger.ts` | Writes session log on shutdown → docs/memory/logs + PI_MEMORY.md |
 | `~/.pi/agent/extensions/memory-sync.ts` | Loads memory at session_start, injects into system prompt first turn |
+| `~/.pi/agent/skills/` | Symlinked from `~/pi-skills/` — Mario's pi-skills |
+
+## Claude Code Extensions
+| File | Purpose |
+|------|---------|
+| `~/.claude/extensions/memory-sync.sh` | Loads canonical memory at session start |
+| `~/.claude/extensions/session-logger.sh` | Logs session to memory center |
+| `~/.claude/skills/` | Symlinked from `~/pi-skills/` — Mario's pi-skills |
+
+## Codex Extensions
+| File | Purpose |
+|------|---------|
+| `~/.codex/extensions/memory-sync.sh` | Loads canonical memory at session start |
+| `~/.codex/extensions/session-logger.sh` | Logs session to memory center |
+| `~/.codex/skills/pi-skills/` | Symlinked from `~/pi-skills/` — Mario's pi-skills |
+
+## Unified Memory Center (2026-04-07)
+
+Canonical memory root: `~/code/jpglabs/docs/memory/`
+
+```
+memory/
+├── MEMORY_SYNC.md       # Cross-agent sync protocol
+├── PI_MEMORY.md         # Master ledger
+├── AGENTS.md            # Agent governance
+├── sessions/            # Per-agent session logs
+│   ├── pi/
+│   ├── claude/
+│   ├── codex/
+│   └── openclaude/
+└── logs/                # Technical action logs
+```
+
+Philosophy: Progressive disclosure over MCP bulk. CLI tools with READMEs instead of full MCP schemas.
 
 ### Voice Interface
 - **Run:** `pi-voice loop` or `~/Desktop/Pi Voice.command`
@@ -144,11 +178,22 @@ After SSH works — run in order:
 CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 ```
 
+### VPS Ollama Models (confirmed 2026-04-07)
+| Model | Purpose | Access |
+|-------|---------|--------|
+| `deepseek-r1:7b` | Reasoning (large) | http://VPS_IP:11434 |
+| `nemotron-3-super` | NVIDIA Nemotron 3 Super — general / reasoning | http://VPS_IP:11434 |
+
+**Ollama endpoint (VPS):** `http://187.77.227.151:11434`
+**SSH access:** `ssh root@187.77.227.151` (key `~/.ssh/id_ed25519`) — Tailscale peer: `jpglabs-vps-tailnet`; fallback público: `jpglabs-vps` (187.77.227.151)
+**Note:** Porta 11434 deve estar liberada no firewall do VPS para uso interno; expor externamente apenas via Tailscale ou túnel SSH para segurança.
+
 ### VPS Service Status (diagnosed 2026-03-12)
 | Service | URL | Status | Cause |
 |---------|-----|--------|-------|
 | Traefik | — | ✅ Running | — |
 | Open WebUI | chat.jpglabs.com.br | ✅ 200 | — |
+| Ollama | :11434 (VPS) | ✅ Running | nemotron-3-super + deepseek-r1:7b disponíveis |
 | Portfolio | jpglabs.com.br | ❌ 526/404 | CF SSL strict + container route miss |
 | n8n | n8n.jpglabs.com.br | ❌ 404 | Traefik route miss / container down |
 | Mailserver | mail.jpglabs.com.br | ❌ Never started | finish-setup.sh never ran |
@@ -258,11 +303,14 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | 2026-03-31 | FrankMD local notes root expanded to `~/code`, including visible path `~/code/memoria-compartilhada` |
 | 2026-03-31 | PiPhone VPS telemetry path verified as `baseURL + /vps/telemetry`; real devices prefer remote bundled URLs over loopback |
 | 2026-03-31 | `jader@jpglabs.com.br` mail plan remains VPS `docker-mailserver` plus Cloudflare DNS/certbot; DNS is live with MX/SPF/DMARC/DKIM, but SMTP/IMAP ports still time out publicly |
+| 2026-04-03 | Temporary planning exception approved: keep `Jira + Confluence` and `Notion` updated in parallel until `2026-05-31`, then decide whether the parallel lane ends or remains after migration |
+| 2026-04-07 | Unified Memory Center: pi-skills installed for Pi, Claude, Codex; memory-sync and session-logger extensions created; MEMORY_SYNC.md protocol documented |
+| 2026-04-07 | VPS Ollama: nemotron-3-super configurado na VPS (187.77.227.151:11434); acesso SSH local via Tailscale (jpglabs-vps-tailnet) ou público (jpglabs-vps) |
 
 ---
 
 ## Rules (non-negotiable)
-- Always read this file + `~/.codex/memories/*.md` at session start
+- Always read this file + canonical memory at session start
 - Always run brutal-critic-triad before code changes (load jader-engineering-profile first)
 - Never uninstall active CLI running the current session
 - Never commit TSE/client projects without explicit per-session confirmation
@@ -274,6 +322,7 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 - All conversations in English (user is Brazilian — direct grammar feedback for improving comprehension)
 - End every session with `memory_delta` + `next_action`
 - Never expose credentials, API keys, tokens or passwords in output
+- Prefer CLI tools with READMEs over MCP servers (progressive disclosure)
 
 ---
 
@@ -287,4 +336,4 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 
 ---
 
-_Last updated: 2026-03-19 by Claude (piphone-update-roadmap session)_
+_Last updated: 2026-04-07 by Claude Code (vps-ollama-nemotron session)_

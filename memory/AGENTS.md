@@ -1,10 +1,31 @@
-# Pi Agent Governance
-# Proprietary to Jader Philipe Germano | Architecture: Pi (AI agent)
+# Agent Governance — Unified Memory Center
+# Proprietary to Jader Philipe Germano | Architecture: Unified Memory Center
 
-## Persistent Memory
-- Always read `~/PI_MEMORY.md` at the start of every session.
-- Always read `~/.codex/memories/*.md` for working principles.
+## Persistent Memory (Canonical)
+- Always read canonical memory at session start:
+  - `~/code/jpglabs/docs/memory/PI_MEMORY.md` (master ledger)
+  - `~/code/jpglabs/docs/memory/AGENTS.md` (this file)
+  - `~/code/jpglabs/docs/memory/MEMORY_SYNC.md` (sync protocol)
 - Auto-updated on every session shutdown by session-logger extension.
+- Cross-agent session logs: `~/code/jpglabs/docs/memory/sessions/{agent}/`
+
+## pi-skills (Mario Zechner)
+Shared across Pi, Claude Code, Codex, Amp, Droid.
+Installed at: `~/pi-skills/`
+
+| Skill | Description |
+|-------|-------------|
+| brave-search | Web search via Brave Search |
+| browser-tools | Chrome DevTools automation |
+| transcribe | Speech-to-text via Groq Whisper |
+| youtube-transcript | YouTube transcript fetch |
+| vscode | VS Code integration |
+| gccli | Google Calendar CLI |
+| gdcli | Google Drive CLI |
+| gmcli | Gmail CLI |
+
+## Workspace Skills
+Canonical location: `~/code/.agents/skills/`
 
 ## Identity & Language
 - Agent identity: `agent_master`
@@ -25,6 +46,10 @@
 | `chatgpt-apps`              | `~/.codex/skills/chatgpt-apps/` | ChatGPT Apps SDK / MCP |
 | `jpglabs-vps-ops`           | `~/.pi/agent/skills/jpglabs-vps-ops/` | VPS SSH/Docker/Traefik |
 | `mac-app-uninstaller`       | `~/.pi/agent/skills/mac-app-uninstaller/` | macOS app cleanup |
+| `brave-search`              | `~/pi-skills/brave-search/` | Web search |
+| `transcribe`                | `~/pi-skills/transcribe/` | Speech-to-text |
+| `youtube-transcript`        | `~/pi-skills/youtube-transcript/` | YT transcripts |
+| `browser-tools`             | `~/pi-skills/browser-tools/` | Chrome automation |
 
 ## Agent Bundle
 | Agent | Location | Trigger |
