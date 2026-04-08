@@ -25,3 +25,11 @@ Ao atuar em um repo:
 - abrir `projects/<repo>/GIT_HISTORY.md`
 - abrir `projects/<repo>/llms/CLAUDE.md`
 - usar `jpglabs/docs` como referência transversal compartilhada
+- antes de planejar, carregar guideline, `ROADMAP.md`, ticket em `Jira` ou
+  espelho no `Confluence` se já existirem para evitar duplicação e gasto
+  desnecessário de tokens
+- tratar `Jira` como task/status board, `Confluence` como spec/roadmap mirror e
+  `Notion` apenas como diário
+- terminar tarefas substanciais com uma proposta concreta de próximo passo
+  pronta para aprovação; se a UI suportar popup/card de permissão, preferir esse
+  formato

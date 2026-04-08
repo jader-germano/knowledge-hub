@@ -17,3 +17,7 @@ Manual sync: `cp ~/PI_MEMORY.md /Users/philipegermano/code/jpglabs/docs/memory/P
 - Sessões incorporadas vivem em `memory/sessions/`.
 - Logs técnicos vivem em `memory/logs/`.
 - Não criar variantes paralelas em `reports/`, mirrors legados ou outras raízes.
+- O grafo Docker MCP compartilhado entre Codex, Claude e Gemini é derivado e
+  complementar. Ele não substitui este ledger em Markdown.
+- Quando houver divergência, este diretório vence; o grafo deve ser resemeado a
+  partir daqui.

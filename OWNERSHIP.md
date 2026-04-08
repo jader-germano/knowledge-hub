@@ -12,6 +12,29 @@ Escopo:
 - handoff e rotina diária
 - contexto por LLM
 
+## Superfícies Externas Canônicas
+
+Ownership operacional fora do workspace:
+
+- `Jira`:
+  - tasks
+  - status
+  - prioridades
+  - roadmap de execução
+- `Confluence`:
+  - especificações
+  - decisões
+  - roadmap narrativo
+  - espelho compartilhável de handoff
+- `Notion`:
+  - Diário de Bordo e journal operacional
+
+Regra:
+
+- `Notion` não deve ser usado como board de task ou roadmap
+- `ROADMAP.md` local é mirror de trabalho; não substitui `Jira` como quadro
+  canônico de execução
+
 ## Nível 2: Contexto Por Repositório
 
 Ownership: `projects/<repo>/`

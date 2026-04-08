@@ -15,6 +15,8 @@ Obrigatoriedade adicional para qualquer resumo final de sessão:
 - sempre incluir `Commands Executed`, mesmo quando os comandos forem poucos
 - sempre incluir `Change Tree`, mesmo quando a árvore precisar ser curta ou
   truncada
+- sempre incluir `References And Glossary`, mesmo quando não houver termo novo
+  para registrar
 - quando não houver comandos relevantes ou alterações em arquivo, declarar isso
   explicitamente em vez de omitir a seção
 - sempre registrar a mesma sessão no diário raiz do workspace
@@ -31,6 +33,7 @@ Referência transversal:
 - Timestamp completo do fechamento
 - Data da sessão
 - `feature/session id`
+- `Provider`, quando conhecido
 - Repositório
 - Branch ativa
 - Objetivo aprovado
@@ -61,6 +64,8 @@ forma explícita.
 
 - Builds executados
 - Testes executados
+- Cobertura atingida na fatia entregue
+- Gaps de cobertura remanescentes e justificativa técnica
 - Validação em macOS
 - Validação em iOS
 
@@ -105,6 +110,14 @@ Quando as mudanças da sessão forem aceitas, propor imediatamente:
 - branch nova no padrão Gitflow, relacionada ao contexto da alteração
 - commit message objetiva e contextual
 - pedido de revisão do commit antes de seguir para push ou PR
+- manter autoria humana do commit por default, sem `Co-Authored-By` para
+  agentes, salvo decisão explícita em sentido contrário
+- quando agentes tiverem participado materialmente da sessão, registrar o uso
+  de IA em `PR`, handoff, `ADR` ou diário, não no rodapé do commit por padrão
+- quando a sessão tocar `MCP`, distinguir explicitamente:
+  - servidores apenas disponíveis no catálogo
+  - servidores configurados no `.mcp.json`
+  - servidores realmente validados por `dry-run` no host
 
 Formato mínimo:
 
@@ -112,9 +125,32 @@ Formato mínimo:
 - Commit: `type(scope): resumo curto`
 - Review request: confirmar staging, diff e mensagem antes de consolidar
 
+Política complementar de autoria:
+
+- por padrão, commits continuam com autoria humana e não devem incluir
+  `Co-Authored-By` de agentes quando o trabalho tiver sido conduzido sob
+  direção, revisão e aprovação humanas
+- quando houver apoio de IA relevante, registrar isso no resumo da sessão,
+  no handoff, no `PR` ou em `ADR`, com descrição objetiva da participação:
+  pesquisa, arquitetura, Figma handoff, implementação, testes, revisão ou
+  observabilidade
+
 ## References And Glossary
 
-- Links estudados hoje
+Obrigatório em todo fechamento de sessão.
+
+- fontes consultadas hoje, com indicação objetiva do que foi acessado ou
+  extraído
+  - exemplo local:
+    - `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — bootstrap relido
+      para validar o contrato de fechamento
+  - exemplo remoto/origem Git:
+    - `GitHub origin via gh repo list jader-germano --limit 200` — listados os
+      repositórios do owner; confirmados `portfolio-v2` e
+      `jpglabs-portfolio`
+    - `GitHub origin via gh api repos/jader-germano/jpglabs-portfolio/contents/package.json`
+      — confirmado `Vite + React`, sem `Next.js`
+- sempre declarar explicitamente quando nenhum termo novo entrar no glossário
 - Novos termos introduzidos nesta sessão → registrar em `GLOSSARY.md`
   - Formato: `` `termo` — definição curta ``
   - Após registrar, referenciar aqui apenas o link âncora:
@@ -135,3 +171,23 @@ Formato mínimo:
 ## Handoff Notes
 
 - Tudo que o próximo agente/provedor precisa preservar
+
+## Comando Canônico De Sync
+
+Depois que `report.md` estiver fechado, o sync canônico do fechamento passa a
+ser:
+
+```bash
+python3 /Users/philipegermano/code/jpglabs/docs/scripts/sync-session-close.py \
+  --report /Users/philipegermano/code/jpglabs/docs/projects/<repo>/sessions/<feature-id>/<yyyy-mm-dd-session>/report.md \
+  --write
+```
+
+Esse comando:
+
+- sincroniza a entrada correspondente em `/Users/philipegermano/code/daily/`
+- sincroniza um resumo operacional em `agents/AGENT_BRIDGE.md`
+- emite ou atualiza o sidecar JSON em `memory/events/`
+- tenta projetar o sidecar no grafo derivado
+- não invalida o fechamento se a projeção falhar, desde que `report.md`,
+  diário e sidecar tenham sido gravados com sucesso

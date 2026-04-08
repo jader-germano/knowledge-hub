@@ -14,15 +14,12 @@ graph TD
     subgraph K3s Cluster
         Traefik[Traefik Ingress] --> Port[Portfolio - Next.js]
         Traefik --> n8n[n8n Automation]
-        Traefik --> UI[Open-WebUI]
         
         Port --> Ollama[Ollama API - Deepseek-R1]
         Port --> Supabase[(Supabase DB/Auth)]
         
         n8n --> Slack[Slack Notifications]
         n8n --> Email[Email Alerts]
-        
-        UI --> Ollama
     end
 ```
 

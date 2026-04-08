@@ -1,0 +1,94 @@
+[
+  {
+    "updatedAt": "2026-03-08T13:30:00.000Z",
+    "createdAt": "2026-03-08T13:30:00.000Z",
+    "id": "lead-hunter-01",
+    "name": "JPGLabs [Growth] - AI Lead Hunter",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours",
+                "hoursInterval": 1
+              }
+            ]
+          }
+        },
+        "name": "Every Hour",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.1,
+        "position": [0, 0]
+      },
+      {
+        "parameters": {
+          "url": "https://www.reddit.com/r/n8n/new.json",
+          "options": {}
+        },
+        "name": "Scrape Reddit",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [200, 0]
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.first().json.data.children;\nreturn items.map(i => ({ json: { \n  title: i.data.title, \n  text: i.data.selftext, \n  url: 'https://reddit.com' + i.data.permalink,\n  author: i.data.author\n}}));"
+        },
+        "name": "Format Posts",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [400, 0]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{ $json.title + $json.text }}",
+                "operation": "contains",
+                "value2": "help"
+              }
+            ]
+          }
+        },
+        "name": "Filter Keywords",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 1,
+        "position": [600, 0]
+      },
+      {
+        "parameters": {
+          "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "text",
+                "value": "={{ '🎯 New Lead Found!\\nUser: ' + $json.author + '\\nTopic: ' + $json.title + '\\nLink: ' + $json.url }}"
+              }
+            ]
+          }
+        },
+        "name": "Notify Slack",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [850, 0]
+      }
+    ],
+    "connections": {
+      "Every Hour": {
+        "main": [[{ "node": "Scrape Reddit", "type": "main", "index": 0 }]]
+      },
+      "Scrape Reddit": {
+        "main": [[{ "node": "Format Posts", "type": "main", "index": 0 }]]
+      },
+      "Format Posts": {
+        "main": [[{ "node": "Filter Keywords", "type": "main", "index": 0 }]]
+      },
+      "Filter Keywords": {
+        "main": [[{ "node": "Notify Slack", "type": "main", "index": 0 }]]
+      }
+    }
+  }
+]

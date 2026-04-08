@@ -14,7 +14,6 @@ Taxonomia:
 - `agents/` — handoff e fechamento de sessão
 - `llms/` — contexto compartilhado por LLM
 - `memory/` — memória incorporada do workspace, working memories e logs técnicos
-- `daily/` — diário operacional do repositório `docs`
 - `projects/` — contexto, histórico e roadmaps classificados por projeto ou slice operacional
 - `reference/` — referências de design e capturas web
 - `reports/` — relatórios operacionais e templates
@@ -35,6 +34,9 @@ Princípio central:
 - o antigo `_archive/` do root do workspace foi auditado; o conteúdo útil já
   absorvido vive em `context/`, `infrastructure/docs/` e `archive/`
 - o diário pessoal por sessão vive no root do workspace em `/Users/philipegermano/code/daily/`
+- `Jira` e `Confluence` são as superfícies-alvo de task, roadmap e especificação compartilhável
+- `Notion` fica restrito ao Diário de Bordo
+- roadmaps em `projects/*/ROADMAP.md` são mirrors de trabalho do workspace, não um segundo board canônico
 - a configuração de runtime descoberta por convenção fixa continua no root do
   workspace; `config/` guarda apenas a configuração genérica compartilhada
 - o bootstrap compartilhado da raiz continua em `WORKSPACE_BOOTSTRAP.md`

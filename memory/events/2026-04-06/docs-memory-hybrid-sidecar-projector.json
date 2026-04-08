@@ -1,0 +1,164 @@
+{
+  "$schema": "/Users/philipegermano/code/jpglabs/docs/memory/schemas/session-memory-sidecar.schema.json",
+  "schema_version": "1.0",
+  "session": {
+    "id": "docs-memory-hybrid-sidecar-projector",
+    "timestamp": "2026-04-06T11:06:05-03:00",
+    "date": "2026-04-06",
+    "provider": "codex",
+    "workspace": "/Users/philipegermano/code",
+    "status": "completed",
+    "feature_id": "memory-hybrid-sidecar-projector",
+    "summary": "Hybrid memory architecture formalized with canonical Markdown, JSON session sidecars, and an idempotent projector for the derived Docker MCP graph."
+  },
+  "projects": [
+    {
+      "id": "docs",
+      "name": "jpglabs/docs",
+      "path": "/Users/philipegermano/code/jpglabs/docs",
+      "role": "canonical workspace hub"
+    }
+  ],
+  "artifacts": {
+    "report": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/memory-hybrid-sidecar-projector/2026-04-06-session/report.md",
+    "daily": "/Users/philipegermano/code/daily/2026-04-06.md",
+    "evidence_dir": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/memory-hybrid-sidecar-projector/2026-04-06-session"
+  },
+  "tags": [
+    "memory",
+    "mcp",
+    "projector",
+    "docs",
+    "provider-neutral"
+  ],
+  "decisions": [
+    {
+      "id": "canonical-hybrid-memory-model",
+      "summary": "Markdown remains the canonical ledger, JSON sidecars become the canonical machine write path, and the Docker MCP graph remains derived.",
+      "status": "approved",
+      "rationale": "This keeps the memory lane auditable in Git, portable across providers, and recoverable when Docker MCP is stale or unavailable.",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "stdio-projector-over-cli-serialization",
+      "summary": "The projector talks to the MCP gateway over stdio JSON-RPC instead of relying on brittle shell serialization for create_entities.",
+      "status": "approved",
+      "rationale": "The CLI path already showed instability for complex array payloads, so the projector needs a deterministic transport.",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "legacy-session-backfill",
+      "summary": "Historical session reports are imported into partial sidecars before graph projection, preserving provenance and avoiding false precision.",
+      "status": "approved",
+      "rationale": "Backfill is required for discoverability, but imported sessions need explicit markers because old reports do not always carry provider or exact timestamp metadata.",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "docker-memory-is-not-authoritative",
+      "summary": "The Docker MCP memory layer is useful for discovery but is not stable enough to become the canonical memory source.",
+      "status": "confirmed",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "next_actions": [
+    {
+      "id": "validate-apply-path",
+      "summary": "Run the projector with --apply on a host context that can access the Docker MCP gateway end to end.",
+      "status": "completed",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "wire-session-close-automation",
+      "summary": "Update the session-close flow so report.md, daily, sidecar emission, and graph projection happen in that order.",
+      "status": "pending",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "curate-imported-metadata",
+      "summary": "Curate imported sidecars when older session reports can be enriched with exact provider and close timestamp metadata.",
+      "status": "pending",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "files_touched": [
+    "/Users/philipegermano/code/jpglabs/docs/memory/EVENTS_CONTRACT.md",
+    "/Users/philipegermano/code/jpglabs/docs/memory/events/README.md",
+    "/Users/philipegermano/code/jpglabs/docs/memory/schemas/session-memory-sidecar.schema.json",
+    "/Users/philipegermano/code/jpglabs/docs/scripts/backfill-session-sidecars.py",
+    "/Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py",
+    "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/memory-hybrid-sidecar-projector/2026-04-06-session/report.md",
+    "/Users/philipegermano/code/jpglabs/docs/memory/events/2026-04-06/docs-memory-hybrid-sidecar-projector.json",
+    "/Users/philipegermano/code/jpglabs/docs/memory/events/2026-03-31/docs-claude-cli-teams-enable-2026-03-31-session.json",
+    "/Users/philipegermano/code/jpglabs/docs/memory/events/2026-03-31/docs-code-root-reclassify-and-llm-context-2026-03-31-session.json",
+    "/Users/philipegermano/code/jpglabs/docs/memory/events/2026-03-31/docs-root-bootstrap-decouple-2026-03-31-session.json",
+    "/Users/philipegermano/code/jpglabs/docs/memory/events/2026-04-02/docs-kaidi-sdr-recovery-case-2026-04-02-session.json"
+  ],
+  "commands": [
+    {
+      "command": "python3 -m py_compile /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py",
+      "action": "validate the projector syntax",
+      "result": "compiled successfully"
+    },
+    {
+      "command": "python3 -m py_compile /Users/philipegermano/code/jpglabs/docs/scripts/backfill-session-sidecars.py",
+      "action": "validate the backfill syntax",
+      "result": "compiled successfully"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --dry-run",
+      "action": "validate the aggregated projection plan",
+      "result": "reported 47 entities and 86 relations across 5 sidecars"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/backfill-session-sidecars.py --write",
+      "action": "import historical session reports into JSON sidecars",
+      "result": "created 4 imported sidecars and skipped the current session because it already had a sidecar"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --apply",
+      "action": "project the sidecars into the Docker MCP memory graph",
+      "result": "first apply created 47 entities and 86 relations"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --apply",
+      "action": "verify the projector idempotence",
+      "result": "second apply produced 0 new entities, 0 new observations, and 0 new relations"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --apply",
+      "action": "reconcile the graph after enriching the canonical session sidecar",
+      "result": "post-enrichment apply created 2 entities, added 3 observations, and created 4 relations"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --apply",
+      "action": "verify final idempotence after the sidecar reconciliation",
+      "result": "final apply produced 0 new entities, 0 new observations, and 0 new relations with the graph settled at 49 entities and 90 relations"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --apply",
+      "action": "reconcile stale managed observations after hardening the projector observation sync",
+      "result": "cleanup apply deleted 4 stale observations and added 1 consolidated observation while preserving the graph shape at 49 entities and 90 relations"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --apply",
+      "action": "confirm final zero-delta convergence after observation cleanup",
+      "result": "final post-cleanup apply produced 0 new entities, 0 deleted observations, 0 new observations, and 0 new relations"
+    }
+  ]
+}

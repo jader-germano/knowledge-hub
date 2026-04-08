@@ -1,0 +1,24 @@
+version: 1
+default_lane: dsv
+naming:
+  pattern: "<prefix>.jpglabs.com.br"
+  notes:
+    - "dsv stays local for now, but follows the same lane naming contract."
+    - "stg uses the stg.jpglabs.com.br subdomain."
+    - "prod keeps the root jpglabs.com.br surface."
+lanes:
+  dsv:
+    kind: local
+    host: localhost
+    pi_service_base_url: http://localhost:3131
+    ollama_base_url: http://localhost:11434
+    portfolio_backend_base_url: http://localhost:3000
+    portfolio_frontend_base_url: http://localhost:8082
+  stg:
+    kind: remote
+    host: stg.jpglabs.com.br
+    pi_service_base_url: https://stg.jpglabs.com.br/pi
+  prod:
+    kind: remote
+    host: jpglabs.com.br
+    pi_service_base_url: https://jpglabs.com.br/pi

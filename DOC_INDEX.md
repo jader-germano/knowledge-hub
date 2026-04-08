@@ -19,9 +19,9 @@ Classificação atual dos documentos no workspace.
 - `jpglabs/docs/MCP_SETUP.md` — referência transversal de MCP e gateway Docker
 - `jpglabs/docs/agents/AGENT_BRIDGE.md` — handoff transversal mais recente
 - `jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md` — template obrigatório de fechamento
-- `jpglabs/docs/daily/README.md` — rotina diária e automação
-- `jpglabs/docs/daily/AUTOMATION_PROMPT.md` — prompt-base da sessão diária automatizada
-- `jpglabs/docs/daily/2026-03-31.md` — resumo diário desta reorganização
+- `daily/README.md` — contrato canônico do diário raiz do workspace
+- `daily/AUTOMATION_PROMPT.md` — prompt-base da sessão diária automatizada
+- `daily/*.md` — relatórios diários por sessão do workspace
 - `jpglabs/docs/manifests/workspace.index.yaml` — índice de contextos
 - `jpglabs/docs/manifests/docs.index.yaml` — índice classificatório dos documentos
 - `jpglabs/docs/manifests/skills.index.yaml` — índice de skills compartilhadas
@@ -108,11 +108,49 @@ Contrato:
 - `jpglabs/docs/memory/AGENTS.md` — governança operacional do agente Pi
 - `jpglabs/docs/memory/sessions/` — working memories incorporadas
 - `jpglabs/docs/memory/logs/` — logs técnicos e trilha operacional do Pi
+- `jpglabs/docs/memory/wiki/` — compilações temáticas derivadas de `raw/` (wiki layer Karpathy)
 
 Contrato:
 
 - `jpglabs/docs/memory/` é o namespace canônico e gravável de memória
+- `memory/wiki/` é editável pelo LLM; derivar sempre de fontes em `raw/`
 - não criar variantes paralelas em `reports/`, mirrors antigos ou raízes legadas
+
+## Raw Sources
+
+- `jpglabs/docs/raw/README.md` — contrato da camada imutável
+- `jpglabs/docs/raw/videos/` — transcrições brutas de vídeos (append-only)
+- `jpglabs/docs/raw/articles/` — textos integrais de artigos/papers (append-only)
+
+Contrato:
+
+- `jpglabs/docs/raw/` é append-only para agentes LLM
+- nunca editar conteúdo após captura; apenas adicionar novas entradas versionadas
+- toda compilação em `memory/wiki/` deve referenciar fonte em `raw/`
+
+## Architecture Decision Records
+
+- `jpglabs/docs/research/adr/ADR-001-llm-wiki-architecture.md` — mapeamento LLM Wiki (Karpathy) ao workspace
+
+## Obsidian Vault Config
+
+- `jpglabs/docs/.obsidian/graph.json` — graph view com cores por pasta (raw=verde, memory=azul, projects=laranja, agents=vermelho)
+- `jpglabs/docs/.obsidian/templates.json` — aponta para `_templates/` como pasta de templates
+- `jpglabs/docs/.obsidian/daily-notes.json` — daily notes em `daily/`, template `_templates/daily-session`
+- `jpglabs/docs/.obsidian/community-plugins.json` — plugins recomendados (Dataview, Templater, Calendar)
+- `jpglabs/docs/.obsidian/plugins/README.md` — guia de instalação e plugins a evitar
+
+## Templates
+
+- `jpglabs/docs/_templates/raw-video.md` — template para transcrição de vídeo (raw layer)
+- `jpglabs/docs/_templates/raw-article.md` — template para artigo capturado (raw layer)
+- `jpglabs/docs/_templates/wiki-page.md` — template para compilação temática (wiki layer)
+- `jpglabs/docs/_templates/daily-session.md` — template para sessão no daily
+- `jpglabs/docs/_templates/project-context.md` — template para PROJECT_CONTEXT de novo projeto
+
+## Index / MOC
+
+- `jpglabs/docs/index.md` — Map of Content principal do vault Obsidian (entrada por tipo, projeto e layer Karpathy)
 
 ## Regras De Classificação
 

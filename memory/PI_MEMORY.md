@@ -49,13 +49,13 @@
 - **Connects to:** jpglabs.com.br + hub.jpglabs.com.br
 - **Status:** ✅ Scaffolded — needs `npm install`, EAS project ID in app.json
 
-### 5. AwesomePie iOS
+### 5. AwesomePie iOS ⚠️ LEGADO ARQUIVADO
 - **Repo:** `~/code/pessoal/awesomepie-ios`
 - **Stack:** Swift + SFSpeechRecognizer + AVAudioEngine (Apple Intelligence)
 - **Deploy:** Device ID `00008140-00163C303EE1801C` (iPhone do Jader, iOS 26.4)
 - **Team ID:** `RYJN4S9W4U`
 - **Provider fallback:** Local Ollama → VPS deepseek-r1:7b → OpenAI 4o → Claude
-- **Status:** ✅ Deployed — needs OpenAI API key for GPT-4o-mini tier
+- **Status:** ⛔ Descontinuado — arquivado em 2026-04-07; não recebe mais desenvolvimento ativo
 
 ### 6. VPS — jpglabs.com.br
 - **IP:** `187.77.227.151` (Hostinger, Ubuntu 24.04.3 LTS)
@@ -194,6 +194,7 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | Traefik | — | ✅ Running | — |
 | Open WebUI | chat.jpglabs.com.br | ✅ 200 | — |
 | Ollama | :11434 (VPS) | ✅ Running | nemotron-3-super + deepseek-r1:7b disponíveis |
+| Banana Slides | :3000 (frontend) :5000 (backend) | ✅ Running | /docker/banana-slides · Gemini API · docker-compose.prod.yml |
 | Portfolio | jpglabs.com.br | ❌ 526/404 | CF SSL strict + container route miss |
 | n8n | n8n.jpglabs.com.br | ❌ 404 | Traefik route miss / container down |
 | Mailserver | mail.jpglabs.com.br | ❌ Never started | finish-setup.sh never ran |
@@ -257,7 +258,7 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | 8 | knowledge-hub-app: k8s deploy + add hub.jpglabs.com.br DNS | ⛔ After VPS SSH |
 | 9 | Mobile: `npm install` in `jpglabs-portifolio-mobile` | ⏳ Ready |
 | 10 | Mobile: add EAS project ID to `app.json` | ⏳ Ready |
-| 11 | AwesomePie iOS: add OpenAI API key → test GPT-4o-mini vs local | 🟡 In Progress (PiPhone update phase — 2026-03-19) |
+| 11 | AwesomePie iOS: add OpenAI API key → test GPT-4o-mini vs local | ⛔ Cancelado — projeto arquivado em 2026-04-07 |
 | 12 | memory-sync extension: test `/memory-status` after `/reload` | ⏳ Ready |
 | 13 | Workspace docs: push merged docs/memory state to private GitHub repo → enable sync automation | ⏳ Ready |
 | 14 | Add hub-secrets block to k8s `02-secrets.yaml` | ⛔ After VPS SSH |
@@ -306,6 +307,8 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | 2026-04-03 | Temporary planning exception approved: keep `Jira + Confluence` and `Notion` updated in parallel until `2026-05-31`, then decide whether the parallel lane ends or remains after migration |
 | 2026-04-07 | Unified Memory Center: pi-skills installed for Pi, Claude, Codex; memory-sync and session-logger extensions created; MEMORY_SYNC.md protocol documented |
 | 2026-04-07 | VPS Ollama: nemotron-3-super configurado na VPS (187.77.227.151:11434); acesso SSH local via Tailscale (jpglabs-vps-tailnet) ou público (jpglabs-vps) |
+| 2026-04-07 | AwesomePie iOS arquivado como legado — projeto descontinuado |
+| 2026-04-08 | Banana Slides deployado na VPS via docker-compose.prod.yml — frontend :3000 · backend :5000 · AI_PROVIDER_FORMAT=gemini |
 
 ---
 

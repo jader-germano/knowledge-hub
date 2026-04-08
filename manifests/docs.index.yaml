@@ -26,11 +26,11 @@ docs:
     class: handoff-bridge
   - path: jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md
     class: handoff-template
-  - path: jpglabs/docs/daily/README.md
+  - path: daily/README.md
     class: daily-automation-contract
-  - path: jpglabs/docs/daily/AUTOMATION_PROMPT.md
+  - path: daily/AUTOMATION_PROMPT.md
     class: daily-automation-prompt
-  - path: jpglabs/docs/daily/2026-03-31.md
+  - path: daily/2026-03-31.md
     class: daily-summary
   - path: .agents/skills/README.md
     class: shared-skills-catalog

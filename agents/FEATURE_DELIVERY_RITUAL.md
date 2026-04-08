@@ -80,3 +80,11 @@ feature concluída.
 
 Se a sessão terminar apenas em planejamento ou design, isso deve estar explícito
 no relatório e o fechamento não conta como entrega funcional.
+
+Quando `report.md` estiver completo, o fechamento canônico deve rodar:
+
+```bash
+python3 /Users/philipegermano/code/jpglabs/docs/scripts/sync-session-close.py \
+  --report /Users/philipegermano/code/jpglabs/docs/projects/<repo>/sessions/<feature-id>/<yyyy-mm-dd-session>/report.md \
+  --write
+```
