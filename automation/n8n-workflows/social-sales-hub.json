@@ -1,0 +1,421 @@
+[
+  {
+    "updatedAt": "2026-03-07T18:44:19.000Z",
+    "createdAt": "2026-03-07T17:00:52.605Z",
+    "id": "lkvR3GdzgQR3ZWfB",
+    "name": "JPGLabs [v2] - Social & Sales Hub",
+    "description": null,
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "url": "https://techcrunch.com/feed/",
+          "options": {
+            "timeout": 30000
+          }
+        },
+        "name": "Daily News Trigger",
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "b4631670-f721-45a4-a8c1-cf99bb157512"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Validate RSS response before proceeding\nconst items = $input.all();\nif (!items || items.length === 0) {\n  throw new Error('RSS feed returned no items');\n}\n\nconst item = items[0].json;\nif (!item.title) {\n  throw new Error('RSS item missing required field: title');\n}\n\nreturn items;"
+        },
+        "name": "Validate RSS Response",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          200,
+          0
+        ],
+        "id": "validate-rss"
+      },
+      {
+        "parameters": {
+          "model": "qwen2.5-coder:7b",
+          "systemPrompt": "=Voce e o JPGLabs Social Master. \nContexto da Marca:\n- Persona: Visionary Operator (Senior Dev)\n- Produto: Modern AI Engineer Toolkit v3.0\n\nTarefa: Transforme a noticia: '{{$json.title}}' em um post de LinkedIn e um script de TikTok.",
+          "options": {}
+        },
+        "name": "AI Content Creator",
+        "type": "n8n-nodes-base.aiAgent",
+        "typeVersion": 1,
+        "position": [
+          400,
+          0
+        ],
+        "id": "301c45e2-d1c4-4336-a1bc-79355d7e8e56"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Validate AI Content Creator response\nconst output = $input.first().json;\nif (!output || (!output.output && !output.text)) {\n  throw new Error('AI Content Creator returned empty response');\n}\nreturn $input.all();"
+        },
+        "name": "Validate AI Content",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          600,
+          0
+        ],
+        "id": "validate-ai-content"
+      },
+      {
+        "parameters": {
+          "path": "dm-webhook",
+          "options": {}
+        },
+        "name": "Inbound Message (DMs)",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [
+          0,
+          300
+        ],
+        "id": "679930aa-b614-46fd-b7e2-2c425d490d52",
+        "webhookId": "d44f9d79-449c-4e1d-8d07-c6e38a78c104"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Validate incoming DM payload\nconst body = $json.body;\nif (!body || !body.message) {\n  throw new Error('Invalid DM payload: missing message field');\n}\nif (!body.from) {\n  throw new Error('Invalid DM payload: missing from field');\n}\nif (typeof body.message !== 'string' || body.message.length > 5000) {\n  throw new Error('Invalid DM payload: message must be a string under 5000 chars');\n}\n\n// Sanitize input (strip HTML tags)\nconst sanitized = body.message.replace(/<[^>]*>/g, '');\n$json.body.message = sanitized;\n\nreturn $input.all();"
+        },
+        "name": "Validate DM Payload",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          200,
+          300
+        ],
+        "id": "validate-dm"
+      },
+      {
+        "parameters": {
+          "model": "qwen2.5-coder:7b",
+          "promptType": "define",
+          "text": "={{$json.body.message}}",
+          "systemPrompt": "Voce e o JPGLabs Sales Assistant. Se o usuario quiser automatizar algo ou aprender sobre agentes, recomende o Toolkit v3.0 (https://jpglabs.com.br/interactive-v3/). Seja senior e tecnico.",
+          "options": {}
+        },
+        "name": "AI Sales Assistant",
+        "type": "n8n-nodes-base.aiAgent",
+        "typeVersion": 1,
+        "position": [
+          400,
+          300
+        ],
+        "id": "0ef2c95f-dbd6-479d-a200-08a6e146b71d"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Validate AI Sales response\nconst output = $input.first().json;\nif (!output || (!output.output && !output.text)) {\n  throw new Error('AI Sales Assistant returned empty response');\n}\nreturn $input.all();"
+        },
+        "name": "Validate Sales Response",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          600,
+          300
+        ],
+        "id": "validate-sales"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "boolean": [
+              {
+                "value1": "={{$node[\"AI Sales Assistant\"].json.output.includes('https')}}",
+                "value2": true
+              }
+            ]
+          }
+        },
+        "name": "Is Sales Intent?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 1,
+        "position": [
+          800,
+          300
+        ],
+        "id": "468a099b-79d7-4f78-8d3c-24c5e4895493"
+      },
+      {
+        "parameters": {
+          "message": "=Possivel Lead Qualificado: {{$node[\"Inbound Message (DMs)\"].json.body.from}} - Mensagem: {{$node[\"Inbound Message (DMs)\"].json.body.message}}",
+          "priority": 1,
+          "additionalFields": {}
+        },
+        "name": "Notify Admin (Lead)",
+        "type": "n8n-nodes-base.pushover",
+        "typeVersion": 1,
+        "position": [
+          1050,
+          250
+        ],
+        "id": "e4c5ff59-463b-42d3-ab27-13a1a4234aed"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          1250,
+          100
+        ],
+        "id": "7ee86aac-423a-4f31-9c45-81649ae01f36",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "model": "qwen2.5-coder:7b",
+          "baseUrl": "http://100.68.217.36:11434"
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+        "typeVersion": 1,
+        "position": [
+          1266,
+          350
+        ],
+        "id": "c9805bd0-75a6-46d6-8ed2-1c886f622432",
+        "name": "Google Gemini Chat Model"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+        "typeVersion": 1,
+        "position": [
+          1362,
+          400
+        ],
+        "id": "d743103c-f214-4cb1-b4f6-a7900bb3a65b",
+        "name": "MongoDB Chat Memory"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+        "typeVersion": 1.2,
+        "position": [
+          1458,
+          450
+        ],
+        "id": "1202230e-63d3-4685-a879-996b3fe5b411",
+        "name": "MCP Client"
+      },
+      {
+        "parameters": {
+          "errorTriggerType": "allErrors"
+        },
+        "name": "Error Trigger",
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          550
+        ],
+        "id": "err-trigger-social"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Log workflow errors for debugging\nconst error = $input.first().json;\nconst logEntry = {\n  workflow: 'Social & Sales Hub',\n  error: error.message || 'Unknown error',\n  node: error.node?.name || 'unknown',\n  timestamp: new Date().toISOString()\n};\nconsole.error('Social Sales Hub Error:', JSON.stringify(logEntry));\nreturn [{ json: logEntry }];"
+        },
+        "name": "Log Error",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          250,
+          550
+        ],
+        "id": "code-log-error"
+      }
+    ],
+    "connections": {
+      "Daily News Trigger": {
+        "main": [
+          [
+            {
+              "node": "Validate RSS Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Validate RSS Response": {
+        "main": [
+          [
+            {
+              "node": "AI Content Creator",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Content Creator": {
+        "main": [
+          [
+            {
+              "node": "Validate AI Content",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Inbound Message (DMs)": {
+        "main": [
+          [
+            {
+              "node": "Validate DM Payload",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Validate DM Payload": {
+        "main": [
+          [
+            {
+              "node": "AI Sales Assistant",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Sales Assistant": {
+        "main": [
+          [
+            {
+              "node": "Validate Sales Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Validate Sales Response": {
+        "main": [
+          [
+            {
+              "node": "Is Sales Intent?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is Sales Intent?": {
+        "main": [
+          [
+            {
+              "node": "Notify Admin (Lead)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Notify Admin (Lead)": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "MongoDB Chat Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "MCP Client": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Log Error",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "binaryMode": "separate",
+      "availableInMCP": false
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "29edda7f-7f2e-42ec-bf2a-e9478ae63977",
+    "activeVersionId": null,
+    "versionCounter": 9,
+    "triggerCount": 0,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-03-07T17:00:52.607Z",
+        "createdAt": "2026-03-07T17:00:52.607Z",
+        "role": "workflow:owner",
+        "workflowId": "lkvR3GdzgQR3ZWfB",
+        "projectId": "wL0S2fKSRlDG069V",
+        "project": {
+          "updatedAt": "2026-03-07T10:28:02.232Z",
+          "createdAt": "2026-02-28T17:22:21.227Z",
+          "id": "wL0S2fKSRlDG069V",
+          "name": "Jader Germano <jader@jpglabs.com.br>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "creatorId": "d303e6c3-d3f4-49b6-8a20-cc1a2464f67e"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": null,
+      "description": null
+    }
+  }
+]

@@ -1,0 +1,112 @@
+generated_on: 2026-04-01
+docs:
+  - path: README.md
+    class: workspace-entrypoint
+  - path: WORKSPACE_BOOTSTRAP.md
+    class: workspace-bootstrap
+  - path: AGENTS.md
+    class: codex-agent-shim
+  - path: jpglabs/docs/README.md
+    class: global-entrypoint
+  - path: jpglabs/docs/ROADMAP.md
+    class: global-strategy
+  - path: jpglabs/docs/WORKSPACE_INDEX.md
+    class: global-project-index
+  - path: jpglabs/docs/GIT_HISTORY_INDEX.md
+    class: global-git-index
+  - path: jpglabs/docs/DOC_INDEX.md
+    class: global-doc-classification
+  - path: jpglabs/docs/RULES.md
+    class: governance-rules
+  - path: jpglabs/docs/OWNERSHIP.md
+    class: governance-ownership
+  - path: jpglabs/docs/MCP_SETUP.md
+    class: mcp-reference
+  - path: jpglabs/docs/agents/AGENT_BRIDGE.md
+    class: handoff-bridge
+  - path: jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md
+    class: handoff-template
+  - path: daily/README.md
+    class: daily-automation-contract
+  - path: daily/AUTOMATION_PROMPT.md
+    class: daily-automation-prompt
+  - path: daily/2026-03-31.md
+    class: daily-summary
+  - path: .agents/skills/README.md
+    class: shared-skills-catalog
+  - path: jpglabs/docs/llms/CODEX.md
+    class: llm-context
+  - path: jpglabs/docs/llms/CLAUDE.md
+    class: llm-context
+  - path: jpglabs/docs/llms/GEMINI.md
+    class: llm-context
+  - path: jpglabs/docs/reference/design/design-system-extraction-4-sites.md
+    class: design-reference-analysis
+  - path: jpglabs/docs/reference/design/design-system-claude-codex.html
+    class: design-reference-render
+  - path: jpglabs/docs/reference/web-captures/google-antigravity-auth-success.html
+    class: web-capture
+  - path: jpglabs/docs/reference/web-captures/jpglabs-pi-products-and-services.html
+    class: web-capture
+  - path: jpglabs/docs/reference/web-captures/monkeytype-typing-test.html
+    class: web-capture
+  - path: jpglabs/docs/reports/claude-code/claude-code-daily-report-2026-03-21.md
+    class: scheduled-report
+  - path: jpglabs/docs/reports/claude-code/claude-code-daily-report-2026-03-21.html
+    class: scheduled-report-render
+  - path: jpglabs/docs/reports/claude-code/claude-code-report-template.html
+    class: report-template
+  - path: jpglabs/docs/research/roadmap-pressure-tests/brutal-critic-triad-pressure-test-2026-03-21.json
+    class: research-artifact
+  - path: jpglabs/docs/research/claude-shared-capabilities-audit.md
+    class: research-audit
+  - path: jpglabs/docs/archive/root-docs/DOCS_INDEX.legacy-2026-03-27.md
+    class: legacy-doc-index
+  - path: jpglabs/docs/projects/*/PROJECT_CONTEXT.md
+    class: project-context
+  - path: jpglabs/docs/projects/*/ROADMAP.md
+    class: project-roadmap
+  - path: jpglabs/docs/projects/*/GIT_HISTORY.md
+    class: project-git-history
+  - path: jpglabs/docs/projects/*/llms/CODEX.md
+    class: repo-llm-context
+  - path: jpglabs/docs/projects/*/llms/CLAUDE.md
+    class: repo-llm-context
+  - path: jpglabs/docs/projects/*/llms/GEMINI.md
+    class: repo-llm-context
+  - path: jpglabs/docs/projects/*/sessions/**/report.md
+    class: project-session-report
+  - path: jpglabs/docs/projects/*/sessions/**/prototype.md
+    class: project-session-prototype
+  - path: jpglabs/docs/reports/sessions/README.md
+    class: derived-session-views-contract
+  - path: jpglabs/docs/reports/sessions/_template/report.md
+    class: session-template
+  - path: jpglabs/docs/reports/sessions/_template/prototype.md
+    class: session-template
+  - path: jpglabs/docs/memory/README.md
+    class: shared-memory-contract
+  - path: jpglabs/docs/memory/AGENTS.md
+    class: shared-memory-governance
+  - path: jpglabs/docs/memory/PI_MEMORY.md
+    class: shared-memory-ledger
+  - path: jpglabs/docs/memory/sessions/**
+    class: shared-memory-session
+  - path: jpglabs/docs/memory/logs/README.md
+    class: shared-memory-log-index
+  - path: jpglabs/docs/memory/logs/*.md
+    class: shared-memory-log
+  - path: CODEX.md
+    class: provider-bootstrap
+  - path: CLAUDE.md
+    class: provider-bootstrap
+  - path: GEMINI.md
+    class: provider-bootstrap
+  - path: .codex/README.md
+    class: provider-runtime-bootstrap
+  - path: .claude/README.md
+    class: provider-runtime-bootstrap
+  - path: .claude/skills/README.md
+    class: provider-generated-skill-wrappers
+  - path: .gemini/README.md
+    class: provider-runtime-bootstrap

@@ -1,0 +1,349 @@
+[
+  {
+    "updatedAt": "2026-03-08T13:00:00.000Z",
+    "createdAt": "2026-03-07T21:38:31.252Z",
+    "id": "GmR0wYQzCEJ0IRMB",
+    "name": "JPGLabs [Health Check] - Infrastructure Monitor",
+    "description": "Monitors jpglabs.com.br, n8n.jpglabs.com.br, and chat.jpglabs.com.br every 5 minutes with Slack and Email notifications.",
+    "active": true,
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "minutes",
+                "minutesInterval": 5
+              }
+            ]
+          }
+        },
+        "name": "Every 5 Minutes",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -400,
+          200
+        ],
+        "id": "sched-01"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Initialize services to check\nconst services = [\n  { name: 'Portfolio', url: 'https://jpglabs.com.br' },\n  { name: 'n8n', url: 'https://n8n.jpglabs.com.br' },\n  { name: 'AI Chat', url: 'https://chat.jpglabs.com.br' }\n];\n\nreturn services.map(s => ({ json: s }));"
+        },
+        "name": "Define Services",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -200,
+          200
+        ],
+        "id": "code-services"
+      },
+      {
+        "parameters": {
+          "batchSize": 1,
+          "options": {}
+        },
+        "name": "Check Each Service",
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          0,
+          200
+        ],
+        "id": "split-01"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Perform HTTP check with timing\nconst service = $json;\nconst startTime = Date.now();\nlet statusCode = 0;\nlet responseTimeMs = 0;\nlet isUp = false;\nlet errorMessage = '';\n\ntry {\n  const response = await this.helpers.httpRequest({\n    method: 'GET',\n    url: service.url,\n    timeout: 10000,\n    resolveWithFullResponse: true,\n    simple: false\n  });\n  responseTimeMs = Date.now() - startTime;\n  statusCode = response.statusCode || 200;\n  const html = response.body || '';\n  const hasUIMarkers = html.includes('Knowledge Vault') || html.includes('Instantiate Your');\n  isUp = statusCode >= 200 && statusCode < 400 && responseTimeMs <= 3000 && (service.name !== 'Portfolio' || hasUIMarkers);\n  if (service.name === 'Portfolio' && !hasUIMarkers && isUp) {\n    errorMessage = 'UI Elements missing (possible 404/blank page)';\n    isUp = false;\n  }\n} catch (e) {\n  responseTimeMs = Date.now() - startTime;\n  errorMessage = e.message || 'Connection failed';\n  isUp = false;\n}\n\nreturn [{ json: {\n  name: service.name,\n  url: service.url,\n  statusCode,\n  responseTimeMs,\n  isUp,\n  errorMessage,\n  checkedAt: new Date().toISOString()\n}}];"
+        },
+        "name": "HTTP Health Check",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          200,
+          200
+        ],
+        "id": "code-healthcheck"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Consecutive failure tracking with staticData\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.failureCounts) staticData.failureCounts = {};\nif (!staticData.downSince) staticData.downSince = {};\nif (!staticData.alertSent) staticData.alertSent = {};\n\nconst check = $json;\nconst key = check.name;\n\nlet action = 'none'; // none | alert | recovery\n\nif (check.isUp) {\n  // Service is UP\n  const wasDown = (staticData.failureCounts[key] || 0) >= 2;\n  if (wasDown && staticData.alertSent[key]) {\n    // Was down and alert was sent -> send recovery\n    const downSince = staticData.downSince[key] || new Date().toISOString();\n    const downDurationMs = Date.now() - new Date(downSince).getTime();\n    const downMinutes = Math.round(downDurationMs / 60000);\n    action = 'recovery';\n    check.recoveryMessage = `[RECOVERED] ${check.name} RECOVERED after ${downMinutes} min | URL: ${check.url} | Time: ${check.checkedAt}`;\n  }\n  // Reset counters\n  staticData.failureCounts[key] = 0;\n  delete staticData.downSince[key];\n  delete staticData.alertSent[key];\n} else {\n  // Service is DOWN\n  staticData.failureCounts[key] = (staticData.failureCounts[key] || 0) + 1;\n  if (!staticData.downSince[key]) {\n    staticData.downSince[key] = new Date().toISOString();\n  }\n\n  // Only alert after 2 consecutive failures\n  if (staticData.failureCounts[key] >= 2 && !staticData.alertSent[key]) {\n    action = 'alert';\n    staticData.alertSent[key] = true;\n    check.alertMessage = `[DOWN] ${check.name} DOWN | Status: ${check.statusCode} | Response: ${check.responseTimeMs}ms | Error: ${check.errorMessage} | URL: ${check.url} | Time: ${check.checkedAt}`;\n  }\n}\n\ncheck.action = action;\ncheck.consecutiveFailures = staticData.failureCounts[key] || 0;\n\nreturn [{ json: check }];"
+        },
+        "name": "Track Consecutive Failures",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          400,
+          200
+        ],
+        "id": "code-track"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "loose"
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.action }}",
+                      "rightValue": "alert",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Alert"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "loose"
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.action }}",
+                      "rightValue": "recovery",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Recovery"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "loose"
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.action }}",
+                      "rightValue": "none",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "OK"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "name": "Route by Action",
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3,
+        "position": [
+          600,
+          200
+        ],
+        "id": "switch-action"
+      },
+      {
+        "parameters": {
+          "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "text",
+                "value": "={{ $json.alertMessage }}"
+              }
+            ]
+          }
+        },
+        "name": "Slack Alert",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          850,
+          0
+        ],
+        "id": "slack-alert"
+      },
+      {
+        "parameters": {
+          "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "text",
+                "value": "={{ $json.recoveryMessage }}"
+              }
+            ]
+          }
+        },
+        "name": "Slack Recovery",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          850,
+          150
+        ],
+        "id": "slack-recovery"
+      },
+      {
+        "parameters": {
+          "toEmail": "={{ $env.OWNER_EMAIL || 'jader@jpglabs.com.br' }}",
+          "subject": "={{ '[JPGLabs DOWN] ' + $json.name + ' is offline' }}",
+          "text": "={{ $json.alertMessage }}",
+          "options": {},
+          "fromEmail": "jader@jpglabs.com.br"
+        },
+        "name": "Send Alert Email",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 2,
+        "position": [
+          1050,
+          0
+        ],
+        "id": "email-alert"
+      },
+      {
+        "parameters": {
+          "toEmail": "={{ $env.OWNER_EMAIL || 'jader@jpglabs.com.br' }}",
+          "subject": "={{ '[JPGLabs RECOVERED] ' + $json.name + ' is back online' }}",
+          "text": "={{ $json.recoveryMessage }}",
+          "options": {},
+          "fromEmail": "jader@jpglabs.com.br"
+        },
+        "name": "Send Recovery Email",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 2,
+        "position": [
+          1050,
+          150
+        ],
+        "id": "email-recovery"
+      },
+      {
+        "parameters": {},
+        "name": "All OK (No Action)",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          850,
+          400
+        ],
+        "id": "noop-ok"
+      }
+    ],
+    "connections": {
+      "Every 5 Minutes": {
+        "main": [
+          [
+            {
+              "node": "Define Services",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Define Services": {
+        "main": [
+          [
+            {
+              "node": "Check Each Service",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check Each Service": {
+        "main": [
+          [
+            {
+              "node": "HTTP Health Check",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Health Check": {
+        "main": [
+          [
+            {
+              "node": "Track Consecutive Failures",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Track Consecutive Failures": {
+        "main": [
+          [
+            {
+              "node": "Route by Action",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Route by Action": {
+        "main": [
+          [
+            {
+              "node": "Slack Alert",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Send Alert Email",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Slack Recovery",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Send Recovery Email",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "All OK (No Action)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  }
+]

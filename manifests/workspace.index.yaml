@@ -1,0 +1,76 @@
+version: 2
+workspace_root: /Users/philipegermano/code
+docs_root: /Users/philipegermano/code/jpglabs/docs
+hub_root: /Users/philipegermano/code/jpglabs/docs
+resolution_order:
+  - /Users/philipegermano/code/jpglabs/docs/RULES.md
+  - /Users/philipegermano/code/jpglabs/docs/OWNERSHIP.md
+  - /Users/philipegermano/code/jpglabs/docs/WORKSPACE_INDEX.md
+  - /Users/philipegermano/code/jpglabs/docs/GIT_HISTORY_INDEX.md
+  - /Users/philipegermano/code/jpglabs/docs/manifests/workspace.index.yaml
+  - /Users/philipegermano/code/jpglabs/docs/manifests/skills.index.yaml
+  - /Users/philipegermano/code/jpglabs/docs/DOC_INDEX.md
+  - /Users/philipegermano/code/jpglabs/docs/MCP_SETUP.md
+  - /Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md
+  - /Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md
+canonical_roots:
+  agents: /Users/philipegermano/code/jpglabs/docs/agents
+  skills: /Users/philipegermano/code/jpglabs/docs/skills
+  memory: /Users/philipegermano/code/jpglabs/docs/memory
+  daily: /Users/philipegermano/code/daily
+  config: /Users/philipegermano/code/config
+  mcp: /Users/philipegermano/code/config/mcp
+  manifests: /Users/philipegermano/code/jpglabs/docs/manifests
+provider_bootstrap_paths:
+  codex: /Users/philipegermano/code/jpglabs/docs/.codex
+  claude: /Users/philipegermano/code/jpglabs/docs/.claude_code
+  gemini: /Users/philipegermano/code/jpglabs/docs/.gemini
+repositories:
+  - id: docs
+    path: /Users/philipegermano/code/jpglabs/docs
+    role: shared-orchestration-docs
+  - id: apple-study-checklist
+    path: /Users/philipegermano/code/jpglabs/apple-study-checklist
+    role: native-app
+  - id: FrankMD
+    path: /Users/philipegermano/code/FrankMD
+    role: vault-reference-and-optional-backend
+  - id: pi-local-app
+    path: /Users/philipegermano/code/jpglabs/pi-local-app
+    role: pi-runtime-api
+  - id: portfolio-backend
+    path: /Users/philipegermano/code/jpglabs/portfolio-backend
+    role: portfolio-web-surface
+  - id: portfolio-mobile
+    path: /Users/philipegermano/code/jpglabs/portfolio-mobile
+    role: portfolio-mobile-client
+  - id: imap-server
+    path: /Users/philipegermano/code/jpglabs/imap-server
+    role: mcp-email-server
+  - id: knowledge-hub-app
+    path: /Users/philipegermano/code/jpglabs/knowledge-hub-app
+    role: knowledge-hub-web-app
+  - id: piphone-ios
+    path: /Users/philipegermano/code/jpglabs/piphone-ios
+    role: ios-pi-client
+  - id: pibar-macos
+    path: /Users/philipegermano/code/jpglabs/pibar-macos
+    role: macos-pi-client
+  - id: PieCenter
+    path: /Users/philipegermano/code/jpglabs/PieCenter
+    role: unified-apple-shell
+  - id: Playground 2
+    path: /Users/philipegermano/code/Playground 2
+    role: experimental-bootstrap
+internal_contexts:
+  - id: infrastructure
+    path: /Users/philipegermano/code/jpglabs/docs/projects/infrastructure
+    role: absorbed-operations-and-automation
+  - id: jpglabs
+    path: /Users/philipegermano/code/jpglabs/docs/projects/jpglabs
+    role: studio-strategy-and-commercial-context
+legacy_imports:
+  - id: ai-orchestration-hub
+    path: /Users/philipegermano/code/jpglabs/docs/archive/legacy-repos/ai-orchestration-hub
+  - id: jpglabs-infra-repo
+    path: /Users/philipegermano/code/jpglabs/docs/archive/legacy-repos/jpglabs-infra-repo

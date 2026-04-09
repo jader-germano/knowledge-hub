@@ -1,0 +1,9 @@
+{
+  "daily-notes": true,
+  "templates": true,
+  "graph": true,
+  "backlink": true,
+  "outgoing-link": true,
+  "tag-pane": true,
+  "page-preview": true
+}

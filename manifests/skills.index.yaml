@@ -1,0 +1,58 @@
+version: 1
+root_path: /Users/philipegermano/code/jpglabs/docs/skills
+workspace_shared_root: /Users/philipegermano/code/.agents/skills
+resolution_policy:
+  canonical_source: workspace-shared-first
+  provider_bootstrap_only: true
+  validate_against_index: true
+skills:
+  - id: teams
+    path: /Users/philipegermano/code/.agents/skills/teams/SKILL.md
+    owner: workspace
+    scope: provider-orchestration
+    status: active
+  - id: email-daily-triage
+    path: /Users/philipegermano/code/.agents/skills/email-daily-triage/SKILL.md
+    owner: workspace
+    scope: inbox-automation
+    status: active
+    imported_from: /Users/philipegermano/.claude/scheduled-tasks/email-daily-triage/SKILL.md
+  - id: github-activity-digest
+    path: /Users/philipegermano/code/.agents/skills/github-activity-digest/SKILL.md
+    owner: workspace
+    scope: developer-visibility
+    status: active
+    imported_from: /Users/philipegermano/.claude/scheduled-tasks/github-activity-digest/SKILL.md
+  - id: infra-health-check
+    path: /Users/philipegermano/code/.agents/skills/infra-health-check/SKILL.md
+    owner: workspace
+    scope: operational-monitoring
+    status: active
+    imported_from: /Users/philipegermano/.claude/scheduled-tasks/infra-health-check/SKILL.md
+  - id: job-opportunities-scanner
+    path: /Users/philipegermano/code/.agents/skills/job-opportunities-scanner/SKILL.md
+    owner: workspace
+    scope: personal-ops
+    status: active
+    imported_from: /Users/philipegermano/.claude/scheduled-tasks/job-opportunities-scanner/SKILL.md
+  - id: relatorio-mensal-tse
+    path: /Users/philipegermano/code/.agents/skills/relatorio-mensal-tse/SKILL.md
+    owner: workspace
+    scope: contract-ops
+    status: active
+    imported_from: /Users/philipegermano/.claude/scheduled-tasks/relatorio-mensal-tse/SKILL.md
+  - id: ptbr-docs-standard
+    path: /Users/philipegermano/code/jpglabs/docs/skills/ptbr-docs-standard/SKILL.md
+    owner: docs
+    scope: shared-documentation
+    status: active
+  - id: design-system-pipeline
+    path: /Users/philipegermano/code/jpglabs/docs/skills/design-system-pipeline/SKILL.md
+    owner: docs
+    scope: design-tooling
+    status: active
+    tool_path: /Users/philipegermano/code/design-pipeline/pipeline.py
+provider_bootstrap_paths:
+  codex: /Users/philipegermano/code/jpglabs/docs/.codex
+  claude: /Users/philipegermano/code/jpglabs/docs/.claude_code
+  gemini: /Users/philipegermano/code/jpglabs/docs/.gemini

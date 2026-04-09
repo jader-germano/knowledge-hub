@@ -1,8 +1,9 @@
 # PI_MEMORY.md — Persistent Memory Context
 # Proprietary to Jader Philipe Germano | Architecture: Pi (AI agent)
 # © 2026 Jader Philipe Germano. All rights reserved.
+> Incorporated workspace memory and operational context.
 > Auto-maintained by Pi on every session shutdown.
-> Read at every session start — single source of truth.
+> Canonical memory ledger under `/Users/philipegermano/code/jpglabs/docs/memory`.
 
 ---
 
@@ -48,20 +49,20 @@
 - **Connects to:** jpglabs.com.br + hub.jpglabs.com.br
 - **Status:** ✅ Scaffolded — needs `npm install`, EAS project ID in app.json
 
-### 5. AwesomePie iOS
+### 5. AwesomePie iOS ⚠️ LEGADO ARQUIVADO
 - **Repo:** `~/code/pessoal/awesomepie-ios`
 - **Stack:** Swift + SFSpeechRecognizer + AVAudioEngine (Apple Intelligence)
 - **Deploy:** Device ID `00008140-00163C303EE1801C` (iPhone do Jader, iOS 26.4)
 - **Team ID:** `RYJN4S9W4U`
 - **Provider fallback:** Local Ollama → VPS deepseek-r1:7b → OpenAI 4o → Claude
-- **Status:** ✅ Deployed — needs OpenAI API key for GPT-4o-mini tier
+- **Status:** ⛔ Descontinuado — arquivado em 2026-04-07; não recebe mais desenvolvimento ativo
 
 ### 6. VPS — jpglabs.com.br
 - **IP:** `187.77.227.151` (Hostinger, Ubuntu 24.04.3 LTS)
 - **SSH:** `root@187.77.227.151` — `~/.ssh/id_ed25519`
-- **Stack:** Docker Compose (Traefik, n8n, mailserver) + k3s (portfolio, ollama, open-webui)
+- **Stack:** Docker Compose (Traefik, n8n, mailserver) + k3s (portfolio-backend, ollama)
 - **Compose dirs:** `/docker/n8n/` · `/docker/portfolio/` · `/docker/chat/` · `/docker/mailserver/`
-- **Status:** ⚠️ SSH key not authorized · portfolio/n8n down · mailserver never started
+- **Status:** ⚠️ SSH key not authorized · portfolio container exec format error · n8n operacional · mailserver operacional
 
 ### 7. pi-local-app
 - **Repo:** `~/code/pessoal/pi-local-app`
@@ -69,10 +70,10 @@
 - **LaunchAgent:** `com.jader.pi-local`
 - **Status:** ✅ Running — PID 36705, uptime ~7.8h, Ollama reachable
 
-### 8. knowledge-hub (Obsidian vault)
-- **Repo:** `~/code/pessoal/knowledge-hub`
-- **Sections:** Projects · Backlog · fullstack · Income · infrastructure · memory · pi-agent-log
-- **Pi logs:** `~/code/pessoal/knowledge-hub/pi-agent-log/YYYY-MM-DD.md`
+### 8. Workspace docs and memory hub
+- **Repo:** `~/code/jpglabs/docs`
+- **Sections:** Projects · Backlog · infrastructure · memory · reports · research
+- **Pi logs:** `~/code/jpglabs/docs/memory/logs/YYYY-MM-DD.md`
 
 ---
 
@@ -108,8 +109,42 @@
 ### Pi Extensions
 | File | Purpose |
 |------|---------|
-| `~/.pi/agent/extensions/session-logger.ts` | Writes session log on shutdown → knowledge-hub + PI_MEMORY.md |
+| `~/.pi/agent/extensions/session-logger.ts` | Writes session log on shutdown → docs/memory/logs + PI_MEMORY.md |
 | `~/.pi/agent/extensions/memory-sync.ts` | Loads memory at session_start, injects into system prompt first turn |
+| `~/.pi/agent/skills/` | Symlinked from `~/pi-skills/` — Mario's pi-skills |
+
+## Claude Code Extensions
+| File | Purpose |
+|------|---------|
+| `~/.claude/extensions/memory-sync.sh` | Loads canonical memory at session start |
+| `~/.claude/extensions/session-logger.sh` | Logs session to memory center |
+| `~/.claude/skills/` | Symlinked from `~/pi-skills/` — Mario's pi-skills |
+
+## Codex Extensions
+| File | Purpose |
+|------|---------|
+| `~/.codex/extensions/memory-sync.sh` | Loads canonical memory at session start |
+| `~/.codex/extensions/session-logger.sh` | Logs session to memory center |
+| `~/.codex/skills/pi-skills/` | Symlinked from `~/pi-skills/` — Mario's pi-skills |
+
+## Unified Memory Center (2026-04-07)
+
+Canonical memory root: `~/code/jpglabs/docs/memory/`
+
+```
+memory/
+├── MEMORY_SYNC.md       # Cross-agent sync protocol
+├── PI_MEMORY.md         # Master ledger
+├── AGENTS.md            # Agent governance
+├── sessions/            # Per-agent session logs
+│   ├── pi/
+│   ├── claude/
+│   ├── codex/
+│   └── openclaude/
+└── logs/                # Technical action logs
+```
+
+Philosophy: Progressive disclosure over MCP bulk. CLI tools with READMEs instead of full MCP schemas.
 
 ### Voice Interface
 - **Run:** `pi-voice loop` or `~/Desktop/Pi Voice.command`
@@ -143,16 +178,28 @@ After SSH works — run in order:
 CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 ```
 
+### VPS Ollama Models (confirmed 2026-04-07)
+| Model | Purpose | Access |
+|-------|---------|--------|
+| `deepseek-r1:7b` | Reasoning (large) | http://VPS_IP:11434 |
+| `nemotron-3-super` | NVIDIA Nemotron 3 Super — general / reasoning | http://VPS_IP:11434 |
+
+**Ollama endpoint (VPS):** `http://187.77.227.151:11434`
+**SSH access:** `ssh root@187.77.227.151` (key `~/.ssh/id_ed25519`) — Tailscale peer: `jpglabs-vps-tailnet`; fallback público: `jpglabs-vps` (187.77.227.151)
+**Note:** Porta 11434 deve estar liberada no firewall do VPS para uso interno; expor externamente apenas via Tailscale ou túnel SSH para segurança.
+
 ### VPS Service Status (diagnosed 2026-03-12)
 | Service | URL | Status | Cause |
 |---------|-----|--------|-------|
 | Traefik | — | ✅ Running | — |
 | Open WebUI | chat.jpglabs.com.br | ✅ 200 | — |
+| Ollama | :11434 (VPS) | ✅ Running | nemotron-3-super + deepseek-r1:7b disponíveis |
+| Banana Slides | :3000 (frontend) :5000 (backend) | ✅ Running | /docker/banana-slides · Gemini API · docker-compose.prod.yml |
 | Portfolio | jpglabs.com.br | ❌ 526/404 | CF SSL strict + container route miss |
-| n8n | n8n.jpglabs.com.br | ❌ 404 | Traefik route miss / container down |
-| Mailserver | mail.jpglabs.com.br | ❌ Never started | finish-setup.sh never ran |
-| pi-local API | api.jpglabs.com.br | ❌ No DNS | Not deployed to VPS yet |
-| knowledge-hub | hub.jpglabs.com.br | ❌ No DNS | New service — needs deploy |
+| n8n | n8n.jpglabs.com.br | ✅ Operacional | Configurado e rodando |
+| Mailserver | mail.jpglabs.com.br | ✅ Operacional | docker-mailserver configurado |
+| pi-local API | api.jpglabs.com.br | ❌ Descontinuado | Família Pi removida (abr/2026) |
+| knowledge-hub-app | hub.jpglabs.com.br | ❌ No DNS | New service — needs deploy |
 | k3s | — | Unknown | Needs SSH to check |
 
 ### n8n Active Workflows (last confirmed 2026-03-09)
@@ -211,9 +258,9 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | 8 | knowledge-hub-app: k8s deploy + add hub.jpglabs.com.br DNS | ⛔ After VPS SSH |
 | 9 | Mobile: `npm install` in `jpglabs-portifolio-mobile` | ⏳ Ready |
 | 10 | Mobile: add EAS project ID to `app.json` | ⏳ Ready |
-| 11 | AwesomePie iOS: add OpenAI API key → test GPT-4o-mini vs local | 🟡 In Progress (PiPhone update phase — 2026-03-19) |
+| 11 | AwesomePie iOS: add OpenAI API key → test GPT-4o-mini vs local | ⛔ Cancelado — projeto arquivado em 2026-04-07 |
 | 12 | memory-sync extension: test `/memory-status` after `/reload` | ⏳ Ready |
-| 13 | Vault: push knowledge-hub to private GitHub repo → enable vault-sync CronJob | ⏳ Ready |
+| 13 | Workspace docs: push merged docs/memory state to private GitHub repo → enable sync automation | ⏳ Ready |
 | 14 | Add hub-secrets block to k8s `02-secrets.yaml` | ⛔ After VPS SSH |
 | 15 | Grant microphone access to Terminal (pi-voice STT) | ⚠️ System Settings → Privacy |
 | 16 | Import Little Snitch rules (`~/pi-telemetry-block.lsrules`) | ⚠️ Manual |
@@ -234,7 +281,7 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | 2026-03-12 | jpglabs-portifolio-mobile scaffolded — Expo SDK 51, 4 tabs, hub API integration |
 | 2026-03-12 | k8s: knowledge-hub.yaml — PVC, vault-sync CronJob (5min), Deployment, Ingress → hub.jpglabs.com.br |
 | 2026-03-12 | Supabase migration 001_finance.sql — income_sources, transactions, goals + RLS policies |
-| 2026-03-12 | apply-all.sh — disk preflight (auto-prune ≥85%), knowledge-hub added to deploy loop |
+| 2026-03-12 | apply-all.sh — disk preflight (auto-prune ≥85%), knowledge-hub-app added to deploy loop |
 | 2026-03-12 | vps-full-repair.sh — full diagnosis + disk clean + firewall + portfolio redeploy + health check |
 | 2026-03-12 | vps-mail-setup.sh — interactive mailserver account creation + DKIM setup |
 | 2026-03-12 | VPS diagnosis — 526 root cause (CF Strict + container down) + mailserver never started confirmed |
@@ -243,18 +290,34 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | 2026-03-12 | pi-local + Ollama bound to 0.0.0.0 — LAN accessible from iPhone |
 | 2026-03-12 | repo-split — jpglabs-portfolio-frontend (Vite) + jpglabs-portfolio-backend (Next.js) |
 | 2026-03-12 | Pi.app v2.0 FINAL — proprietary branding, memory R/W, voice, network viz |
-| 2026-03-11 | session-logger.ts extension — logs every session to knowledge-hub + updates PI_MEMORY.md |
+| 2026-03-11 | session-logger.ts extension — logs every session to jpglabs/docs/memory/logs + updates PI_MEMORY.md |
 | 2026-03-11 | pi-voice (STT/TTS, 8-thread M4, ggml-small.en.bin) |
 | 2026-03-11 | mac-app-uninstaller skill, Little Snitch telemetry rules |
 | 2026-03-11 | Uninstalled Codex.app + Claude.app GUI (~1.4GB freed), CLIs kept |
 | 2026-03-09 | Portfolio route + access control refactor — centralized routes, RBAC, legacy redirects |
 | 2026-03-09 | Roadmap board in Hub page (RoadmapBoard.tsx + roadmap.ts) |
 | 2026-03-09 | VPS deploy parity on port 8082 confirmed |
+| 2026-03-27 | Workspace root canonicalized to `~/code`; active configs and docs moved away from iCloud paths |
+| 2026-03-28 | `jpglabs/docs` became the canonical cross-agent hub for rules, ownership, manifests, and session handoff |
+| 2026-03-31 | Shared Docker MCP stack configured for Codex, Claude Desktop, Claude Code, and Gemini with `git`, `filesystem`, `playwright`, `fetch`, `context7`, `memory`, `sequentialthinking`, `ast-grep`, and `semgrep` |
+| 2026-03-31 | Shared volume `shared-memory` created for MCP memory; open legacy sessions may still persist to `claude-memory` until clients restart |
+| 2026-03-31 | FrankMD local notes root expanded to `~/code`, including visible path `~/code/memoria-compartilhada` |
+| 2026-03-31 | PiPhone VPS telemetry path verified as `baseURL + /vps/telemetry`; real devices prefer remote bundled URLs over loopback |
+| 2026-03-31 | `jader@jpglabs.com.br` mail plan remains VPS `docker-mailserver` plus Cloudflare DNS/certbot; DNS is live with MX/SPF/DMARC/DKIM, but SMTP/IMAP ports still time out publicly |
+| 2026-04-03 | Temporary planning exception approved: keep `Jira + Confluence` and `Notion` updated in parallel until `2026-05-31`, then decide whether the parallel lane ends or remains after migration |
+| 2026-04-07 | Unified Memory Center: pi-skills installed for Pi, Claude, Codex; memory-sync and session-logger extensions created; MEMORY_SYNC.md protocol documented |
+| 2026-04-07 | VPS Ollama: nemotron-3-super configurado na VPS (187.77.227.151:11434); acesso SSH local via Tailscale (jpglabs-vps-tailnet) ou público (jpglabs-vps) |
+| 2026-04-07 | AwesomePie iOS arquivado como legado — projeto descontinuado |
+| 2026-04-08 | Banana Slides deployado na VPS via docker-compose.prod.yml — frontend :3000 · backend :5000 · AI_PROVIDER_FORMAT=gemini |
+| 2026-04-08 | Família Pi inteira descontinuada: pi-local-app, piphone-ios, pibar-macos, PieCenter, AwesomePie, pi-watchdog — repos serão removidos |
+| 2026-04-08 | Foco de desenvolvimento pivotado para OpenClaude (coding-agent CLI multi-provider) + jpglabs-saas (SaaS B2B licitações) |
+| 2026-04-08 | n8n e docker-mailserver confirmados como operacionais na VPS |
+| 2026-04-08 | Design system padrão: design-system-claude-codex.html — tema claro warm (--c-brand: #CF6731), background grid cartesiano, sem azul/roxo |
 
 ---
 
 ## Rules (non-negotiable)
-- Always read this file + `~/.codex/memories/*.md` at session start
+- Always read this file + canonical memory at session start
 - Always run brutal-critic-triad before code changes (load jader-engineering-profile first)
 - Never uninstall active CLI running the current session
 - Never commit TSE/client projects without explicit per-session confirmation
@@ -266,6 +329,7 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 - All conversations in English (user is Brazilian — direct grammar feedback for improving comprehension)
 - End every session with `memory_delta` + `next_action`
 - Never expose credentials, API keys, tokens or passwords in output
+- Prefer CLI tools with READMEs over MCP servers (progressive disclosure)
 
 ---
 
@@ -279,4 +343,4 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 
 ---
 
-_Last updated: 2026-03-19 by Claude (piphone-update-roadmap session)_
+_Last updated: 2026-04-07 by Claude Code (vps-ollama-nemotron session)_

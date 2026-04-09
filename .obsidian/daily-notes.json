@@ -1,0 +1,6 @@
+{
+  "folder": "daily",
+  "template": "_templates/daily-session",
+  "format": "YYYY-MM-DD",
+  "autorun": false
+}
