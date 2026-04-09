@@ -29,6 +29,7 @@
 - GitLab: `https://gitlab.com/jader-germano/jpglabs-saas`
 - Confluence: `https://jadergermano.atlassian.net/wiki/spaces/SD`
 - Jira: `https://jpglabs.atlassian.net/jira/software/projects/SCRUM/boards`
+- Perfil Atlassian: `https://home.atlassian.com/o/7babc1a4-46d5-4bcc-b108-ed2586bb2579/people/5e0a03440242870e996e621a?cloudId=f2d06056-c0d3-4c77-af10-8c964f76218f`
 - Status semanal: `/Users/philipegermano/contratos/jpglabs/STATUS.md`
 
 ## Próximos Marcos
