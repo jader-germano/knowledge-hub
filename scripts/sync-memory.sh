@@ -44,7 +44,7 @@ for agent_dir in "$MEMORY_ROOT/sessions"/*/; do
   agent=$(basename "$agent_dir")
   ssh "$VPS_HOST" "mkdir -p $VPS_MEMORY_DIR/sessions/$agent"
   # sync only the 10 most recent session files
-  recent=$(ls -t "$agent_dir"*.md 2>/dev/null | head -10)
+  recent=$(ls -t "$agent_dir"*.md 2>/dev/null | head -10 || true)
   if [[ -n "$recent" ]]; then
     rsync -avz $recent "$VPS_HOST:$VPS_MEMORY_DIR/sessions/$agent/"
   else
