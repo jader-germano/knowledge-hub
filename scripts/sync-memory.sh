@@ -4,7 +4,7 @@
 set -euo pipefail
 
 MEMORY_ROOT="${MEMORY_ROOT:-$HOME/code/jpglabs/docs/memory}"
-VPS_HOST="${VPS_HOST:-root@187.77.227.151}"
+VPS_HOST="${VPS_HOST:-jpglabs-vps}"
 VPS_MEMORY_DIR="/root/memory"
 KUBECTL="ssh $VPS_HOST k3s kubectl"
 
