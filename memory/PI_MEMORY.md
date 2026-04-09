@@ -62,7 +62,7 @@
 - **SSH:** `root@187.77.227.151` — `~/.ssh/id_ed25519`
 - **Stack:** Docker Compose (Traefik, n8n, mailserver) + k3s (portfolio-backend, ollama)
 - **Compose dirs:** `/docker/n8n/` · `/docker/portfolio/` · `/docker/chat/` · `/docker/mailserver/`
-- **Status:** ⚠️ SSH key not authorized · portfolio/n8n down · mailserver never started
+- **Status:** ⚠️ SSH key not authorized · portfolio container exec format error · n8n operacional · mailserver operacional
 
 ### 7. pi-local-app
 - **Repo:** `~/code/pessoal/pi-local-app`
@@ -196,9 +196,9 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | Ollama | :11434 (VPS) | ✅ Running | nemotron-3-super + deepseek-r1:7b disponíveis |
 | Banana Slides | :3000 (frontend) :5000 (backend) | ✅ Running | /docker/banana-slides · Gemini API · docker-compose.prod.yml |
 | Portfolio | jpglabs.com.br | ❌ 526/404 | CF SSL strict + container route miss |
-| n8n | n8n.jpglabs.com.br | ❌ 404 | Traefik route miss / container down |
-| Mailserver | mail.jpglabs.com.br | ❌ Never started | finish-setup.sh never ran |
-| pi-local API | api.jpglabs.com.br | ❌ No DNS | Not deployed to VPS yet |
+| n8n | n8n.jpglabs.com.br | ✅ Operacional | Configurado e rodando |
+| Mailserver | mail.jpglabs.com.br | ✅ Operacional | docker-mailserver configurado |
+| pi-local API | api.jpglabs.com.br | ❌ Descontinuado | Família Pi removida (abr/2026) |
 | knowledge-hub-app | hub.jpglabs.com.br | ❌ No DNS | New service — needs deploy |
 | k3s | — | Unknown | Needs SSH to check |
 
@@ -309,6 +309,10 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | 2026-04-07 | VPS Ollama: nemotron-3-super configurado na VPS (187.77.227.151:11434); acesso SSH local via Tailscale (jpglabs-vps-tailnet) ou público (jpglabs-vps) |
 | 2026-04-07 | AwesomePie iOS arquivado como legado — projeto descontinuado |
 | 2026-04-08 | Banana Slides deployado na VPS via docker-compose.prod.yml — frontend :3000 · backend :5000 · AI_PROVIDER_FORMAT=gemini |
+| 2026-04-08 | Família Pi inteira descontinuada: pi-local-app, piphone-ios, pibar-macos, PieCenter, AwesomePie, pi-watchdog — repos serão removidos |
+| 2026-04-08 | Foco de desenvolvimento pivotado para OpenClaude (coding-agent CLI multi-provider) + jpglabs-saas (SaaS B2B licitações) |
+| 2026-04-08 | n8n e docker-mailserver confirmados como operacionais na VPS |
+| 2026-04-08 | Design system padrão: design-system-claude-codex.html — tema claro warm (--c-brand: #CF6731), background grid cartesiano, sem azul/roxo |
 
 ---
 
