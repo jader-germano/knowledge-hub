@@ -1,0 +1,119 @@
+{
+  "$schema": "/Users/philipegermano/code/jpglabs/docs/memory/schemas/session-memory-sidecar.schema.json",
+  "schema_version": "1.0",
+  "session": {
+    "id": "docs-claude-cli-teams-enable-2026-03-31-session",
+    "timestamp": "2026-03-31T00:00:00-03:00",
+    "date": "2026-03-31",
+    "provider": "unknown",
+    "workspace": "/Users/philipegermano/code",
+    "status": "partial",
+    "feature_id": "claude-cli-teams-enable",
+    "summary": "O Claude Code foi atualizado de `2.1.87` para `2.1.88`. | O bin\u00e1rio nativo atualizado ficou dispon\u00edvel em `~/.local/bin/claude`."
+  },
+  "projects": [
+    {
+      "id": "docs",
+      "name": "jpglabs/docs",
+      "path": "/Users/philipegermano/code/jpglabs/docs",
+      "role": "imported from legacy session report"
+    }
+  ],
+  "artifacts": {
+    "report": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/claude-cli-teams-enable/2026-03-31-session/report.md",
+    "daily": "/Users/philipegermano/code/daily/2026-03-31.md",
+    "evidence_dir": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/claude-cli-teams-enable/2026-03-31-session"
+  },
+  "tags": [
+    "claude-cli-teams-enable",
+    "docs",
+    "imported",
+    "session-report"
+  ],
+  "findings": [
+    {
+      "id": "legacy-import",
+      "summary": "Imported from a legacy Markdown report. Timestamp and provider may be approximate and should be curated if higher fidelity is required.",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-n-o-h-evid-ncia-funcional-com-gifs-porque-esta-s",
+      "summary": "N\u00e3o h\u00e1 evid\u00eancia funcional com GIFs porque esta sess\u00e3o n\u00e3o foi de entrega de UI",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-semgrep-permanece-fora-da-baseline-funcional-at-",
+      "summary": "`semgrep` permanece fora da baseline funcional at\u00e9 receber autentica\u00e7\u00e3o OAuth",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-ast-grep-exige-dir-relativo-ao-workspace-ou-src-",
+      "summary": "`ast-grep` exige `dir` relativo ao workspace ou `/src/...`; paths absolutos do host n\u00e3o s\u00e3o interoper\u00e1veis nesse par\u00e2metro",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-a-execu-o-real-de-teams-ainda-n-o-foi-validada-e",
+      "summary": "a execu\u00e7\u00e3o real de `/teams` ainda n\u00e3o foi validada em uma sess\u00e3o Claude controlada",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-o-fluxo-oficial-de-figma-foi-decidido-pelo-plugi",
+      "summary": "o fluxo oficial de Figma foi decidido pelo plugin/app, mas ainda falta um teste com arquivo ou frame real",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "next_actions": [
+    {
+      "id": "imported-abrir-uma-sess-o-claude-neste-workspace-e-testar",
+      "summary": "Abrir uma sess\u00e3o `claude` neste workspace e testar `/teams` com um caso simples",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "imported-decidir-se-semgrep-receber-oauth-para-voltar-bas",
+      "summary": "Decidir se `semgrep` receber\u00e1 OAuth para voltar \u00e0 baseline funcional",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "imported-validar-o-fluxo-oficial-de-figma-com-um-arquivo-",
+      "summary": "Validar o fluxo oficial de Figma com um arquivo ou frame real via plugin/app",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "decisions": [],
+  "files_touched": [
+    "`/Users/philipegermano/code/.mcp.json`",
+    "`/Users/philipegermano/code/.claude/settings.json`",
+    "`/Users/philipegermano/code/.claude/skills/teams/SKILL.md`",
+    "`/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/claude-cli-teams-enable/2026-03-31-session/report.md`",
+    "`/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/claude-cli-teams-enable/2026-03-31-session/prototype.md`",
+    "`/Users/philipegermano/.zshrc`"
+  ],
+  "commands": []
+}

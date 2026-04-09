@@ -19,9 +19,9 @@ Classificação atual dos documentos no workspace.
 - `jpglabs/docs/MCP_SETUP.md` — referência transversal de MCP e gateway Docker
 - `jpglabs/docs/agents/AGENT_BRIDGE.md` — handoff transversal mais recente
 - `jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md` — template obrigatório de fechamento
-- `jpglabs/docs/daily/README.md` — rotina diária e automação
-- `jpglabs/docs/daily/AUTOMATION_PROMPT.md` — prompt-base da sessão diária automatizada
-- `jpglabs/docs/daily/2026-03-31.md` — resumo diário desta reorganização
+- `daily/README.md` — contrato canônico do diário raiz do workspace
+- `daily/AUTOMATION_PROMPT.md` — prompt-base da sessão diária automatizada
+- `daily/*.md` — relatórios diários por sessão do workspace
 - `jpglabs/docs/manifests/workspace.index.yaml` — índice de contextos
 - `jpglabs/docs/manifests/docs.index.yaml` — índice classificatório dos documentos
 - `jpglabs/docs/manifests/skills.index.yaml` — índice de skills compartilhadas

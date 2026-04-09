@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Claude Code Daily Report - 2026-03-21</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --surface: #161b22;
+    --surface2: #1c2128;
+    --border: #30363d;
+    --blue: #2f81f7;
+    --green: #238636;
+    --yellow: #e3b341;
+    --red: #f85149;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --font: "SF Mono", "Fira Code", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; line-height: 1.6; }
+  nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 20; }
+  nav .logo { font-family: var(--font); font-size: 13px; color: var(--blue); font-weight: 700; letter-spacing: 1px; }
+  nav .nav-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  nav .nav-pills a { color: var(--muted); text-decoration: none; font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 1px solid transparent; }
+  nav .nav-pills a:hover { color: var(--text); border-color: var(--border); }
+  .container { max-width: 1120px; margin: 0 auto; padding: 32px 24px; }
+  section { margin-bottom: 40px; }
+  h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+  h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 14px; font-weight: 700; color: var(--blue); margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  p { color: var(--muted); margin-bottom: 12px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; font-family: var(--font); border: 1px solid; }
+  .badge-blue { color: var(--blue); border-color: color-mix(in srgb, var(--blue) 30%, transparent); background: color-mix(in srgb, var(--blue) 10%, transparent); }
+  .badge-green { color: var(--green); border-color: color-mix(in srgb, var(--green) 30%, transparent); background: color-mix(in srgb, var(--green) 10%, transparent); }
+  .badge-yellow { color: var(--yellow); border-color: color-mix(in srgb, var(--yellow) 30%, transparent); background: color-mix(in srgb, var(--yellow) 10%, transparent); }
+  .badge-muted { color: var(--muted); border-color: var(--border); background: var(--surface2); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+  .card-title { font-weight: 700; font-size: 14px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; } }
+  .status-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .status-row:last-child { border-bottom: none; }
+  .status-icon { width: 20px; text-align: center; flex-shrink: 0; margin-top: 2px; }
+  .status-label { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+  .status-detail { color: var(--muted); font-size: 12px; }
+  code { font-family: var(--font); font-size: 12px; background: var(--surface2); padding: 2px 5px; border-radius: 3px; color: var(--blue); }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: var(--surface2); color: var(--muted); font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 9px 12px; border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  ul { padding-left: 18px; color: var(--muted); }
+  li { margin: 8px 0; }
+  .confirm-box { background: color-mix(in srgb, var(--blue) 8%, transparent); border: 1px solid var(--blue); border-radius: 10px; padding: 24px; margin-top: 32px; }
+  .confirm-box h3 { color: var(--blue); margin-bottom: 16px; font-size: 16px; text-transform: none; letter-spacing: 0; }
+  .confirm-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .confirm-num { background: var(--blue); color: #000; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; flex-shrink: 0; margin-top: 1px; }
+  .confirm-text { font-size: 13px; }
+  .confirm-text strong { color: var(--text); display: block; margin-bottom: 2px; }
+  .confirm-text span { color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<nav>
+  <span class="logo">JPG LABS</span>
+  <div class="nav-pills">
+    <a href="#estado">Estado</a>
+    <a href="#matriz">Matriz</a>
+    <a href="#comparativo">Comparativo</a>
+    <a href="#faltas">Faltas</a>
+    <a href="#proximo">Próximo passo</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div style="margin-bottom: 40px;">
+    <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
+      <span class="badge badge-blue">DAILY REPORT</span>
+      <span class="badge badge-green">BASELINE VS NOW</span>
+      <span class="badge badge-muted">2026-03-21</span>
+    </div>
+    <h1>Claude Code - Evolucao desde o baseline do PR #3</h1>
+    <p style="font-size:15px; color:var(--muted); max-width:760px;">Comparativo entre o estado congelado no export de conversa do PR #3 e o estado atual apos canon, ADRs, implementacao e merges da trilha de runtime split, Pi service e thin clients.</p>
+  </div>
+
+  <section id="estado">
+    <h2>1. Estado consolidado</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">O que mudou de verdade</span>
+          <span class="badge badge-yellow">saltos estruturais</span>
+        </div>
+        <div class="status-row">
+          <div class="status-icon">+</div>
+          <div><div class="status-label">Conclusoes viraram canon</div><div class="status-detail">O que era conversa ou correcao ad hoc foi consolidado em <code>CLAUDE.md</code>, ADRs e notas de arquitetura do hub.</div></div>
+        </div>
+        <div class="status-row">
+          <div class="status-icon">+</div>
+          <div><div class="status-label">Arquitetura saiu do implicito</div><div class="status-detail">O split de 3 runtimes foi formalizado e mergeado: Node canonico para <code>/api/*</code>, Vite publico, AI frontend autenticado.</div></div>
+        </div>
+        <div class="status-row">
+          <div class="status-icon">+</div>
+          <div><div class="status-label">Thin clients entraram na trilha real</div><div class="status-detail"><code>PiPhone</code> e <code>PiBar</code> agora consomem <code>/life/*</code> com fallback para <code>/threads</code>.</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Leitura de roadmap</span>
+          <span class="badge badge-blue">fundacao forte</span>
+        </div>
+        <div class="status-row">
+          <div class="status-icon">=</div>
+          <div><div class="status-label">Plataforma destravou</div><div class="status-detail">A base tecnica para web, mobile e operacao ficou bem mais coerente do que no baseline do PR #3.</div></div>
+        </div>
+        <div class="status-row">
+          <div class="status-icon">!</div>
+          <div><div class="status-label">Produto ainda nao acompanhou</div><div class="status-detail">A trilha Omni segue dependente de Figma, landing page, integracao com inbox e alertas no PiPhone.</div></div>
+        </div>
+        <div class="status-row">
+          <div class="status-icon">></div>
+          <div><div class="status-label">Proxima fase</div><div class="status-detail">Agora o gargalo deixa de ser arquitetura e volta a ser execucao do roadmap comercial.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="matriz">
+    <h2>2. Matriz de evolucao</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Frente</th>
+          <th>Antes</th>
+          <th>Agora</th>
+          <th>Falta</th>
+          <th>Progresso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Protocolo Claude/Pi</td>
+          <td>Texto misturado, termos stale, sem canon.</td>
+          <td><code>CLAUDE.md</code> com <code>AI_HOME</code>, <code>ROOT_ADMIN</code>, <code>session.sync</code>, <code>session.diary</code> e <code>life/*</code>.</td>
+          <td>So manutencao incremental.</td>
+          <td>~90%</td>
+        </tr>
+        <tr>
+          <td>Arquitetura de runtimes</td>
+          <td>Direcao implicita.</td>
+          <td>Split triplo aceito e mergeado.</td>
+          <td>Deploy e validacao live.</td>
+          <td>~85%</td>
+        </tr>
+        <tr>
+          <td>Contrato Pi service</td>
+          <td><code>threads</code> ainda era a referencia visivel.</td>
+          <td><code>pi-local-app</code> com <code>life/*</code> e roles canonicas.</td>
+          <td>Verificar paridade em producao.</td>
+          <td>~85%</td>
+        </tr>
+        <tr>
+          <td>Thin clients</td>
+          <td>Prioridade discutida, sem paridade entregue.</td>
+          <td><code>PiPhone</code> e <code>PiBar</code> mergeados em <code>/life/*</code>.</td>
+          <td>Validacao runtime vivo e publish/version bump se necessario.</td>
+          <td>~80%</td>
+        </tr>
+        <tr>
+          <td>Canon/ADRs</td>
+          <td>Sem ADR aceito do split triplo.</td>
+          <td>ADR-002 aceito e hub alinhado.</td>
+          <td>Arquivar notas com BFF antigo.</td>
+          <td>~85%</td>
+        </tr>
+        <tr>
+          <td>Roadmap Omni/produto</td>
+          <td>Majoritariamente conceitual.</td>
+          <td>Fundacao tecnica mais forte.</td>
+          <td>Figma, LP, <code>inbox_messages</code>, alertas no PiPhone.</td>
+          <td>~35%</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="comparativo">
+    <h2>3. Antes -> agora -> falta</h2>
+    <div class="card">
+      <h3>Claude / Pi protocol</h3>
+      <p><strong>Antes:</strong> correcao pedida em conversa, ainda misturando politica local e referencia externa.</p>
+      <p><strong>Agora:</strong> protocolo canonico consolidado no hub.</p>
+      <p><strong>Falta:</strong> apenas manutencao quando houver mudanca de contrato.</p>
+
+      <h3>Runtime ownership</h3>
+      <p><strong>Antes:</strong> ambiguidade sobre quem possuia <code>/api/*</code>.</p>
+      <p><strong>Agora:</strong> Node eh o runtime canonico; Vite eh publico; AI frontend eh operador/autenticado.</p>
+      <p><strong>Falta:</strong> validacao live e limpeza de compatibilidade temporaria.</p>
+
+      <h3>Thin-client parity</h3>
+      <p><strong>Antes:</strong> prioridade mobile declarada, mas snapshot antigo nao representava entrega real.</p>
+      <p><strong>Agora:</strong> ambos os clientes Apple passaram a refletir o contrato do life manager.</p>
+      <p><strong>Falta:</strong> verificacao no runtime atualizado.</p>
+
+      <h3>Roadmap execution</h3>
+      <p><strong>Antes:</strong> discussao dominada por arquitetura e guard rails.</p>
+      <p><strong>Agora:</strong> blockers estruturais bem menores.</p>
+      <p><strong>Falta:</strong> execucao do roadmap de negocio.</p>
+    </div>
+  </section>
+
+  <section id="faltas">
+    <h2>4. O que ainda falta</h2>
+    <div class="card">
+      <ul>
+        <li>Deployar ou puxar os <code>main</code> mergeados nos ambientes ativos.</li>
+        <li>Validar ponta a ponta: runtime Node, frontend AI, frontend Vite, <code>pi-local-app</code> e clientes Apple.</li>
+        <li>Retomar o roadmap Omni em entrega de produto: Figma, landing page, integracao com inbox e alertas no PiPhone.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="proximo">
+    <div class="confirm-box">
+      <h3>Proximo passo recomendado</h3>
+      <div class="confirm-item">
+        <div class="confirm-num">1</div>
+        <div class="confirm-text"><strong>Validar o runtime vivo</strong><span>Conferir se os contratos mergeados estao realmente no ar e consumidos pelas superficies certas.</span></div>
+      </div>
+      <div class="confirm-item">
+        <div class="confirm-num">2</div>
+        <div class="confirm-text"><strong>Fechar a verificacao dos clientes</strong><span>Garantir que PiPhone e PiBar estao lendo o <code>life/*</code> canonicamente.</span></div>
+      </div>
+      <div class="confirm-item">
+        <div class="confirm-num">3</div>
+        <div class="confirm-text"><strong>Voltar para produto</strong><span>Migrar foco da fundacao tecnica para a execucao do roadmap Omni.</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

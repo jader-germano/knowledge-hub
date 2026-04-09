@@ -16,6 +16,7 @@ General guide for agents working in the workspace rooted at:
 - `jpglabs/portfolio-mobile/`: portfolio mobile client
 - `jpglabs/piphone-ios/`: iOS client related to the Pi ecosystem
 - `jpglabs/pibar-macos/`: macOS client related to the Pi ecosystem
+- `jpglabs/PieCenter/`: unified Apple shell under active construction
 - `jpglabs/docs/tools/`: imported active artifacts from legacy orchestration
 - `jpglabs/docs/archive/legacy-repos/`: archived repositories and legacy snapshots
 - `FrankMD/`: filesystem-first Rails application

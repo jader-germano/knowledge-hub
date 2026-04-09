@@ -17,8 +17,7 @@ canonical_roots:
   agents: /Users/philipegermano/code/jpglabs/docs/agents
   skills: /Users/philipegermano/code/jpglabs/docs/skills
   memory: /Users/philipegermano/code/jpglabs/docs/memory
-  jpglabs_daily: /Users/philipegermano/code/jpglabs/docs/daily
-  personal_daily: /Users/philipegermano/code/daily
+  daily: /Users/philipegermano/code/daily
   config: /Users/philipegermano/code/config
   mcp: /Users/philipegermano/code/config/mcp
   manifests: /Users/philipegermano/code/jpglabs/docs/manifests
@@ -57,6 +56,9 @@ repositories:
   - id: pibar-macos
     path: /Users/philipegermano/code/jpglabs/pibar-macos
     role: macos-pi-client
+  - id: PieCenter
+    path: /Users/philipegermano/code/jpglabs/PieCenter
+    role: unified-apple-shell
   - id: Playground 2
     path: /Users/philipegermano/code/Playground 2
     role: experimental-bootstrap

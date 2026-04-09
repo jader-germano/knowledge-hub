@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design System — Claude.app & Codex.app</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --page-bg: #F7F6F3;
+      --page-text: #1A1A1A;
+      --section-bg: #FFFFFF;
+      --border: #E2E0D8;
+      --muted: #6B6B6B;
+      --radius: 10px;
+      --font-sans: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--page-bg);
+      color: var(--page-text);
+      line-height: 1.6;
+      padding: 0 0 80px;
+    }
+
+    /* ── TOP NAV ── */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(247, 246, 243, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 40px;
+    }
+    .top-nav-brand { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
+    .top-nav-links { display: flex; gap: 28px; }
+    .top-nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .top-nav-links a:hover { color: var(--page-text); }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 72px 40px 56px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--border);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .hero p { font-size: 16px; color: var(--muted); max-width: 520px; margin: 0 auto; }
+    .app-pills {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1.5px solid;
+    }
+    .pill-claude { border-color: #CF6731; color: #CF6731; background: #FEF3EC; }
+    .pill-codex  { border-color: #10A37F; color: #10A37F; background: #ECFAF5; }
+    .pill-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .pill-claude .pill-dot { background: #CF6731; }
+    .pill-codex  .pill-dot { background: #10A37F; }
+
+    /* ── SECTION WRAPPER ── */
+    .section-wrap {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .section-label-bar {
+      width: 4px;
+      height: 32px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .section-label h2 { font-size: 26px; font-weight: 700; letter-spacing: -0.6px; }
+    .section-label p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 56px 0 48px;
+    }
+
+    /* ── GRID CARDS ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .card {
+      background: var(--section-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .card-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .card-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .card-sub { font-size: 12px; color: var(--muted); }
+
+    /* ── COLOR SWATCHES ── */
+    .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+    .swatch {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    .swatch-color { height: 60px; }
+    .swatch-info { padding: 10px 12px; background: #fff; }
+    .swatch-name { font-size: 12px; font-weight: 600; display: block; }
+    .swatch-hex  { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+
+    /* ── TYPOGRAPHY SHOWCASE ── */
+    .type-row {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+    }
+    .type-row:last-child { border-bottom: none; }
+    .type-meta { width: 120px; flex-shrink: 0; }
+    .type-meta span { font-size: 11px; color: var(--muted); font-family: var(--font-mono); display: block; }
+
+    /* ── SPACING ── */
+    .spacing-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 0;
+    }
+    .spacing-bar { background: currentColor; height: 8px; border-radius: 2px; flex-shrink: 0; }
+    .spacing-meta { font-size: 12px; font-family: var(--font-mono); color: var(--muted); }
+
+    /* ── COMPONENT PREVIEW AREA ── */
+    .component-preview {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .component-preview-bar {
+      padding: 8px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--page-bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .component-preview-body { padding: 28px; }
+
+    /* ── CLAUDE THEME VARS ── */
+    .claude-theme {
+      --c-bg:          #FAFAF8;
+      --c-sidebar:     #EFEFEB;
+      --c-surface:     #FFFFFF;
+      --c-border:      #E5E3DA;
+      --c-text:        #1A1A18;
+      --c-text-muted:  #706F6C;
+      --c-brand:       #CF6731;
+      --c-brand-light: #FEF3EC;
+      --c-accent:      #7C3AED;
+      --c-accent-light:#F5F3FF;
+      --c-code-bg:     #F3F2EE;
+      --c-btn-hover:   #B85A28;
+    }
+
+    /* ── CODEX THEME VARS ── */
+    .codex-theme {
+      --cx-bg:          #0D0D0D;
+      --cx-sidebar:     #171717;
+      --cx-surface:     #1E1E1E;
+      --cx-surface2:    #2A2A2A;
+      --cx-border:      #3A3A3A;
+      --cx-text:        #ECECEC;
+      --cx-text-muted:  #8E8E8E;
+      --cx-brand:       #10A37F;
+      --cx-brand-light: #0B6E56;
+      --cx-blue:        #4B9EF8;
+      --cx-red:         #F87171;
+      --cx-yellow:      #FBBF24;
+      --cx-code-bg:     #141414;
+    }
+
+    /* ┌──────────────────────────────────────────┐
+       │  CLAUDE COMPONENTS                        │
+       └──────────────────────────────────────────┘ */
+    .claude-app-demo {
+      display: flex;
+      height: 380px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #E5E3DA;
+      background: #FAFAF8;
+      font-family: var(--font-sans);
+    }
+    .claude-sidebar {
+      width: 220px;
+      background: #EFEFEB;
+      border-right: 1px solid #E5E3DA;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .claude-sidebar-header {
+      padding: 16px 14px 12px;
+      border-bottom: 1px solid #E5E3DA;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .claude-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1A1A18;
+    }
+    .claude-logo-mark {
+      width: 24px; height: 24px;
+      background: #CF6731;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 12px; font-weight: 700;
+    }
+    .claude-new-btn {
+      width: 26px; height: 26px;
+      background: #E5E3DA;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      color: #706F6C;
+      cursor: pointer;
+    }
+    .claude-chat-list { padding: 8px 8px; flex: 1; overflow: hidden; }
+    .claude-chat-item {
+      padding: 8px 10px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      color: #706F6C;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
+    }
+    .claude-chat-item.active {
+      background: #FFFFFF;
+      color: #1A1A18;
+      font-weight: 500;
+    }
+    .claude-chat-section { padding: 8px 10px 4px; font-size: 10px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #B0AEA9; }
+    .claude-main {
+      flex: 1;
+      background: #FAFAF8;
+      display: flex;
+      flex-direction: column;
+    }
+    .claude-messages {
+      flex: 1;
+      padding: 20px 28px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .claude-msg-user {
+      align-self: flex-end;
+      max-width: 65%;
+      background: #FFFFFF;
+      border: 1px solid #E5E3DA;
+      border-radius: 16px 16px 4px 16px;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      color: #1A1A18;
+    }
+    .claude-msg-assistant {
+      align-self: flex-start;
+      max-width: 72%;
+      font-size: 13.5px;
+      color: #1A1A18;
+      line-height: 1.6;
+    }
+    .claude-msg-assistant .avatar {
+      width: 22px; height: 22px;
+      background: #CF6731;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .claude-input-wrap {
+      padding: 12px 20px 16px;
+      border-top: 1px solid #E5E3DA;
+    }
+    .claude-input {
+      display: flex;
+      align-items: center;
+      background: #FFFFFF;
+      border: 1.5px solid #E5E3DA;
+      border-radius: 12px;
+      padding: 10px 14px;
+      gap: 10px;
+    }
+    .claude-input-field {
+      flex: 1;
+      font-size: 13px;
+      color: #B0AEA9;
+      font-family: var(--font-sans);
+    }
+    .claude-input-send {
+      width: 30px; height: 30px;
+      background: #CF6731;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      font-size: 14px;
+    }
+
+    /* Claude buttons */
+    .claude-btn-primary {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #CF6731;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+    .claude-btn-secondary {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: transparent;
+      color: #1A1A18;
+      border: 1.5px solid #E5E3DA;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+    .claude-btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: transparent;
+      color: #706F6C;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+    .claude-code {
+      background: #F3F2EE;
+      border: 1px solid #E5E3DA;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: #3D3D3A;
+      overflow: auto;
+    }
+    .claude-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11.5px;
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 3px 10px;
+    }
+    .claude-badge-brand  { background: #FEF3EC; color: #CF6731; }
+    .claude-badge-accent { background: #F5F3FF; color: #7C3AED; }
+    .claude-badge-neutral{ background: #EFEFEB; color: #706F6C; }
+
+    /* ┌──────────────────────────────────────────┐
+       │  CODEX COMPONENTS                         │
+       └──────────────────────────────────────────┘ */
+    .codex-app-demo {
+      display: flex;
+      height: 380px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #3A3A3A;
+      background: #0D0D0D;
+      font-family: var(--font-sans);
+    }
+    .codex-sidebar {
+      width: 220px;
+      background: #171717;
+      border-right: 1px solid #2A2A2A;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .codex-sidebar-header {
+      padding: 14px;
+      border-bottom: 1px solid #2A2A2A;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .codex-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #ECECEC;
+    }
+    .codex-logo-mark {
+      width: 24px; height: 24px;
+      background: #10A37F;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 13px; font-weight: 700;
+    }
+    .codex-new-btn {
+      width: 26px; height: 26px;
+      background: #2A2A2A;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: #8E8E8E;
+    }
+    .codex-file-tree { padding: 8px 6px; flex: 1; overflow: hidden; }
+    .codex-file-section { padding: 8px 8px 4px; font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #555; }
+    .codex-file-item {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 8px;
+      border-radius: 5px;
+      font-size: 12px;
+      color: #8E8E8E;
+      cursor: pointer;
+    }
+    .codex-file-item.active { background: #2A2A2A; color: #ECECEC; }
+    .codex-file-icon { font-size: 11px; }
+    .codex-main {
+      flex: 1;
+      background: #0D0D0D;
+      display: flex;
+      flex-direction: column;
+    }
+    .codex-toolbar {
+      background: #171717;
+      border-bottom: 1px solid #2A2A2A;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .codex-tab {
+      padding: 4px 12px;
+      border-radius: 5px;
+      font-size: 12px;
+      color: #8E8E8E;
+      cursor: pointer;
+    }
+    .codex-tab.active {
+      background: #0D0D0D;
+      color: #ECECEC;
+      font-weight: 500;
+    }
+    .codex-editor {
+      flex: 1;
+      padding: 14px 18px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.7;
+      color: #ECECEC;
+      overflow: hidden;
+    }
+    .cx-kw { color: #C792EA; }
+    .cx-fn { color: #82AAFF; }
+    .cx-str { color: #C3E88D; }
+    .cx-num { color: #F78C6C; }
+    .cx-cm { color: #546E7A; }
+    .codex-terminal {
+      height: 90px;
+      background: #141414;
+      border-top: 1px solid #2A2A2A;
+      padding: 10px 16px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: #8E8E8E;
+      overflow: hidden;
+    }
+    .cx-prompt { color: #10A37F; }
+    .cx-output { color: #ECECEC; }
+    .cx-err    { color: #F87171; }
+
+    .codex-btn-primary {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #10A37F;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+    .codex-btn-secondary {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: transparent;
+      color: #ECECEC;
+      border: 1.5px solid #3A3A3A;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+    .codex-btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: transparent;
+      color: #8E8E8E;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+    .codex-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 5px;
+      padding: 3px 8px;
+    }
+    .codex-badge-brand   { background: #0B3D30; color: #10A37F; }
+    .codex-badge-blue    { background: #0F2544; color: #4B9EF8; }
+    .codex-badge-red     { background: #3B1111; color: #F87171; }
+    .codex-badge-neutral { background: #2A2A2A; color: #8E8E8E; }
+
+    .diff-add { background: rgba(16,163,127,.12); color: #10A37F; font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; display: block; }
+    .diff-del { background: rgba(248,113,113,.10); color: #F87171; font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; display: block; }
+    .diff-ctx { color: #555; font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; display: block; }
+
+    /* ── COMPARISON TABLE ── */
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    .comp-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--page-bg);
+      border-bottom: 1.5px solid var(--border);
+    }
+    .comp-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .comp-table td:first-child { color: var(--muted); font-size: 12px; font-weight: 600; width: 140px; }
+    .comp-chip {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    /* ── UTILITY ── */
+    .mt-8  { margin-top: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .mt-24 { margin-top: 24px; }
+    .mt-32 { margin-top: 32px; }
+    .flex  { display: flex; }
+    .flex-wrap { flex-wrap: wrap; }
+    .gap-8  { gap: 8px; }
+    .gap-12 { gap: 12px; }
+    .gap-16 { gap: 16px; }
+    .items-center { align-items: center; }
+    .full-width { width: 100%; }
+
+    @media (max-width: 768px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .top-nav-links { display: none; }
+      .hero h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── TOP NAV ─────────────────────────────────────── -->
+<nav class="top-nav">
+  <span class="top-nav-brand">Design System Reference</span>
+  <div class="top-nav-links">
+    <a href="#claude">Claude.app</a>
+    <a href="#codex">Codex.app</a>
+    <a href="#compare">Comparison</a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────── -->
+<header class="hero">
+  <div class="hero-eyebrow">Design System · 2025–2026</div>
+  <h1>Claude.app &amp; Codex.app</h1>
+  <p>Visual design reference covering colors, typography, spacing, and UI components for both applications.</p>
+  <div class="app-pills">
+    <span class="pill pill-claude">
+      <span class="pill-dot"></span>Claude.app — Anthropic
+    </span>
+    <span class="pill pill-codex">
+      <span class="pill-dot"></span>Codex.app — OpenAI
+    </span>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════
+     CLAUDE.APP
+     ══════════════════════════════════════════════════════ -->
+<div class="section-wrap" id="claude">
+
+  <!-- Section Label -->
+  <div class="section-label">
+    <div class="section-label-bar" style="background:#CF6731;"></div>
+    <div>
+      <h2>Claude.app</h2>
+      <p>By Anthropic · Warm, minimal, conversational</p>
+    </div>
+  </div>
+
+  <!-- COLORS -->
+  <div class="card-label">Color Palette</div>
+  <div class="swatch-grid">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#FAFAF8;border-bottom:1px solid #E5E3DA;"></div>
+      <div class="swatch-info"><span class="swatch-name">Background</span><span class="swatch-hex">#FAFAF8</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#EFEFEB;"></div>
+      <div class="swatch-info"><span class="swatch-name">Sidebar</span><span class="swatch-hex">#EFEFEB</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#FFFFFF;border-bottom:1px solid #E5E3DA;"></div>
+      <div class="swatch-info"><span class="swatch-name">Surface</span><span class="swatch-hex">#FFFFFF</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#E5E3DA;"></div>
+      <div class="swatch-info"><span class="swatch-name">Border</span><span class="swatch-hex">#E5E3DA</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#1A1A18;"></div>
+      <div class="swatch-info" style="background:#fff"><span class="swatch-name">Text Primary</span><span class="swatch-hex">#1A1A18</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#706F6C;"></div>
+      <div class="swatch-info"><span class="swatch-name">Text Muted</span><span class="swatch-hex">#706F6C</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#CF6731;"></div>
+      <div class="swatch-info"><span class="swatch-name">Brand / Accent</span><span class="swatch-hex">#CF6731</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#B85A28;"></div>
+      <div class="swatch-info"><span class="swatch-name">Brand Hover</span><span class="swatch-hex">#B85A28</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#FEF3EC;"></div>
+      <div class="swatch-info"><span class="swatch-name">Brand Light</span><span class="swatch-hex">#FEF3EC</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#7C3AED;"></div>
+      <div class="swatch-info"><span class="swatch-name">Accent Purple</span><span class="swatch-hex">#7C3AED</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#F5F3FF;"></div>
+      <div class="swatch-info"><span class="swatch-name">Accent Light</span><span class="swatch-hex">#F5F3FF</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#F3F2EE;"></div>
+      <div class="swatch-info"><span class="swatch-name">Code BG</span><span class="swatch-hex">#F3F2EE</span></div>
+    </div>
+  </div>
+
+  <!-- TYPOGRAPHY -->
+  <div class="card-label mt-32">Typography</div>
+  <div class="card">
+    <div class="type-row">
+      <div class="type-meta"><span>Display</span><span>32px / 700</span></div>
+      <div style="font-size:32px;font-weight:700;letter-spacing:-0.8px;font-family:'Inter',sans-serif;color:#1A1A18;">How can I help?</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta"><span>Heading 1</span><span>22px / 700</span></div>
+      <div style="font-size:22px;font-weight:700;letter-spacing:-0.4px;font-family:'Inter',sans-serif;color:#1A1A18;">Today's Conversations</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta"><span>Heading 2</span><span>17px / 600</span></div>
+      <div style="font-size:17px;font-weight:600;font-family:'Inter',sans-serif;color:#1A1A18;">Model Settings</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta"><span>Body</span><span>14px / 400</span></div>
+      <div style="font-size:14px;line-height:1.65;font-family:'Inter',sans-serif;color:#1A1A18;">Claude is a next-generation AI assistant built for work and personal tasks, trained to be safe, accurate, and genuinely helpful.</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta"><span>Caption</span><span>12px / 400</span></div>
+      <div style="font-size:12px;color:#706F6C;font-family:'Inter',sans-serif;">Claude 3.7 Sonnet · Today at 9:45 AM</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta"><span>Mono</span><span>13px / 400</span></div>
+      <div style="font-size:13px;font-family:'JetBrains Mono',monospace;background:#F3F2EE;padding:6px 12px;border-radius:5px;color:#3D3D3A;">const answer = claude.complete(prompt)</div>
+    </div>
+  </div>
+
+  <!-- SPACING -->
+  <div class="card-label mt-32">Spacing Scale</div>
+  <div class="card">
+    <div class="spacing-row" style="color:#CF6731;"><div class="spacing-bar" style="width:4px;"></div><span class="spacing-meta">4px — xs · micro gaps, icon padding</span></div>
+    <div class="spacing-row" style="color:#CF6731;"><div class="spacing-bar" style="width:8px;"></div><span class="spacing-meta">8px — sm · inline gaps, badge padding</span></div>
+    <div class="spacing-row" style="color:#CF6731;"><div class="spacing-bar" style="width:12px;"></div><span class="spacing-meta">12px — md · chat item padding</span></div>
+    <div class="spacing-row" style="color:#CF6731;"><div class="spacing-bar" style="width:16px;"></div><span class="spacing-meta">16px — lg · card padding, section gaps</span></div>
+    <div class="spacing-row" style="color:#CF6731;"><div class="spacing-bar" style="width:24px;"></div><span class="spacing-meta">24px — xl · between components</span></div>
+    <div class="spacing-row" style="color:#CF6731;"><div class="spacing-bar" style="width:32px;"></div><span class="spacing-meta">32px — 2xl · section separation</span></div>
+    <div class="spacing-row" style="color:#CF6731;"><div class="spacing-bar" style="width:48px;"></div><span class="spacing-meta">48px — 3xl · major layout sections</span></div>
+  </div>
+
+  <!-- BORDER RADIUS -->
+  <div class="card-label mt-32">Border Radius</div>
+  <div class="grid-4 mt-8">
+    <div class="card" style="text-align:center;">
+      <div style="width:48px;height:48px;background:#FEF3EC;border:1.5px solid #CF6731;border-radius:4px;margin:0 auto 10px;"></div>
+      <div class="card-title">4px</div><div class="card-sub">Subtle — inline tags</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="width:48px;height:48px;background:#FEF3EC;border:1.5px solid #CF6731;border-radius:8px;margin:0 auto 10px;"></div>
+      <div class="card-title">8px</div><div class="card-sub">Default — buttons, cards</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="width:48px;height:48px;background:#FEF3EC;border:1.5px solid #CF6731;border-radius:12px;margin:0 auto 10px;"></div>
+      <div class="card-title">12px</div><div class="card-sub">Large — panels, modals</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="width:48px;height:48px;background:#FEF3EC;border:1.5px solid #CF6731;border-radius:999px;margin:0 auto 10px;"></div>
+      <div class="card-title">Full</div><div class="card-sub">Pills — badges, avatars</div>
+    </div>
+  </div>
+
+  <!-- UI PREVIEW -->
+  <div class="card-label mt-32">UI Preview — Chat Interface</div>
+  <div class="claude-app-demo">
+    <div class="claude-sidebar">
+      <div class="claude-sidebar-header">
+        <div class="claude-logo">
+          <div class="claude-logo-mark">C</div>
+          Claude
+        </div>
+        <div class="claude-new-btn">+</div>
+      </div>
+      <div class="claude-chat-list">
+        <div class="claude-chat-section">Today</div>
+        <div class="claude-chat-item active">Design system reference</div>
+        <div class="claude-chat-item">Blender Python script</div>
+        <div class="claude-chat-section">Yesterday</div>
+        <div class="claude-chat-item">React component review</div>
+        <div class="claude-chat-item">SQL query optimization</div>
+        <div class="claude-chat-item">Marketing copy draft</div>
+      </div>
+    </div>
+    <div class="claude-main">
+      <div class="claude-messages">
+        <div class="claude-msg-user">Explain monads in simple terms.</div>
+        <div class="claude-msg-assistant">
+          <div class="avatar">C</div>
+          <div>A monad is like a container that holds a value and defines rules for transforming that value. Think of it as a burrito — the tortilla is the monad, the filling is your value, and you can transform the filling without opening the whole thing.</div>
+        </div>
+        <div class="claude-msg-user">Can you give a code example?</div>
+      </div>
+      <div class="claude-input-wrap">
+        <div class="claude-input">
+          <div class="claude-input-field">Reply to Claude…</div>
+          <div class="claude-input-send">↑</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENTS -->
+  <div class="card-label mt-32">Buttons</div>
+  <div class="component-preview">
+    <div class="component-preview-bar">Button Variants</div>
+    <div class="component-preview-body flex gap-12 flex-wrap items-center">
+      <button class="claude-btn-primary">Send Message</button>
+      <button class="claude-btn-secondary">Cancel</button>
+      <button class="claude-btn-ghost">View History</button>
+      <button class="claude-btn-primary" style="opacity:.45;cursor:not-allowed;">Disabled</button>
+    </div>
+  </div>
+
+  <div class="card-label mt-24">Badges</div>
+  <div class="component-preview">
+    <div class="component-preview-bar">Badge Variants</div>
+    <div class="component-preview-body flex gap-8 flex-wrap items-center">
+      <span class="claude-badge claude-badge-brand">Claude 3.7</span>
+      <span class="claude-badge claude-badge-accent">New</span>
+      <span class="claude-badge claude-badge-neutral">Archived</span>
+      <span class="claude-badge claude-badge-brand">Sonnet</span>
+      <span class="claude-badge claude-badge-accent">Pro</span>
+    </div>
+  </div>
+
+  <div class="card-label mt-24">Code Block</div>
+  <div class="component-preview">
+    <div class="component-preview-bar">Code — Light Theme</div>
+    <div class="component-preview-body">
+      <pre class="claude-code">import anthropic
+
+client = anthropic.Anthropic()
+
+message = client.messages.create(
+    model="claude-opus-4-6",
+    max_tokens=1024,
+    messages=[{"role": "user", "content": "Hello, Claude"}]
+)
+print(message.content)</pre>
+    </div>
+  </div>
+
+</div>
+
+<hr class="section-divider" style="max-width:1140px;margin:56px auto 48px;" />
+
+<!-- ══════════════════════════════════════════════════════
+     CODEX.APP
+     ══════════════════════════════════════════════════════ -->
+<div class="section-wrap" id="codex">
+
+  <div class="section-label">
+    <div class="section-label-bar" style="background:#10A37F;"></div>
+    <div>
+      <h2>Codex.app</h2>
+      <p>By OpenAI · Dark, code-first, agentic</p>
+    </div>
+  </div>
+
+  <!-- COLORS -->
+  <div class="card-label">Color Palette</div>
+  <div class="swatch-grid">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#0D0D0D;"></div>
+      <div class="swatch-info" style="background:#1E1E1E"><span class="swatch-name" style="color:#ECECEC">Background</span><span class="swatch-hex" style="color:#555">#0D0D0D</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#171717;"></div>
+      <div class="swatch-info" style="background:#1E1E1E"><span class="swatch-name" style="color:#ECECEC">Sidebar</span><span class="swatch-hex" style="color:#555">#171717</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#1E1E1E;"></div>
+      <div class="swatch-info" style="background:#1E1E1E"><span class="swatch-name" style="color:#ECECEC">Surface</span><span class="swatch-hex" style="color:#555">#1E1E1E</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#2A2A2A;"></div>
+      <div class="swatch-info" style="background:#1E1E1E"><span class="swatch-name" style="color:#ECECEC">Surface Raised</span><span class="swatch-hex" style="color:#555">#2A2A2A</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#3A3A3A;"></div>
+      <div class="swatch-info" style="background:#1E1E1E"><span class="swatch-name" style="color:#ECECEC">Border</span><span class="swatch-hex" style="color:#555">#3A3A3A</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#ECECEC;"></div>
+      <div class="swatch-info"><span class="swatch-name">Text Primary</span><span class="swatch-hex">#ECECEC</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#8E8E8E;"></div>
+      <div class="swatch-info"><span class="swatch-name">Text Muted</span><span class="swatch-hex">#8E8E8E</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#10A37F;"></div>
+      <div class="swatch-info"><span class="swatch-name">Brand Green</span><span class="swatch-hex">#10A37F</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#0B6E56;"></div>
+      <div class="swatch-info"><span class="swatch-name">Brand Hover</span><span class="swatch-hex">#0B6E56</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#4B9EF8;"></div>
+      <div class="swatch-info"><span class="swatch-name">Accent Blue</span><span class="swatch-hex">#4B9EF8</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#F87171;"></div>
+      <div class="swatch-info"><span class="swatch-name">Error / Delete</span><span class="swatch-hex">#F87171</span></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#FBBF24;"></div>
+      <div class="swatch-info"><span class="swatch-name">Warning</span><span class="swatch-hex">#FBBF24</span></div>
+    </div>
+  </div>
+
+  <!-- TYPOGRAPHY -->
+  <div class="card-label mt-32">Typography</div>
+  <div class="card" style="background:#1E1E1E;border-color:#3A3A3A;">
+    <div class="type-row" style="border-color:#3A3A3A;">
+      <div class="type-meta"><span style="color:#555">Display</span><span style="color:#555">28px / 700</span></div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-0.6px;font-family:'Inter',sans-serif;color:#ECECEC;">Ready to code.</div>
+    </div>
+    <div class="type-row" style="border-color:#3A3A3A;">
+      <div class="type-meta"><span style="color:#555">Heading 1</span><span style="color:#555">18px / 600</span></div>
+      <div style="font-size:18px;font-weight:600;font-family:'Inter',sans-serif;color:#ECECEC;">Active Tasks</div>
+    </div>
+    <div class="type-row" style="border-color:#3A3A3A;">
+      <div class="type-meta"><span style="color:#555">Body</span><span style="color:#555">13.5px / 400</span></div>
+      <div style="font-size:13.5px;line-height:1.6;font-family:'Inter',sans-serif;color:#ECECEC;">Codex is an AI coding agent that reads, writes, and runs code autonomously inside a sandboxed environment.</div>
+    </div>
+    <div class="type-row" style="border-color:#3A3A3A;">
+      <div class="type-meta"><span style="color:#555">Caption</span><span style="color:#555">11.5px / 400</span></div>
+      <div style="font-size:11.5px;color:#8E8E8E;font-family:'Inter',sans-serif;">main.py · 3 minutes ago · gpt-4.1</div>
+    </div>
+    <div class="type-row" style="border-color:transparent;">
+      <div class="type-meta"><span style="color:#555">Code Mono</span><span style="color:#555">12.5px / 400</span></div>
+      <div style="font-size:12.5px;font-family:'JetBrains Mono',monospace;background:#141414;padding:6px 12px;border-radius:5px;color:#C3E88D;">git commit -m "feat: add streaming"</div>
+    </div>
+  </div>
+
+  <!-- SPACING -->
+  <div class="card-label mt-32">Spacing Scale</div>
+  <div class="card" style="background:#1E1E1E;border-color:#3A3A3A;">
+    <div class="spacing-row" style="color:#10A37F;"><div class="spacing-bar" style="width:4px;"></div><span class="spacing-meta" style="color:#8E8E8E">4px — xs · icon padding, chip gaps</span></div>
+    <div class="spacing-row" style="color:#10A37F;"><div class="spacing-bar" style="width:8px;"></div><span class="spacing-meta" style="color:#8E8E8E">8px — sm · button padding (v), tree items</span></div>
+    <div class="spacing-row" style="color:#10A37F;"><div class="spacing-bar" style="width:12px;"></div><span class="spacing-meta" style="color:#8E8E8E">12px — md · toolbar padding, badge margin</span></div>
+    <div class="spacing-row" style="color:#10A37F;"><div class="spacing-bar" style="width:16px;"></div><span class="spacing-meta" style="color:#8E8E8E">16px — lg · panel padding, card body</span></div>
+    <div class="spacing-row" style="color:#10A37F;"><div class="spacing-bar" style="width:20px;"></div><span class="spacing-meta" style="color:#8E8E8E">20px — xl · editor gutter offset</span></div>
+    <div class="spacing-row" style="color:#10A37F;"><div class="spacing-bar" style="width:24px;"></div><span class="spacing-meta" style="color:#8E8E8E">24px — 2xl · between panel sections</span></div>
+  </div>
+
+  <!-- UI PREVIEW -->
+  <div class="card-label mt-32">UI Preview — Code Editor Interface</div>
+  <div class="codex-app-demo">
+    <div class="codex-sidebar">
+      <div class="codex-sidebar-header">
+        <div class="codex-logo">
+          <div class="codex-logo-mark">⌘</div>
+          Codex
+        </div>
+        <div class="codex-new-btn">+</div>
+      </div>
+      <div class="codex-file-tree">
+        <div class="codex-file-section">Project</div>
+        <div class="codex-file-item active"><span class="codex-file-icon">📄</span> main.py</div>
+        <div class="codex-file-item"><span class="codex-file-icon">📄</span> utils.py</div>
+        <div class="codex-file-item"><span class="codex-file-icon">📁</span> tests/</div>
+        <div class="codex-file-item"><span class="codex-file-icon">📄</span> requirements.txt</div>
+        <div class="codex-file-section">Tasks</div>
+        <div class="codex-file-item active"><span class="codex-file-icon">✅</span> Add streaming</div>
+        <div class="codex-file-item"><span class="codex-file-icon">⏳</span> Write tests</div>
+      </div>
+    </div>
+    <div class="codex-main">
+      <div class="codex-toolbar">
+        <div class="codex-tab active">main.py</div>
+        <div class="codex-tab">utils.py</div>
+        <div style="margin-left:auto;display:flex;gap:6px;">
+          <button class="codex-btn-primary" style="padding:4px 12px;font-size:12px;">▶ Run</button>
+          <button class="codex-btn-secondary" style="padding:4px 10px;font-size:12px;">Commit</button>
+        </div>
+      </div>
+      <div class="codex-editor">
+        <span class="cx-kw">import</span> anthropic<br/>
+        <span class="cx-kw">from</span> typing <span class="cx-kw">import</span> Iterator<br/>
+        <br/>
+        <span class="cx-cm"># Initialize client</span><br/>
+        client = anthropic.<span class="cx-fn">Anthropic</span>()<br/>
+        <br/>
+        <span class="cx-kw">def</span> <span class="cx-fn">stream_response</span>(prompt: <span class="cx-fn">str</span>) -&gt; Iterator:<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="cx-kw">with</span> client.messages.<span class="cx-fn">stream</span>(<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model=<span class="cx-str">"claude-opus-4-6"</span>,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max_tokens=<span class="cx-num">1024</span>,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;) <span class="cx-kw">as</span> stream:<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cx-kw">yield from</span> stream.<span class="cx-fn">text_stream</span>
+      </div>
+      <div class="codex-terminal">
+        <span class="cx-prompt">$</span> python main.py<br/>
+        <span class="cx-output">Streaming enabled. Connected to claude-opus-4-6.</span><br/>
+        <span class="cx-prompt">$</span> pytest tests/<br/>
+        <span class="cx-output">........  8 passed in 0.42s</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENTS -->
+  <div class="card-label mt-32">Buttons</div>
+  <div class="component-preview" style="background:#1E1E1E;border-color:#3A3A3A;">
+    <div class="component-preview-bar" style="background:#171717;border-color:#3A3A3A;color:#555;">Button Variants</div>
+    <div class="component-preview-body flex gap-12 flex-wrap items-center" style="background:#1E1E1E;">
+      <button class="codex-btn-primary">▶ Run Task</button>
+      <button class="codex-btn-secondary">Commit</button>
+      <button class="codex-btn-ghost">View Diff</button>
+      <button class="codex-btn-primary" style="opacity:.4;cursor:not-allowed;">Disabled</button>
+    </div>
+  </div>
+
+  <div class="card-label mt-24">Badges</div>
+  <div class="component-preview" style="background:#1E1E1E;border-color:#3A3A3A;">
+    <div class="component-preview-bar" style="background:#171717;border-color:#3A3A3A;color:#555;">Badge Variants</div>
+    <div class="component-preview-body flex gap-8 flex-wrap items-center" style="background:#1E1E1E;">
+      <span class="codex-badge codex-badge-brand">Running</span>
+      <span class="codex-badge codex-badge-blue">GPT-4.1</span>
+      <span class="codex-badge codex-badge-red">Failed</span>
+      <span class="codex-badge codex-badge-neutral">Queued</span>
+      <span class="codex-badge codex-badge-brand">Completed</span>
+    </div>
+  </div>
+
+  <div class="card-label mt-24">Diff View</div>
+  <div class="component-preview" style="background:#1E1E1E;border-color:#3A3A3A;">
+    <div class="component-preview-bar" style="background:#171717;border-color:#3A3A3A;color:#555;">Code Diff — utils.py</div>
+    <div class="component-preview-body" style="background:#141414;padding:12px 0;">
+      <span class="diff-ctx"> def fetch_data(url: str) -> dict:</span>
+      <span class="diff-del">-    response = requests.get(url)</span>
+      <span class="diff-add">+    response = requests.get(url, timeout=30)</span>
+      <span class="diff-add">+    response.raise_for_status()</span>
+      <span class="diff-ctx">     return response.json()</span>
+    </div>
+  </div>
+
+</div>
+
+<hr class="section-divider" style="max-width:1140px;margin:56px auto 48px;" />
+
+<!-- ══════════════════════════════════════════════════════
+     COMPARISON
+     ══════════════════════════════════════════════════════ -->
+<div class="section-wrap" id="compare">
+
+  <div class="section-label">
+    <div class="section-label-bar" style="background:linear-gradient(to bottom, #CF6731, #10A37F);"></div>
+    <div>
+      <h2>Side-by-Side Comparison</h2>
+      <p>Key design decisions compared across both products</p>
+    </div>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden;">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Attribute</th>
+          <th>
+            <span class="comp-chip" style="background:#CF6731;"></span>Claude.app
+          </th>
+          <th>
+            <span class="comp-chip" style="background:#10A37F;"></span>Codex.app
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Theme</td>
+          <td>Light-first, warm off-white</td>
+          <td>Dark-only, near-black</td>
+        </tr>
+        <tr>
+          <td>Brand Color</td>
+          <td><span style="color:#CF6731;font-weight:600;">#CF6731</span> — warm orange/amber</td>
+          <td><span style="color:#10A37F;font-weight:600;">#10A37F</span> — teal green</td>
+        </tr>
+        <tr>
+          <td>Primary Font</td>
+          <td>Inter (Söhne-inspired), 14px body</td>
+          <td>Inter, 13.5px body</td>
+        </tr>
+        <tr>
+          <td>Mono Font</td>
+          <td>JetBrains Mono / Söhne Mono</td>
+          <td>JetBrains Mono / Fira Code</td>
+        </tr>
+        <tr>
+          <td>Border Radius</td>
+          <td>8px default, 12px large, full pills</td>
+          <td>5–8px, more angular, dense</td>
+        </tr>
+        <tr>
+          <td>Layout</td>
+          <td>Sidebar (left) + centered chat</td>
+          <td>Sidebar + editor + bottom terminal</td>
+        </tr>
+        <tr>
+          <td>Primary Use Case</td>
+          <td>Conversational AI, writing, analysis</td>
+          <td>Code generation, agentic tasks</td>
+        </tr>
+        <tr>
+          <td>Input Style</td>
+          <td>Rounded pill with send icon</td>
+          <td>Task / prompt input with run button</td>
+        </tr>
+        <tr>
+          <td>Accent Color</td>
+          <td>#7C3AED purple (secondary)</td>
+          <td>#4B9EF8 blue (links, code)</td>
+        </tr>
+        <tr>
+          <td>Code Blocks</td>
+          <td>Light bg (#F3F2EE), warm mono text</td>
+          <td>Near-black (#141414), syntax highlight</td>
+        </tr>
+        <tr>
+          <td>Density</td>
+          <td>Spacious — generous line height</td>
+          <td>Compact — editor-like density</td>
+        </tr>
+        <tr>
+          <td>Button Style</td>
+          <td>Rounded 8px, brand orange fill</td>
+          <td>Slightly angular 6px, teal fill</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DESIGN PRINCIPLES -->
+  <div class="card-label mt-32">Design Principles</div>
+  <div class="grid-2 mt-8">
+    <div class="card" style="border-top:3px solid #CF6731;">
+      <div class="card-label" style="color:#CF6731;">Claude.app</div>
+      <ul style="font-size:13.5px;line-height:1.8;padding-left:16px;color:#3D3D3A;">
+        <li>Warmth &amp; approachability — off-white tones, generous whitespace</li>
+        <li>Typography-first — clear hierarchy, readable at all sizes</li>
+        <li>Minimal chrome — content takes center stage</li>
+        <li>Conversational rhythm — natural message bubbles, human-first layout</li>
+        <li>Trust through clarity — no hidden state, predictable interactions</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid #10A37F;background:#1E1E1E;border-color:#3A3A3A;">
+      <div class="card-label" style="color:#10A37F;">Codex.app</div>
+      <ul style="font-size:13.5px;line-height:1.8;padding-left:16px;color:#ECECEC;">
+        <li>Code-native — dark theme mirrors IDE conventions</li>
+        <li>Power-user density — compact layout, keyboard-first UX</li>
+        <li>Agentic feedback — real-time diffs, terminal output, status badges</li>
+        <li>Multi-panel layout — file tree, editor, and agent side-by-side</li>
+        <li>Automation trust — clear run/commit/rollback affordances</li>
+      </ul>
+    </div>
+  </div>
+
+  <p style="text-align:center;margin-top:48px;font-size:12px;color:#B0AEA9;">
+    Design System Reference · Claude.app &amp; Codex.app · Generated 2026-03-27
+  </p>
+
+</div>
+
+</body>
+</html>

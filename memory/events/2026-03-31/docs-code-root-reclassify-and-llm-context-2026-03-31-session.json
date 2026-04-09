@@ -1,0 +1,54 @@
+{
+  "$schema": "/Users/philipegermano/code/jpglabs/docs/memory/schemas/session-memory-sidecar.schema.json",
+  "schema_version": "1.0",
+  "session": {
+    "id": "docs-code-root-reclassify-and-llm-context-2026-03-31-session",
+    "timestamp": "2026-03-31T00:00:00-03:00",
+    "date": "2026-03-31",
+    "provider": "unknown",
+    "workspace": "/Users/philipegermano/code",
+    "status": "partial",
+    "feature_id": "code-root-reclassify-and-llm-context",
+    "summary": "documentos gen\u00e9ricos da raiz foram reclassificados dentro do reposit\u00f3rio `docs` | cada reposit\u00f3rio indexado passou a expor `GIT_HISTORY.md`"
+  },
+  "projects": [
+    {
+      "id": "docs",
+      "name": "jpglabs/docs",
+      "path": "/Users/philipegermano/code/jpglabs/docs",
+      "role": "imported from legacy session report"
+    }
+  ],
+  "artifacts": {
+    "report": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/code-root-reclassify-and-llm-context/2026-03-31-session/report.md",
+    "daily": "/Users/philipegermano/code/daily/2026-03-31.md",
+    "evidence_dir": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/code-root-reclassify-and-llm-context/2026-03-31-session"
+  },
+  "tags": [
+    "code-root-reclassify-and-llm-context",
+    "docs",
+    "imported",
+    "session-report"
+  ],
+  "findings": [
+    {
+      "id": "legacy-import",
+      "summary": "Imported from a legacy Markdown report. Timestamp and provider may be approximate and should be curated if higher fidelity is required.",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "next_actions": [],
+  "decisions": [],
+  "files_touched": [
+    "`DOC_INDEX.md`",
+    "`manifests/docs.index.yaml`",
+    "`manifests/workspace.index.yaml`",
+    "`daily/AUTOMATION_PROMPT.md`",
+    "`projects/*/GIT_HISTORY.md`",
+    "`projects/*/llms/*.md`"
+  ],
+  "commands": []
+}

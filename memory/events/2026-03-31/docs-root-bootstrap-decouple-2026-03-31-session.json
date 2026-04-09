@@ -1,0 +1,56 @@
+{
+  "$schema": "/Users/philipegermano/code/jpglabs/docs/memory/schemas/session-memory-sidecar.schema.json",
+  "schema_version": "1.0",
+  "session": {
+    "id": "docs-root-bootstrap-decouple-2026-03-31-session",
+    "timestamp": "2026-03-31T00:00:00-03:00",
+    "date": "2026-03-31",
+    "provider": "unknown",
+    "workspace": "/Users/philipegermano/code",
+    "status": "partial",
+    "feature_id": "root-bootstrap-decouple",
+    "summary": "`AGENTS.md` e `CODEX.md` deixaram de dividir a mesma fun\u00e7\u00e3o | o bootstrap compartilhado foi extra\u00eddo para `WORKSPACE_BOOTSTRAP.md`"
+  },
+  "projects": [
+    {
+      "id": "docs",
+      "name": "jpglabs/docs",
+      "path": "/Users/philipegermano/code/jpglabs/docs",
+      "role": "imported from legacy session report"
+    }
+  ],
+  "artifacts": {
+    "report": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/root-bootstrap-decouple/2026-03-31-session/report.md",
+    "daily": "/Users/philipegermano/code/daily/2026-03-31.md",
+    "evidence_dir": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/root-bootstrap-decouple/2026-03-31-session"
+  },
+  "tags": [
+    "docs",
+    "imported",
+    "root-bootstrap-decouple",
+    "session-report"
+  ],
+  "findings": [
+    {
+      "id": "legacy-import",
+      "summary": "Imported from a legacy Markdown report. Timestamp and provider may be approximate and should be curated if higher fidelity is required.",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "next_actions": [],
+  "decisions": [],
+  "files_touched": [
+    "`WORKSPACE_BOOTSTRAP.md`",
+    "`AGENTS.md`",
+    "`CODEX.md`",
+    "`CLAUDE.md`",
+    "`GEMINI.md`",
+    "`.codex/README.md`",
+    "`.claude/README.md`",
+    "`.gemini/README.md`"
+  ],
+  "commands": []
+}

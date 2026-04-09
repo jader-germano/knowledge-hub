@@ -1,0 +1,152 @@
+{
+  "$schema": "/Users/philipegermano/code/jpglabs/docs/memory/schemas/session-memory-sidecar.schema.json",
+  "schema_version": "1.0",
+  "session": {
+    "id": "docs-kaidi-sdr-recovery-case-2026-04-02-session",
+    "timestamp": "2026-04-02T00:00:00-03:00",
+    "date": "2026-04-02",
+    "provider": "unknown",
+    "workspace": "/Users/philipegermano/code",
+    "status": "partial",
+    "feature_id": "kaidi-sdr-recovery-case",
+    "summary": "Este case deve permanecer salvo como op\u00e7\u00e3o futura, n\u00e3o como execu\u00e7\u00e3o"
+  },
+  "projects": [
+    {
+      "id": "docs",
+      "name": "jpglabs/docs",
+      "path": "/Users/philipegermano/code/jpglabs/docs",
+      "role": "imported from legacy session report"
+    }
+  ],
+  "artifacts": {
+    "report": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/kaidi-sdr-recovery-case/2026-04-02-session/report.md",
+    "daily": "/Users/philipegermano/code/daily/2026-04-02.md",
+    "evidence_dir": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/kaidi-sdr-recovery-case/2026-04-02-session"
+  },
+  "tags": [
+    "docs",
+    "imported",
+    "kaidi-sdr-recovery-case",
+    "session-report"
+  ],
+  "findings": [
+    {
+      "id": "legacy-import",
+      "summary": "Imported from a legacy Markdown report. Timestamp and provider may be approximate and should be curated if higher fidelity is required.",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-risco-alto-de-protocolo-propriet-rio-complexo",
+      "summary": "risco alto de protocolo propriet\u00e1rio complexo",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-risco-de-custo-total-acima-do-benef-cio-marginal",
+      "summary": "risco de custo total acima do benef\u00edcio marginal",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-risco-de-emiss-o-inadequada-em-2-4-ghz-se-a-tril",
+      "summary": "risco de emiss\u00e3o inadequada em `2.4 GHz` se a trilha evoluir para TX",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-risco-de-consumir-tempo-relevante-sem-chegar-a-u",
+      "summary": "risco de consumir tempo relevante sem chegar a uma solu\u00e7\u00e3o de produ\u00e7\u00e3o",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-risco-de-o-resultado-final-servir-para-laborat-r",
+      "summary": "risco de o resultado final servir para laborat\u00f3rio, mas n\u00e3o para opera\u00e7\u00e3o confi\u00e1vel em reuni\u00f5es reais",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "next_actions": [],
+  "decisions": [
+    {
+      "id": "imported-n-o-iniciar-compras-nem-implementa-o-agora",
+      "summary": "N\u00e3o iniciar compras nem implementa\u00e7\u00e3o agora.",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "imported-salvar-esta-trilha-apenas-como-case-poss-vel-de-",
+      "summary": "Salvar esta trilha apenas como `case poss\u00edvel de implementa\u00e7\u00e3o`.",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "imported-priorizar-quando-houver-janela-de-execu-o-real",
+      "summary": "Priorizar, quando houver janela de execu\u00e7\u00e3o real:",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "imported-gate-0-recupera-o-el-trica-do-receptor-atual",
+      "summary": "`Gate 0`: recupera\u00e7\u00e3o el\u00e9trica do receptor atual",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "imported-gate-1-investiga-o-rx-only-por-sdr",
+      "summary": "`Gate 1`: investiga\u00e7\u00e3o RX-only por SDR",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "imported-gate-2-prot-tipo-funcional-apenas-se-gate-1-prov",
+      "summary": "`Gate 2`: prot\u00f3tipo funcional apenas se Gate 1 provar baixa complexidade",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "imported-se-o-objetivo-for-resultado-pr-tico-com-baixo-ri",
+      "summary": "Se o objetivo for `resultado pr\u00e1tico com baixo risco`, o case deve ficar arquivado at\u00e9 haver tempo, or\u00e7amento e motiva\u00e7\u00e3o t\u00e9cnica para pesquisa.",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "imported-se-o-objetivo-for-recuperar-valor-e-aprender-a-t",
+      "summary": "Se o objetivo for `recuperar valor e aprender`, a trilha faz sentido, mas precisa de disciplina para matar o projeto cedo se os sinais forem ruins.",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "files_touched": [],
+  "commands": []
+}

@@ -53,7 +53,6 @@ Pi-Agent ──runs──► n8n workflows ──triggers──► WhatsApp / Di
 
 VPS-Infrastructure ──serves──► api.jpglabs.com.br (pi-local-app)
 VPS-Infrastructure ──serves──► n8n.jpglabs.com.br
-VPS-Infrastructure ──serves──► chat.jpglabs.com.br (Open-WebUI)
 VPS-Infrastructure ──serves──► jpglabs.com.br (portfolio)
 
 Job-Applications ──generate──► local Ollama (free)

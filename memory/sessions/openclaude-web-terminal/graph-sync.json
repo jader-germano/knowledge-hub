@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-06T14:27:03.917Z",
+  "source": {
+    "system": "openclaude-web-terminal",
+    "memoryMdPath": "/Users/philipegermano/code/jpglabs/docs/memory/sessions/openclaude-web-terminal/memory.md",
+    "registryPath": "/Users/philipegermano/code/jpglabs/docs/memory/sessions/openclaude-web-terminal/web-sessions.json"
+  },
+  "create_entities": {
+    "entities": [
+      {
+        "entityType": "service",
+        "name": "openclaude-web-terminal",
+        "observations": [
+          "Generated at 2026-04-06T14:27:03.917Z",
+          "Session registry path: /Users/philipegermano/code/jpglabs/docs/memory/sessions/openclaude-web-terminal/web-sessions.json",
+          "Markdown ledger path: /Users/philipegermano/code/jpglabs/docs/memory/sessions/openclaude-web-terminal/memory.md"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:fcd7773c-8a83-4f80-b14a-f8962bf3ba27",
+        "observations": [
+          "Web session id: fcd7773c-8a83-4f80-b14a-f8962bf3ba27",
+          "Transcript session id: 1e210a07-bd49-4a81-8977-d64bf7b02ea5",
+          "Status: idle",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: teste",
+          "Created at: 2026-04-06T14:21:02.101Z",
+          "Last active at: 2026-04-06T14:27:03.914Z"
+        ]
+      },
+      {
+        "entityType": "provider",
+        "name": "openclaude-provider:ollama",
+        "observations": [
+          "Provider profile: ollama"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:8879f029-89a9-4d41-a087-a3dabdb40bbe",
+        "observations": [
+          "Web session id: 8879f029-89a9-4d41-a087-a3dabdb40bbe",
+          "Transcript session id: pending",
+          "Status: starting",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: New session",
+          "Created at: 2026-04-06T14:24:46.979Z",
+          "Last active at: 2026-04-06T14:24:47.087Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:b948a5a3-4613-48b8-ac78-41072f16236e",
+        "observations": [
+          "Web session id: b948a5a3-4613-48b8-ac78-41072f16236e",
+          "Transcript session id: pending",
+          "Status: starting",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: New session",
+          "Created at: 2026-04-06T14:20:58.311Z",
+          "Last active at: 2026-04-06T14:20:58.312Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:30f9e0dc-1610-417c-876f-539c97cedf4f",
+        "observations": [
+          "Web session id: 30f9e0dc-1610-417c-876f-539c97cedf4f",
+          "Transcript session id: pending",
+          "Status: starting",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: New session",
+          "Created at: 2026-04-06T14:19:59.294Z",
+          "Last active at: 2026-04-06T14:19:59.319Z"
+        ]
+      }
+    ]
+  },
+  "add_observations": {
+    "observations": [
+      {
+        "entityName": "openclaude-web-session:fcd7773c-8a83-4f80-b14a-f8962bf3ba27",
+        "contents": [
+          "Last prompt: teste"
+        ]
+      }
+    ]
+  },
+  "create_relations": {
+    "relations": [
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:fcd7773c-8a83-4f80-b14a-f8962bf3ba27"
+      },
+      {
+        "from": "openclaude-web-session:fcd7773c-8a83-4f80-b14a-f8962bf3ba27",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:8879f029-89a9-4d41-a087-a3dabdb40bbe"
+      },
+      {
+        "from": "openclaude-web-session:8879f029-89a9-4d41-a087-a3dabdb40bbe",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:b948a5a3-4613-48b8-ac78-41072f16236e"
+      },
+      {
+        "from": "openclaude-web-session:b948a5a3-4613-48b8-ac78-41072f16236e",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:30f9e0dc-1610-417c-876f-539c97cedf4f"
+      },
+      {
+        "from": "openclaude-web-session:30f9e0dc-1610-417c-876f-539c97cedf4f",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      }
+    ]
+  }
+}
