@@ -19,16 +19,16 @@
 
 - Fase 0 — Fundação: processo JUCESP em andamento (alteração razão social + CNAEs TI)
 - Repo GitLab criado: `gitlab.com/jader-germano/jpglabs-saas`
-- Jira: projeto JPGLABS em `jpglabs.atlassian.net`
-- Confluence: space JPGLABS em `jpglabs.atlassian.net/wiki`
+- Jira: projeto SCRUM em `jpglabs.atlassian.net/jira` (cloudId: d9f316a4-b4d8-40c9-a90a-0539675e39a1)
+- Confluence: space SD em `jadergermano.atlassian.net/wiki` (cloudId: f2d06056-c0d3-4c77-af10-8c964f76218f)
 - Desenvolvimento ainda não iniciado — aguardando conclusão fiscal
 
 ## Fontes Canônicas
 
 - Local: `/Users/philipegermano/contratos/jpglabs/`
 - GitLab: `https://gitlab.com/jader-germano/jpglabs-saas`
-- Confluence: `https://jpglabs.atlassian.net/wiki/spaces/JPGLABS`
-- Jira: `https://jpglabs.atlassian.net/jira/software/projects/JPGLABS`
+- Confluence: `https://jadergermano.atlassian.net/wiki/spaces/SD`
+- Jira: `https://jpglabs.atlassian.net/jira/software/projects/SCRUM/boards`
 - Status semanal: `/Users/philipegermano/contratos/jpglabs/STATUS.md`
 
 ## Próximos Marcos

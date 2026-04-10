@@ -3,6 +3,624 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Session Handoff - 2026-04-06 21:48 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-06 21:48:31 -0300`
+- Data da sessão: `2026-04-06`
+- Feature/session id: `feature/openclaude-desktop-openclaude-palette-2026-04-06`
+- Repositório: `/Users/philipegermano/code/openclaude`
+- Branch ativa: `main`
+- Objetivo aprovado: refazer a próxima versão visual do desktop renderer com cores próximas da identidade do OpenClaude.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - atualização da paleta base do renderer desktop para tons azul-grafite, ciano/teal e laranja de marca
+  - reforço visual de superfícies, estados ativos, hover e foco
+  - alinhamento do `backgroundColor` da janela Electron com a nova base visual
+  - validação por build dos entrypoints do renderer e do processo Electron
+- O que ficou fora do escopo:
+  - mudança de layout ou fluxo funcional do desktop
+  - regressão visual automatizada com screenshot diff
+  - ajustes de tema no TUI Ink principal
+
+### Prototype And Evidence
+
+- Esta sessão foi um refinamento visual localizado no desktop renderer; não houve entrega funcional de feature com protótipo, Figma ou captura de fluxo.
+- Evidências principais:
+  - `/Users/philipegermano/code/openclaude/apps/desktop/renderer/styles.css`
+  - `/Users/philipegermano/code/openclaude/apps/desktop/electron/main.ts`
+
+### Summary
+
+- O renderer desktop agora usa uma base cromática mais próxima da linguagem visual do OpenClaude: fundo azul-grafite profundo, superfícies frias translúcidas, acento ciano/teal e apoio quente em laranja de marca.
+- A mudança ficou concentrada em tokens CSS no topo de `styles.css`, reduzindo acoplamento e facilitando futuros refinamentos sem reespalhar valores hardcoded.
+- Também foram reforçados estados de hover/focus e contraste de cards, sidebar, composer, diálogos e mensagens, para dar mais consistência de produto em vez de apenas trocar cores isoladas.
+- O processo Electron foi alinhado com o novo fundo base para evitar flash visual de uma cor antiga antes do renderer carregar.
+
+### Validation
+
+- Builds executados:
+  - `bun run scripts/build-desktop-renderer.ts`
+  - `bun run scripts/build-desktop-electron.ts`
+- Testes executados:
+  - não houve suíte automatizada específica para regressão visual desta superfície
+- Cobertura atingida na fatia entregue:
+  - cobertura automatizada inexistente para este slice visual; a validação ficou limitada a build bem-sucedido dos entrypoints afetados
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - sem screenshot diff ou teste E2E visual do desktop renderer
+  - sem abertura manual do app nesta sessão para inspeção visual final
+- Validação em macOS:
+  - builds do renderer e do processo Electron concluídos sem erro
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `sed -n '1,220p' /Users/philipegermano/.codex/skills/frontend-skill/SKILL.md`
+  - Action: alinhar a intervenção visual com a skill de frontend aplicável à sessão
+  - Result: direção visual consolidada antes da edição
+- `sed -n '1,260p' /Users/philipegermano/code/openclaude/apps/desktop/renderer/styles.css`
+  - Action: localizar os tokens visuais e superfícies do desktop renderer
+  - Result: confirmado ponto único de controle da paleta CSS
+- `sed -n '1,260p' /Users/philipegermano/code/openclaude/apps/desktop/electron/main.ts`
+  - Action: verificar a cor base da janela Electron
+  - Result: identificado `backgroundColor` antigo e alinhado ao novo tema
+- `sed -n '1,260p' /Users/philipegermano/code/openclaude/src/utils/theme.ts`
+  - Action: ler a identidade cromática já usada pelo projeto
+  - Result: referência explícita da linguagem visual do OpenClaude para guiar a paleta do desktop
+- `bun run scripts/build-desktop-renderer.ts`
+  - Action: validar o empacotamento do renderer após a troca de tokens/estilos
+  - Result: build concluído com sucesso
+- `bun run scripts/build-desktop-electron.ts`
+  - Action: validar o entrypoint Electron após o ajuste do fundo da janela
+  - Result: build concluído com sucesso
+- `git -C /Users/philipegermano/code/openclaude status --short`
+  - Action: confirmar o estado da worktree antes do fechamento
+  - Result: worktree já estava suja e a superfície `apps/desktop/*` segue como conteúdo ainda não rastreado no repositório
+
+### Files Created
+
+- Nenhum arquivo novo nesta sessão
+
+### Files Modified
+
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/styles.css`
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/main.ts`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code
+├── jpglabs
+│   └── docs
+│       └── agents
+│           └── AGENT_BRIDGE.md [modified]
+└── openclaude
+    └── apps
+        └── desktop
+            ├── electron
+            │   └── main.ts [modified]
+            └── renderer
+                └── styles.css [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `feature/openclaude-desktop-openclaude-palette`
+- Commit: `feat(openclaude-desktop): align desktop palette with openclaude branding`
+- Review request: confirmar staging e diff porque a worktree do repo já contém vários deltas prévios e a pasta `apps/desktop` ainda aparece como não rastreada
+- MCP status desta sessão:
+  - sem alteração de baseline MCP
+  - memória compartilhada do projeto precisa apenas registrar o ajuste visual e a validação por build
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — relido para cumprir o contrato de fechamento e handoff
+- `/Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md` — estrutura de fechamento aplicada
+- `/Users/philipegermano/code/jpglabs/docs/projects/openclaude/PROJECT_CONTEXT.md` — contexto fino do repositório relido
+- `/Users/philipegermano/.codex/skills/frontend-skill/SKILL.md` — usada como guia de direção visual e disciplina de composição
+- `/Users/philipegermano/code/openclaude/src/utils/theme.ts` — consultado para aproximar o desktop renderer da linguagem visual do OpenClaude
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/styles.css` — superfície principal da intervenção visual
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/main.ts` — superfície de alinhamento do fundo base da janela
+- Glossary: nenhum termo novo entrou no glossário nesta sessão
+
+### Risks And Gaps
+
+- A validação atual garante build, não garante fidelidade visual final em runtime.
+- A pasta `apps/desktop` aparece como não rastreada no estado atual do repositório; antes de consolidar commit, é preciso revisar o escopo real desse bloco de arquivos.
+- Como a worktree já estava suja, o diff desta sessão precisa ser isolado com cuidado antes de qualquer staging.
+
+### Next Actions
+
+- Abrir o desktop renderer localmente e validar visualmente contraste, foco e equilíbrio da paleta em runtime real.
+- Se a direção visual for aprovada, separar o bloco `apps/desktop` em staging intencional para não misturar esta mudança com deltas prévios do repositório.
+
+### Handoff Notes
+
+- A intervenção foi deliberadamente restrita a tokens e superfícies de maior impacto; não houve refatoração estrutural de componentes.
+- Se a próxima fatia pedir refinamento visual adicional, a sequência correta é inspeção em runtime real antes de mexer em layout ou tipografia.
+
+## Session Handoff - 2026-04-06 20:14 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-06 20:14:38 -0300`
+- Data da sessão: `2026-04-06`
+- Feature/session id: `hotfix/openclaude-codex-launch-provider-precedence-2026-04-06`
+- Repositório: `/Users/philipegermano/code/openclaude`
+- Branch ativa: `main`
+- Objetivo aprovado: corrigir o conflito entre `dev:codex` e `~/.claude/settings.json` que fazia o runtime relançar `GitHub Models` com `github:copilot` sobre o backend Codex.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - isolamento de precedência do launch env gerenciado pelo host
+  - proteção contra override de provider/model/endpoint/auth por `settings.json`
+  - cobertura unitária do contrato novo
+  - alinhamento de expectativas de testes do Gemini já divergentes do código atual
+- O que ficou fora do escopo:
+  - onboarding de token para `GitHub Models`
+  - qualquer alteração de SSH, porque SSH não autentica `models.github.ai`
+  - correção de reachability de rede fora do sandbox
+
+### Prototype And Evidence
+
+- Esta sessão é um hotfix de precedência/configuração de runtime; não houve entrega funcional de feature nem evidência visual dedicada.
+- Evidências principais:
+  - `/Users/philipegermano/code/openclaude/src/utils/providerProfile.ts`
+  - `/Users/philipegermano/code/openclaude/src/utils/managedEnvConstants.ts`
+  - `/Users/philipegermano/code/openclaude/src/utils/providerProfile.test.ts`
+  - `/Users/philipegermano/code/openclaude/src/utils/managedEnvConstants.test.ts`
+
+### Summary
+
+- A causa raiz era de precedência: `bun run dev:codex` montava env de Codex corretamente, mas o runtime reaplicava `~/.claude/settings.json` e reintroduzia `CLAUDE_CODE_USE_GITHUB=1` com `OPENAI_MODEL=github:copilot`.
+- O fix marca o env de launch como `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1` e amplia a lista de env vars de roteamento protegidas, cobrindo OpenAI-compatible, Codex e Gemini.
+- Após a correção, o `doctor` do fluxo `provider-launch.ts codex` passou a reportar `OPENAI_MODEL - codexplan` e `OPENAI_BASE_URL - https://chatgpt.com/backend-api/codex`, eliminando o desvio para `github:copilot`.
+- O bloqueio remanescente no `doctor` é de reachability de rede, não de resolução de modelo/provider.
+
+### Validation
+
+- Builds executados:
+  - nenhum build completo adicional foi necessário para validar o hotfix
+- Testes executados:
+  - `bun test src/utils/providerProfile.test.ts src/utils/managedEnvConstants.test.ts`
+  - `bun run scripts/provider-launch.ts codex --help`
+- Cobertura atingida na fatia entregue:
+  - `37 pass, 0 fail` nos testes focados do contrato de launch/profile/env
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - não houve validação live do endpoint Codex porque o `doctor` ainda falha por reachability de rede no sandbox
+  - não houve onboarding de `GitHub Models`, pois a sessão tratou precedência e não provisionamento de credenciais
+- Validação em macOS:
+  - não aplicável além do runtime CLI local
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `rg -n "CLAUDE_CODE_USE_GITHUB|GITHUB_TOKEN|GitHub Models|ghp_your-token-here" /Users/philipegermano/code /Users/philipegermano -g '!node_modules' -g '!dist' -g '!build'`
+  - Action: localizar a superfície real da configuração `GitHub Models`
+  - Result: confirmação de que o ponto relevante era `openclaude/.env.example`, `README` e o fluxo `/onboard-github`
+- `ls -la ~/.ssh && sed -n '1,220p' ~/.gitconfig && sed -n '1,220p' ~/.ssh/config`
+  - Action: verificar se já existia chave SSH local para GitHub
+  - Result: encontrada `~/.ssh/github_ed25519`; concluído que ela serve para Git, não para `GitHub Models`
+- `sed -n '1,260p' /Users/philipegermano/.claude/settings.json`
+  - Action: identificar o override ativo no config compartilhado do Claude
+  - Result: confirmado `CLAUDE_CODE_USE_GITHUB=1` e `OPENAI_MODEL=github:copilot`
+- `bun test src/utils/providerProfile.test.ts src/utils/managedEnvConstants.test.ts`
+  - Action: validar o hotfix de precedência
+  - Result: `37 pass, 0 fail`
+- `bun run scripts/provider-launch.ts codex --help`
+  - Action: validar o `doctor` do launcher após o hotfix
+  - Result: `OPENAI_MODEL` passou para `codexplan`; falha restante apenas em reachability do endpoint
+
+### Files Created
+
+- `/Users/philipegermano/code/openclaude/src/utils/managedEnvConstants.test.ts`
+
+### Files Modified
+
+- `/Users/philipegermano/code/openclaude/src/utils/providerProfile.ts`
+- `/Users/philipegermano/code/openclaude/src/utils/managedEnvConstants.ts`
+- `/Users/philipegermano/code/openclaude/src/utils/providerProfile.test.ts`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+- `/Users/philipegermano/code/daily/2026-04-06.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code
+├── daily
+│   └── 2026-04-06.md [modified]
+├── jpglabs
+│   └── docs
+│       └── agents
+│           └── AGENT_BRIDGE.md [modified]
+└── openclaude
+    └── src
+        └── utils
+            ├── managedEnvConstants.test.ts [new]
+            ├── managedEnvConstants.ts [modified]
+            ├── providerProfile.test.ts [modified]
+            └── providerProfile.ts [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `fix/openclaude-codex-provider-precedence`
+- Commit: `fix(openclaude): protect host-managed provider routing`
+- Review request: confirmar staging e diff antes de consolidar
+- MCP status desta sessão:
+  - sem alteração de baseline MCP
+  - sem novo `dry-run` de servidores
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — bootstrap relido para obedecer o contrato de fechamento e handoff
+- `/Users/philipegermano/code/jpglabs/docs/RULES.md` — regras operacionais do hub relidas antes da alteração
+- `/Users/philipegermano/code/jpglabs/docs/projects/openclaude/PROJECT_CONTEXT.md` — contexto fino do repositório relido
+- `/Users/philipegermano/.claude/settings.json` — identificado o override real de `GitHub Models`
+- `/Users/philipegermano/.ssh/config` — validada a existência de chave SSH do GitHub e a não aplicabilidade dela a `GitHub Models`
+- `/Users/philipegermano/code/openclaude/src/utils/providerProfile.ts` — ponto de montagem do launch env corrigido
+- `/Users/philipegermano/code/openclaude/src/utils/managedEnvConstants.ts` — ampliada a lista de env vars protegidas contra override
+- `/Users/philipegermano/code/openclaude/src/utils/providerProfile.test.ts` — testes ajustados/estendidos para o contrato atual
+- `/Users/philipegermano/code/openclaude/src/utils/managedEnvConstants.test.ts` — nova cobertura do filtro de env vars gerenciadas pelo host
+- Glossary: nenhum termo novo entrou no glossário nesta sessão
+
+### Risks And Gaps
+
+- `GitHub Models` continua sem credencial configurada neste host; para esse modo, ainda é necessário `GITHUB_TOKEN`/`GH_TOKEN` ou `/onboard-github`.
+- A validação live do endpoint Codex depende de rede disponível fora do sandbox.
+- A worktree do repositório já estava suja antes desta sessão; o hotfix foi isolado, mas o branch continua com outros deltas não revisados.
+
+### Next Actions
+
+- Executar `bun run dev:codex` fora do sandbox/restrição de rede para confirmar sessão completa no backend Codex já sem regressão para `github:copilot`.
+- Se a intenção for usar `GitHub Models`, rodar `/onboard-github` e armazenar o token em secure storage em vez de colocar `GITHUB_TOKEN` em texto claro.
+
+### Handoff Notes
+
+- A chave `~/.ssh/github_ed25519` já existe e serve para `git@github.com`; ela não resolve autenticação de `models.github.ai`.
+- O sintoma correto a observar após este hotfix é: `Provider mode - Codex responses backend enabled` com `OPENAI_MODEL - codexplan`. Se voltar `github:copilot`, houve regressão de precedência.
+
+## Session Handoff - 2026-04-06 19:22 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-06 19:22:58 -0300`
+- Data da sessão: `2026-04-06`
+- Feature/session id: `hotfix/openclaude-desktop-electron-main-process-2026-04-06`
+- Repositório: `/Users/philipegermano/code/openclaude`
+- Branch ativa: `main`
+- Objetivo aprovado: corrigir o crash `Cannot read properties of undefined (reading 'handle')` no main process do `.app` empacotado.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - correção da interop do módulo `electron` em ESM empacotado
+  - rebuild do `.dmg` macOS com o binário corrigido
+  - bump local de versão para `0.1.8` para evitar colisão com volume antigo `0.1.7` montado no Finder
+  - validação do `.app` empacotado em execução real no host
+- O que ficou fora do escopo:
+  - mudança visual da UI
+  - notarização
+
+### Prototype And Evidence
+
+- Esta sessão é um hotfix de runtime do binário desktop.
+- Evidências principais:
+  - `/Users/philipegermano/code/openclaude/apps/desktop/electron/main.ts`
+  - `/Users/philipegermano/code/openclaude/apps/desktop/electron/preload.ts`
+  - `/Users/philipegermano/code/openclaude/release/OpenClaude Desktop-0.1.8-arm64.dmg`
+  - `/Users/philipegermano/code/openclaude/release/mac-arm64/OpenClaude Desktop.app`
+
+### Summary
+
+- A causa raiz era a forma de importar `electron` no `main` e no `preload`: o bundle empacotado estava resolvendo um shape incompatível com `ipcMain.handle`, deixando `ipcMain` indefinido.
+- A correção foi trocar a importação para `createRequire(import.meta.url)` + `require('electron')`, que é mais estável para o processo principal/preload em ESM empacotado.
+- O `.app` rebuildado foi executado localmente e permaneceu vivo, sem reproduzir o crash imediato do main process.
+- Para eliminar ambiguidade de volume/cache no Finder, o pacote macOS foi reemitido como `0.1.8`.
+
+### Validation
+
+- Builds executados:
+  - `bun run build:desktop`
+  - `bun run pack:desktop:mac`
+- Testes executados:
+  - validação prática do `.app` empacotado em execução local
+- Cobertura atingida na fatia entregue:
+  - hotfix validado no artefato final macOS
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - sem teste automatizado específico para esse contrato de interop do Electron
+  - sem nova geração do `.exe`, porque o defeito reportado era apenas no `.dmg/.app`
+- Validação em macOS:
+  - `.app` executado e mantido ativo após o rebuild
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `nl -ba dist/desktop/electron/main.mjs | sed -n '110,155p'`
+  - Action: localizar a linha exata do crash no bundle empacotado
+  - Result: falha confirmada em `ipcMain.handle(...)`
+- `node -e "import('electron')..."`
+  - Action: inspecionar o shape exportado pelo pacote `electron`
+  - Result: confirmou interop frágil/inadequada para a estratégia anterior
+- `bun run build:desktop`
+  - Action: rebuild do desktop com a correção de interop
+  - Result: verde
+- `'/Users/philipegermano/code/openclaude/release/mac-arm64/OpenClaude Desktop.app/Contents/MacOS/OpenClaude Desktop'`
+  - Action: validar o `.app` empacotado diretamente no host
+  - Result: processo permaneceu vivo; crash imediato não reproduzido
+- `bun run pack:desktop:mac`
+  - Action: regenerar o `.dmg` com o binário corrigido
+  - Result: `.dmg` atualizado com sucesso, agora em `0.1.8`
+
+### Files Created
+
+- Nenhum arquivo novo nesta sessão
+
+### Files Modified
+
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/main.ts`
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/preload.ts`
+- `/Users/philipegermano/code/openclaude/package.json`
+- `/Users/philipegermano/code/openclaude/package-lock.json`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+- `/Users/philipegermano/code/daily/2026-04-06.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code
+├── daily
+│   └── 2026-04-06.md [modified]
+├── jpglabs
+│   └── docs
+│       └── agents
+│           └── AGENT_BRIDGE.md [modified]
+└── openclaude
+    ├── apps
+    │   └── desktop
+    │       └── electron
+    │           ├── main.ts [modified]
+    │           └── preload.ts [modified]
+    ├── package-lock.json [modified]
+    └── package.json [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `hotfix/openclaude-desktop-main-process`
+- Commit: `fix(openclaude): stabilize electron main process import`
+- Review request: confirmar staging e diff antes de consolidar
+- MCP status desta sessão:
+  - sem alteração de baseline
+  - sem nova validação de `dry-run`
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — contrato de fechamento relido implicitamente da sessão anterior e preservado nesta continuação
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/main.ts` — corrigida a importação do `electron` no main process
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/preload.ts` — corrigida a importação do `electron` no preload
+- `/Users/philipegermano/code/openclaude/dist/desktop/electron/main.mjs` — bundle inspecionado para localizar a linha real do crash
+- `/Users/philipegermano/code/openclaude/package.json` — versão local elevada para `0.1.8` para evitar colisão com artefato `0.1.7`
+- Glossary: nenhum termo novo entrou no glossário nesta sessão
+
+### Risks And Gaps
+
+- O usuário precisa abrir o `.dmg` `0.1.8`; um volume antigo `0.1.7` continuará carregando o binário quebrado.
+- Notarização continua ausente.
+
+### Next Actions
+
+- Confirmar abertura do `.dmg` `0.1.8` após ejetar qualquer volume `0.1.7` ainda montado.
+
+### Handoff Notes
+
+- Se o usuário ainda vir a mesma stack com caminho em `/Volumes/OpenClaude Desktop ...`, a primeira hipótese deve ser volume antigo montado, não regressão imediata do código.
+
+## Session Handoff - 2026-04-06 19:06 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-06 19:06:14 -0300`
+- Data da sessão: `2026-04-06`
+- Feature/session id: `feature/openclaude-desktop-electron-runtime-2026-04-06`
+- Repositório: `/Users/philipegermano/code/openclaude`
+- Branch ativa: `main`
+- Objetivo aprovado: entregar uma app desktop React + Electron para o `openclaude`, sem provider default implícito, com seleção de modelo como superfície principal, handshake de autenticação na escolha do modelo, runtime local em worker e artefatos empacotados para macOS e Windows.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - renderer React em `apps/desktop/renderer/` com sidebar de sessões, composer enxuto e lista de modelos sem autocomplete
+  - shell Electron com `preload` seguro, worker dedicado e runtime HTTP/WebSocket local
+  - runtime desktop movido de `bun run scripts/web-terminal.ts` para servidor Node hospedado no worker, preservando o spawn do CLI por `ELECTRON_RUN_AS_NODE`
+  - integração `secure-by-default` com token bearer efêmero entre Electron, renderer e runtime local
+  - descoberta do `.mcp.json` do workspace no runtime desktop para reutilizar a baseline MCP compartilhada
+  - artefatos gerados: `.dmg` macOS arm64 e `.exe` Windows arm64 em `release/`
+- O que ficou fora do escopo:
+  - notarização Apple
+  - build Windows x64 / macOS universal
+  - substituição do `window.prompt` por modal React dedicado para coleta de credenciais
+  - iOS
+
+### Prototype And Evidence
+
+- Esta sessão é uma entrega funcional de app desktop local; não houve Figma nem pasta de evidências dedicada nesta fatia.
+- Evidências principais:
+  - `/Users/philipegermano/code/openclaude/release/OpenClaude Desktop-0.1.7-arm64.dmg`
+  - `/Users/philipegermano/code/openclaude/release/OpenClaude Desktop Setup 0.1.7.exe`
+  - `/Users/philipegermano/code/openclaude/release/mac-arm64/OpenClaude Desktop.app`
+  - bootstrap do app dev validado por `bun run dev:desktop`
+
+### Summary
+
+- O desktop deixou de depender de Bun em tempo de execução: o worker agora sobe um servidor Node local, controla WebSocket/API e chama o `dist/cli.mjs` via `process.execPath` com `ELECTRON_RUN_AS_NODE`.
+- A UX principal foi alinhada ao pedido do usuário: modelo primeiro, sem provider default visível, lista menor e handshake disparado na seleção do modelo, não no envio da mensagem.
+- O runtime desktop passou a procurar `.mcp.json` no workspace ativo e a injetar essa configuração no CLI, preservando interoperabilidade com o gateway Docker MCP compartilhado.
+- A cadeia de entrega foi validada até artefato: build desktop verde, app Electron em execução e empacotamento macOS/Windows concluído.
+- Permanece aberto o refinamento de UX da autenticação e a ampliação de targets binários.
+
+### Validation
+
+- Builds executados:
+  - `bun run build:desktop`
+  - `bun run pack:desktop:mac`
+  - `bun run pack:desktop:win`
+- Testes executados:
+  - `bun test src/web-terminal/runtimePolicy.test.ts src/web-terminal/registry.test.ts src/web-terminal/memory.test.ts`
+- Cobertura atingida na fatia entregue:
+  - `13 pass, 0 fail` no núcleo de memória/registry/política do runtime compartilhado
+  - build e empacotamento completos do desktop
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - sem suíte automatizada dedicada para Electron/renderer nesta fatia
+  - `typecheck:desktop` foi tentado, mas expôs ruído estrutural pré-existente do repositório e não serviu como gate confiável desta entrega
+  - sem validação iOS
+- Validação em macOS:
+  - `bun run dev:desktop` passou do bootstrap e ficou em execução
+  - `.dmg` gerado com sucesso
+  - notarização ausente
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `git status --short`
+  - Action: confirmar o estado inicial da worktree
+  - Result: worktree já estava suja; não houve `git pull --ff-only`
+- `bun run build:desktop`
+  - Action: validar a cadeia `dist/cli.mjs + renderer + electron worker`
+  - Result: build verde após correções de path, bundling e runtime
+- `bun test src/web-terminal/runtimePolicy.test.ts src/web-terminal/registry.test.ts src/web-terminal/memory.test.ts`
+  - Action: validar o núcleo reaproveitado do runtime web/desktop
+  - Result: `13 pass, 0 fail`
+- `bun run dev:desktop`
+  - Action: validar bootstrap real da app Electron
+  - Result: primeiro revelou bugs reais de bootstrap; após correções, a app passou a subir sem crash no load
+- `bun run pack:desktop:mac`
+  - Action: gerar artefato macOS
+  - Result: `release/OpenClaude Desktop-0.1.7-arm64.dmg`
+- `bun run pack:desktop:win`
+  - Action: gerar artefato Windows
+  - Result: `release/OpenClaude Desktop Setup 0.1.7.exe` (target arm64)
+- `npm install`
+  - Action: sincronizar lockfile após mover `electron-builder` para `devDependencies`
+  - Result: lock atualizado; sem novas instalações
+- `'/Applications/Docker.app/Contents/Resources/bin/docker' mcp server ls`
+  - Action: revalidar a superfície MCP do host
+  - Result: `21 enabled` após subir o Docker Desktop
+- `'/Applications/Docker.app/Contents/Resources/bin/docker' mcp client ls --global`
+  - Action: validar clientes globais conectados ao gateway
+  - Result: `claude-code`, `claude-desktop`, `codex` e `gemini` conectados ao `MCP_DOCKER`
+
+### Files Created
+
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/runtime-server.ts`
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/main.ts`
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/preload.ts`
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/runtime-worker.ts`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/main.tsx`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/index.html`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/styles.css`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/types.ts`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/lib/api.ts`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/components/AppShell.tsx`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/components/Composer.tsx`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/components/MessageList.tsx`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/components/SessionSidebar.tsx`
+- `/Users/philipegermano/code/openclaude/scripts/build-desktop-renderer.ts`
+- `/Users/philipegermano/code/openclaude/scripts/build-desktop-electron.ts`
+
+### Files Modified
+
+- `/Users/philipegermano/code/openclaude/package.json`
+- `/Users/philipegermano/code/openclaude/package-lock.json`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+- `/Users/philipegermano/code/daily/2026-04-06.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code
+├── daily
+│   └── 2026-04-06.md [modified]
+├── jpglabs
+│   └── docs
+│       └── agents
+│           └── AGENT_BRIDGE.md [modified]
+└── openclaude
+    ├── apps
+    │   └── desktop
+    │       ├── electron
+    │       │   ├── main.ts [new]
+    │       │   ├── preload.ts [new]
+    │       │   ├── runtime-server.ts [new]
+    │       │   └── runtime-worker.ts [new]
+    │       └── renderer
+    │           ├── components
+    │           │   ├── AppShell.tsx [new]
+    │           │   ├── Composer.tsx [new]
+    │           │   ├── MessageList.tsx [new]
+    │           │   └── SessionSidebar.tsx [new]
+    │           ├── lib
+    │           │   └── api.ts [new]
+    │           ├── index.html [new]
+    │           ├── main.tsx [new]
+    │           ├── styles.css [new]
+    │           └── types.ts [new]
+    ├── package-lock.json [modified]
+    ├── package.json [modified]
+    └── scripts
+        ├── build-desktop-electron.ts [new]
+        └── build-desktop-renderer.ts [new]
+```
+
+### Versioning Proposal
+
+- Branch: `feature/openclaude-desktop-app`
+- Commit: `feat(openclaude): add react electron desktop app`
+- Review request: confirmar staging, diff e mensagem antes de consolidar
+- MCP status desta sessão:
+  - servidores apenas disponíveis no catálogo: `atlassian`, `firecrawl`, `grafana`, `kubernetes`, `notion`, `obsidian`, `semgrep`, `sonarqube`, `youtube_transcript` e outros exibidos por `docker mcp server ls`
+  - servidores configurados no `.mcp.json`: `git`, `filesystem`, `desktop-commander`, `playwright`, `fetch`, `context7`, `memory`, `sequentialthinking`
+  - servidores realmente validados nesta sessão: catálogo Docker ativo com `21 enabled`; clientes globais `claude-code`, `claude-desktop`, `codex` e `gemini` conectados ao `MCP_DOCKER`; baseline do app desktop apontando para `.mcp.json` do workspace; `sonarqube` segue apenas configurável por overlay opcional; `figma` segue fora do Docker via provider-native MCP
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — contrato do workspace relido para preflight e fechamento
+- `/Users/philipegermano/code/jpglabs/docs/projects/openclaude/PROJECT_CONTEXT.md` — contexto fino do repositório relido antes da arquitetura desktop
+- `/Users/philipegermano/code/config/mcp/README.md` — baseline MCP compartilhada consultada para alinhamento do runtime desktop
+- `/Users/philipegermano/code/.mcp.json` — validado como entrypoint MCP que a app desktop deve herdar
+- `/Users/philipegermano/code/config/mcp/docker-mcp-config.yaml` — confirmada a baseline configurada (`git`, `filesystem`, `desktop-commander`, `playwright`, `fetch`, `context7`, `memory`, `sequentialthinking`)
+- `/Users/philipegermano/code/config/mcp/docker-mcp-quality.yaml` — confirmada a lane opcional de `sonarqube`
+- `/Users/philipegermano/code/jpglabs/docs/MCP_SETUP.md` — governança MCP consultada e revalidada contra o host
+- `docker mcp server ls` — confirmado `21 enabled` no host após subir o Docker Desktop
+- `docker mcp client ls --global` — confirmada conexão global de `claude-code`, `claude-desktop`, `codex` e `gemini` ao `MCP_DOCKER`
+- Glossary: nenhum termo novo entrou no glossário nesta sessão
+
+### Risks And Gaps
+
+- O `.exe` gerado nesta sessão é `arm64`; se o alvo principal for parque Windows x64, ainda falta gerar esse instalador específico.
+- O app empacotado usa o ícone default do Electron e não está notarizado no macOS.
+- A coleta de credenciais ainda usa `window.prompt`; funcionalmente atende ao handshake na escolha do modelo, mas não é a UX final desejável.
+- O repositório continua com worktree suja e múltiplas mudanças pré-existentes fora da fatia desktop.
+
+### Next Actions
+
+- Gerar `pack:desktop:win:x64` e substituir prompts nativos por modal React de autenticação, preservando o handshake na escolha do modelo.
+
+### Handoff Notes
+
+- O runtime desktop local agora depende do `.mcp.json` do workspace e não do source tree cru do `openclaude`; preservar essa decisão.
+- Não reintroduzir `bun run scripts/web-terminal.ts` dentro do app empacotado; isso quebraria a portabilidade dos artefatos.
+- Se a próxima fatia atacar mobile, a base mais reaproveitável é o renderer React e o contrato do runtime local, não o shell Electron.
+
 ## Session Handoff - 2026-04-06 11:47 -0300
 
 ### Session Metadata
@@ -6786,3 +7404,358 @@ code
 - Tratar o Docker MCP `memory` apenas como índice derivado e reconstruível.
 - Preferir sidecars compactos e operacionais; não projetar segredo, transcript
   bruto nem payload sensível para o grafo.
+
+## 2026-04-06 14:33:25 -0300 — openclaude web sandbox + model UX
+
+### Summary
+
+- Endureci o runtime web do `openclaude` para validar capacidade real de
+  sandbox antes de oferecer ou iniciar modos `strict` e `balanced`.
+- Reorganizei a configuração do composer para ficar mais legível: provider,
+  modelo, segurança, raciocínio e profundidade agora aparecem em grupos com
+  quick-picks de modelo.
+- Cobri o fluxo com testes E2E/UI para desabilitação de modos sem sandbox e
+  seleção rápida de modelo por provider.
+
+### Validation
+
+- `node --check /Users/philipegermano/code/openclaude/web-ui/app.js`
+  - Result: sintaxe válida
+- `bun test /Users/philipegermano/code/openclaude/src/web-terminal/sandboxValidation.test.ts /Users/philipegermano/code/openclaude/src/web-terminal/runtimePolicy.test.ts`
+  - Result: `12 pass, 0 fail`
+- `bun test /Users/philipegermano/code/openclaude/src/web-terminal/web-ui.e2e.ts`
+  - Result: `6 pass, 0 fail`
+- `bun run build`
+  - Result: `✓ Built openclaude v0.1.7 → dist/cli.mjs`
+
+### Files Modified
+
+- `/Users/philipegermano/code/openclaude/scripts/web-terminal.ts`
+- `/Users/philipegermano/code/openclaude/web-ui/index.html`
+- `/Users/philipegermano/code/openclaude/web-ui/app.js`
+- `/Users/philipegermano/code/openclaude/src/web-terminal/web-ui.e2e.ts`
+
+### Files Created
+
+- `/Users/philipegermano/code/openclaude/src/web-terminal/sandboxValidation.ts`
+- `/Users/philipegermano/code/openclaude/src/web-terminal/sandboxValidation.test.ts`
+
+### Risks And Gaps
+
+- A UX ficou substancialmente mais clara, mas ainda falta validação manual em
+  browser real no host fora deste sandbox para ajuste fino visual.
+- O fluxo de instalação externa de `claude-devtools` continua quebrado no host
+  e não foi tratado nesta fatia porque é independente do web terminal.
+
+### Handoff Notes
+
+- Manter a regra de não oferecer acesso sandboxado quando a capability real do
+  host estiver indisponível.
+- Preservar a UX por grupos; não voltar ao strip achatado de selects soltos no
+  composer.
+
+## 2026-04-06 15:20:10 -0300 — openclaude web compact composer + slash commands
+
+### Summary
+
+- Compactei o composer do web terminal para um layout colapsado por default,
+  com provider e model em linha e controles avançados só sob expansão.
+- Adicionei slash commands locais dentro do próprio input:
+  `/status`, `/model`, `/provider`, `/permissions`, `/reasoning`, `/effort`,
+  `/new`, `/setup` e `/help`.
+- Mantive passthrough para slash commands reais do runtime, então comandos como
+  `/teams` continuam indo para a sessão em vez de serem engolidos pela UI.
+- Corrigi a suíte E2E do browser para cobrir o composer recolhido, os atalhos
+  locais e o passthrough de comandos remotos sem flaky path no caso de
+  `continue` com fallback para `full`.
+
+### Validation
+
+- `node --check /Users/philipegermano/code/openclaude/web-ui/app.js`
+  - Result: sintaxe válida
+- `bun run build`
+  - Result: `✓ Built openclaude v0.1.7 → dist/cli.mjs`
+- `bun test /Users/philipegermano/code/openclaude/src/web-terminal/web-ui.e2e.ts`
+  - Result: `12 pass, 0 fail`
+
+### Files Modified
+
+- `/Users/philipegermano/code/openclaude/web-ui/index.html`
+- `/Users/philipegermano/code/openclaude/web-ui/app.js`
+- `/Users/philipegermano/code/openclaude/src/web-terminal/web-ui.e2e.ts`
+
+### Risks And Gaps
+
+- A ergonomia visual ficou alinhada com o objetivo de compactação, mas ainda
+  vale um smoke manual no host para calibrar densidade e microcopy em tela
+  pequena.
+- Os slash commands locais cobrem o controle do composer; o catálogo completo
+  de slash commands nativos do runtime ainda não é descoberto dinamicamente.
+
+### Handoff Notes
+
+- Preservar o composer colapsado por default; não reabrir o painel grande que
+  tomava meia tela.
+- Manter a regra de passthrough para slash commands não locais, para não
+  quebrar `/teams` e outros comandos reais do runtime.
+
+## 2026-04-06 16:31:54 -0300 — openclaude web session status semantics
+
+### Summary
+
+- Corrigi a semântica de status do web terminal para não deixar a sessão presa
+  em `error` após um erro recuperável de turno.
+- O runtime agora volta para `idle` depois de um `result` com erro, preservando
+  o detalhe em `lastError` e nas mensagens do turno.
+- A UI do header traduz os estados técnicos para rótulos humanos:
+  `idle -> ready`, `busy -> running`, `awaiting_permission -> approval` e
+  `stopped -> ended`.
+
+### Validation
+
+- `node --check /Users/philipegermano/code/openclaude/web-ui/app.js`
+  - Result: sintaxe válida
+- `bun run build`
+  - Result: `✓ Built openclaude v0.1.7 → dist/cli.mjs`
+- `bun test /Users/philipegermano/code/openclaude/src/web-terminal/web-ui.e2e.ts`
+  - Result: `13 pass, 0 fail`
+
+### Files Modified
+
+- `/Users/philipegermano/code/openclaude/scripts/web-terminal.ts`
+- `/Users/philipegermano/code/openclaude/web-ui/app.js`
+- `/Users/philipegermano/code/openclaude/src/web-terminal/web-ui.e2e.ts`
+
+### Risks And Gaps
+
+- O header agora reflete melhor o estado real da sessão, mas ainda não existe
+  um badge separado para `lastError` quando um turno falha sem derrubar o
+  runtime.
+
+### Handoff Notes
+
+- Não voltar a usar `status=error` para qualquer `result.is_error`; reservar
+  `error` para falha terminal do processo ou encerramento não limpo.
+
+## 2026-04-06 20:39:26 -0300 — openclaude desktop packaged app recovery
+
+### Summary
+
+- Corrigi a cadeia de falhas do app desktop empacotado no macOS:
+  `ipcMain` no main process, imports opcionais quebrados no worker,
+  preload inválido em ESM, mismatch entre `react` e `react-dom`,
+  `prompt()` incompatível com Electron e `PATH` insuficiente para encontrar
+  `rg` quando a app sobe via Finder.
+- O renderer do pacote agora monta de forma estável e o preload expõe a bridge
+  corretamente no shell Electron.
+- A autenticação no handshake de modelo saiu de `window.prompt` e foi movida
+  para um diálogo React dentro da própria UI.
+
+### Validation
+
+- `bun run build:desktop`
+  - Result: build do CLI, renderer e shell Electron concluído com sucesso
+- `bun run pack:desktop:mac`
+  - Result: `.dmg` `0.1.9` rebuildado múltiplas vezes após cada correção
+- `bun run pack:desktop:win`
+  - Result: `.exe` `0.1.9` regenerado com o mesmo estado final do desktop app
+- `bun test src/web-terminal/runtimePolicy.test.ts src/web-terminal/registry.test.ts src/web-terminal/memory.test.ts`
+  - Result: `13 pass, 0 fail`
+- Verificação isolada do pacote via log do main process:
+  - Result: `runtime ready`, `renderer finished load`, `rootChildCount: 1`,
+    `hasBridge: true`, sem preload error nem mismatch React no boot limpo
+
+### Files Modified
+
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/main.ts`
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/preload.ts`
+- `/Users/philipegermano/code/openclaude/apps/desktop/electron/runtime-server.ts`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/components/AppShell.tsx`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/components/AuthDialog.tsx`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/lib/api.ts`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/main.tsx`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/styles.css`
+- `/Users/philipegermano/code/openclaude/apps/desktop/renderer/types.ts`
+- `/Users/philipegermano/code/openclaude/package.json`
+- `/Users/philipegermano/code/openclaude/package-lock.json`
+- `/Users/philipegermano/code/openclaude/scripts/build-desktop-electron.ts`
+- `/Users/philipegermano/code/openclaude/scripts/build-desktop-renderer.ts`
+
+### Risks And Gaps
+
+- O boot isolado do pacote ficou estável, mas o fluxo completo de credenciais
+  dentro do novo diálogo React ainda não foi exercitado manualmente até o fim
+  contra um provider remoto real nesta sessão.
+- O artefato macOS continua sem notarização e ainda usa o ícone default do
+  Electron.
+
+### Handoff Notes
+
+- Preservar `preload.cjs` como preload do Electron; não voltar a ESM nesse
+  ponto do pacote.
+- Manter `electron` externalizado na build desktop; o bundler não pode
+  embrulhar esse módulo no preload.
+- Se o próximo passo for acabamento, priorizar:
+  1. smoke manual do diálogo de autenticação
+  2. limpeza dos logs de diagnóstico do main process
+  3. notarização e branding do app macOS
+
+
+<!-- session-bridge:docs-session-close-sync-automation-2026-04-06-session:start -->
+## 2026-04-06 — session close sync automation
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-06 21:59:42 -0300`
+- Feature/session id: `docs/session-close-sync-automation-2026-04-06`
+- Repositório: `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `docs/session-contract-fixes`
+- Provider: `codex`
+- Objetivo aprovado: acoplar a emissão do sidecar ao fluxo padrão de fechamento, curar sidecars históricos quando houver metadata mais precisa e automatizar o fechamento canônico sem recolocar o PI local web no centro
+
+### Summary
+
+- Foi criado `scripts/session_close_support.py` como núcleo reutilizável para parsing de `report.md`, geração de sidecar e sync idempotente de blocos markdown.
+- Foi criado `scripts/sync-session-close.py` para automatizar o fechamento canônico a partir do `report.md`, sincronizando diário, `AGENT_BRIDGE`, sidecar e projeção derivada.
+- `backfill-session-sidecars.py` passou a reutilizar o parser estruturado e a curar metadata histórica sem inventar precisão: agora reaproveita timestamp exato quando disponível, `objective`, `branch`, `reported_session_id`, `commands` e `files_touched`.
+- O schema do sidecar foi ampliado com os campos compactos `reported_session_id`, `branch` e `objective`.
+- O projector foi alinhado para projetar esses novos campos sem passar a materializar `commands` e `files_touched` no grafo.
+- O projector passou a reconciliar também entidades e relações gerenciadas do namespace da sessão, removendo resíduos órfãos quando o sidecar muda.
+- A documentação do rito de fechamento foi atualizada para apontar o novo comando canônico.
+- Os quatro sidecars históricos importados foram regravados com metadata melhor e o grafo derivado foi reprojetado com sucesso.
+- O `sync-session-close.py` foi usado para fechar esta própria sessão real, gravando diário, `AGENT_BRIDGE` e sidecar canônico.
+- O disparo inicial do projector a partir do sync falhou com `Docker Desktop is not running` ao usar o Python da sandbox; o comando foi endurecido para usar `python3` do host e a reprojeção final convergiu.
+
+### Risks And Gaps
+
+- o script novo ainda depende de `report.md` suficientemente bem estruturado; relatórios muito fora do template continuam exigindo curadoria manual
+- o grafo derivado continua sujeito à disponibilidade do runtime Docker MCP, embora isso não bloqueie mais o fechamento canônico
+- o sidecar manual da sessão anterior continua com id legado, por escolha deliberada para não deixar resíduo órfão no grafo durante esta fatia
+
+### Next Actions
+
+- Nenhuma ação adicional ficou pendente nesta sessão.
+
+### Handoff Notes
+
+- preservar `jpglabs/docs` como hub canônico
+- preservar o sidecar como write-path de máquina e o grafo Docker MCP como derivado reconstruível
+- não reintroduzir o PI local web como centro do fluxo de memória
+<!-- session-bridge:docs-session-close-sync-automation-2026-04-06-session:end -->
+
+<!-- session-bridge:openclaude-desktop-agentic-ux-2026-04-06-session:start -->
+## 2026-04-06 — openclaude desktop agentic ux
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-06 22:56:58 -0300`
+- Feature/session id: `openclaude/desktop-agentic-ux-2026-04-06`
+- Repositório: `/Users/philipegermano/code/openclaude`
+- Branch ativa: `main`
+- Provider: `codex`
+- Objetivo aprovado: elevar o fluxo agentic do desktop com readiness de providers, seleção guiada de modelo e abertura de arquivos locais com diff Git dentro do renderer
+
+### Summary
+
+- O bootstrap do runtime desktop e do web-terminal passou a expor `providerStatuses`, com estado `ready/attention/inactive` por provider e heurística baseada em credenciais remotas, disponibilidade de Ollama/Atomic Chat e preferência persistida.
+- O desktop renderer ganhou chips de provider no composer, escolha inicial inteligente de modelo com base em providers prontos/preferidos e affordance visual de atenção para provedores incompletos.
+- As mensagens do desktop agora reconhecem referências locais de arquivo em tempo de execução e abrem um painel lateral com conteúdo do arquivo e diff Git quando o path estiver dentro do workspace ativo.
+- Foi adicionado endpoint compartilhado `/api/workspace-file` para desktop e web-terminal, mantendo interoperabilidade do contrato mesmo antes de o web UI usar o painel novo.
+- Foi gerado novo artefato macOS `release/OpenClaude Desktop-0.1.9-arm64.dmg`.
+
+### Risks And Gaps
+
+- O worktree do repositório continua heterogêneo e `apps/desktop`, `src/web-terminal` e `release/` seguem fora do controle do Git local; não é seguro fazer merge automático desta fatia sem staging cirúrgico.
+- O painel de arquivo local cobre preview e diff textual; ele não faz jump real no editor/IDE nem diff estrutural com syntax highlight.
+- O artefato macOS continua sem notarização e ainda usa o ícone default do Electron.
+
+### Next Actions
+
+- Isolar staging apenas da fatia desktop/web-terminal nova, revisar diff e então abrir branch dedicada para publicação.
+- Se a próxima fatia seguir no UX agentic, o passo natural é adicionar um painel de changes/session activity alimentado por eventos do runtime.
+
+### Handoff Notes
+
+- Preservar `providerStatuses` e `/api/workspace-file` como contrato compartilhado entre desktop e web-terminal.
+- Não tentar merge direto em `main` enquanto o repo continuar com worktree ampla e remotes incompletos para o fluxo pedido pelo usuário.
+<!-- session-bridge:openclaude-desktop-agentic-ux-2026-04-06-session:end -->
+
+<!-- session-bridge:openclaude-web-workspace-view-2026-04-06-session:start -->
+## 2026-04-06 — openclaude web workspace view
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-06 23:57:00 -0300`
+- Feature/session id: `openclaude/web-workspace-view-2026-04-06`
+- Repositório: `/Users/philipegermano/code/openclaude`
+- Branch ativa: `main`
+- Provider: `codex`
+- Objetivo aprovado: adicionar uma Workspace View no OpenClaude web com contrato por agente baseado em MCP capability, markdown por papel, memory como fonte compartilhada e visibilidade de tarefas, impedimentos e propostas
+
+### Summary
+
+- O web-terminal agora monta `workspaceView` no bootstrap server-side, cruzando `.mcp.json`, `.codex/config.toml`, Git do repo, scripts de qualidade e a surface de `memory`.
+- Foi criada uma taxonomia operacional por agente com `domain`, `inputs`, `outputs`, `gates`, `blockers` e um bloco markdown reutilizavel por papel.
+- A interface web ganhou menu de acoes no header e uma drawer React `Workspace View`, sem reescrever o chat principal.
+- A drawer mostra `Source of truth`, integracoes MCP/sistemas externos, readiness do repositorio, tarefas atuais, ultimas tarefas, impedimentos ativos e propostas diretas.
+- `MCP Memory` foi tratado como lane transversal do contrato; Figma, Jira, Git, GitHub, GitLab, quality gates e sequential thinking aparecem com readiness explicita.
+- A tentativa de alinhar a implementacao ao conteudo literal dos videos ficou bloqueada no helper local porque `Docker Desktop is not running`.
+
+### Risks And Gaps
+
+- `scripts/web-terminal.ts`, `src/web-terminal/` e `web-ui/` seguem fora do controle do Git nesta worktree; nao houve staging nem merge.
+- A surface nova foi validada por bundle e testes unitarios; faltou abrir o servidor e fazer verificacao visual em browser por colisao de porta no host/sandbox.
+- `Jira` e `GitLab` continuam sendo mostrados como bloqueados/inativos para este repo enquanto a integracao real nao estiver configurada no runtime.
+- O uso dos videos como referencia ficou parcial porque a lane `youtube_transcript` depende do Docker MCP local, indisponivel nesta sessao.
+
+### Next Actions
+
+- Subir o web-terminal no host com porta livre e validar a `Workspace View` em browser.
+- Conectar `Jira` e `GitLab` no runtime quando essas surfaces forem obrigatorias para o handoff do time.
+- Revisar o staging da fatia nova antes de qualquer branch/commit, porque a worktree do repo continua heterogenea.
+
+### Handoff Notes
+
+- Preservar o contrato `capability-driven`: agente so fica verde quando MCP, token/permissao e evidencia exigidos estiverem presentes.
+- Preservar `memory` como source of truth compartilhada e o markdown por papel como formato de handoff.
+- Nao trocar a drawer por narrativa genérica; a utilidade dela depende de mostrar tarefa atual, ultima tarefa, bloqueio e proposta de forma operacional.
+<!-- session-bridge:openclaude-web-workspace-view-2026-04-06-session:end -->
+
+<!-- session-bridge:openclaude-apple-speech-local-transcript-2026-04-07-session:start -->
+## 2026-04-07 — openclaude apple speech local transcript
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-07 00:10:40 -0300`
+- Feature/session id: `openclaude/apple-speech-local-transcript-2026-04-07`
+- Repositório: `/Users/philipegermano/code/openclaude`
+- Branch ativa: `main`
+- Provider: `codex`
+- Objetivo aprovado: elevar `Apple Speech` a prioridade de roadmap como lane nativa de transcript local e refletir isso na linguagem do produto e na `Workspace View`
+
+### Summary
+
+- `ROADMAP.md` foi criado/atualizado para consolidar `native operability` como prioridade e agora declara explicitamente `Apple Speech` como adapter nativo para transcript local em Apple devices.
+- `README.md` e `PROJECT_CONTEXT.md` passaram a refletir essa direcao, tratando transcript local nativo como parte da estrategia do produto, nao como detalhe lateral.
+- A `Workspace View` passou a expor `Local Transcript` como capability nativa separada, ainda nao entregue, com status honesto e proposta direta para priorizar `Apple Speech` no macOS.
+- A copy do web UI foi simplificada para uma linguagem mais calma e nativa, orientada a estado real: `Now`, `Recent`, `Blocked`, `Next`, em vez de texto mais pesado de dashboard.
+- A leitura do repo confirmou que a trilha atual de voz/STT existe, mas esta acoplada ao `voice_stream` remoto da Anthropic; `Apple Speech` local ainda nao esta integrado.
+
+### Risks And Gaps
+
+- `Apple Speech` entrou apenas como prioridade formal e lane visivel; a implementacao nativa ainda nao existe.
+- A `Workspace View` continua em paths nao rastreados na worktree atual do repo, entao ainda nao ha commit seguro.
+- Nao houve validacao funcional de transcript local no runtime porque essa capability ainda nao foi implementada.
+
+### Next Actions
+
+- Definir a arquitetura do adapter `Apple Speech` para transcript local no macOS e sua integracao com a trilha de voz existente.
+- Decidir como o transcript local vai alimentar `memory`, handoff markdown e possivel uso no web/desktop.
+- Revisar staging da fatia atual antes de qualquer branch/commit, porque o repo segue com worktree heterogenea.
+
+### Handoff Notes
+
+- Preservar `Apple Speech local transcript` como prioridade de produto, nao como experimento secundario.
+- Preservar a separacao entre `voice_stream` remoto atual e a futura lane nativa local.
+- Manter a linguagem da `Workspace View` curta, calma e orientada a verdade operacional.
+<!-- session-bridge:openclaude-apple-speech-local-transcript-2026-04-07-session:end -->

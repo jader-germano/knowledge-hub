@@ -3,13 +3,14 @@
   "schema_version": "1.0",
   "session": {
     "id": "docs-kaidi-sdr-recovery-case-2026-04-02-session",
-    "timestamp": "2026-04-02T00:00:00-03:00",
+    "timestamp": "2026-04-02T00:01:43-03:00",
     "date": "2026-04-02",
     "provider": "unknown",
     "workspace": "/Users/philipegermano/code",
     "status": "partial",
     "feature_id": "kaidi-sdr-recovery-case",
-    "summary": "Este case deve permanecer salvo como op\u00e7\u00e3o futura, n\u00e3o como execu\u00e7\u00e3o"
+    "summary": "Este case deve permanecer salvo como op\u00e7\u00e3o futura, n\u00e3o como execu\u00e7\u00e3o",
+    "objective": "registrar um case poss\u00edvel de implementa\u00e7\u00e3o para recuperar o uso dos transmissores Kaidi sem depender de novos dongles descart\u00e1veis"
   },
   "projects": [
     {
@@ -30,57 +31,6 @@
     "kaidi-sdr-recovery-case",
     "session-report"
   ],
-  "findings": [
-    {
-      "id": "legacy-import",
-      "summary": "Imported from a legacy Markdown report. Timestamp and provider may be approximate and should be curated if higher fidelity is required.",
-      "status": "imported",
-      "project_ids": [
-        "docs"
-      ]
-    },
-    {
-      "id": "risk-risco-alto-de-protocolo-propriet-rio-complexo",
-      "summary": "risco alto de protocolo propriet\u00e1rio complexo",
-      "status": "open",
-      "project_ids": [
-        "docs"
-      ]
-    },
-    {
-      "id": "risk-risco-de-custo-total-acima-do-benef-cio-marginal",
-      "summary": "risco de custo total acima do benef\u00edcio marginal",
-      "status": "open",
-      "project_ids": [
-        "docs"
-      ]
-    },
-    {
-      "id": "risk-risco-de-emiss-o-inadequada-em-2-4-ghz-se-a-tril",
-      "summary": "risco de emiss\u00e3o inadequada em `2.4 GHz` se a trilha evoluir para TX",
-      "status": "open",
-      "project_ids": [
-        "docs"
-      ]
-    },
-    {
-      "id": "risk-risco-de-consumir-tempo-relevante-sem-chegar-a-u",
-      "summary": "risco de consumir tempo relevante sem chegar a uma solu\u00e7\u00e3o de produ\u00e7\u00e3o",
-      "status": "open",
-      "project_ids": [
-        "docs"
-      ]
-    },
-    {
-      "id": "risk-risco-de-o-resultado-final-servir-para-laborat-r",
-      "summary": "risco de o resultado final servir para laborat\u00f3rio, mas n\u00e3o para opera\u00e7\u00e3o confi\u00e1vel em reuni\u00f5es reais",
-      "status": "open",
-      "project_ids": [
-        "docs"
-      ]
-    }
-  ],
-  "next_actions": [],
   "decisions": [
     {
       "id": "imported-n-o-iniciar-compras-nem-implementa-o-agora",
@@ -147,6 +97,57 @@
       ]
     }
   ],
+  "findings": [
+    {
+      "id": "legacy-import",
+      "summary": "Imported from a legacy Markdown report. Timestamp and provider may be approximate and should be curated if higher fidelity is required.",
+      "status": "imported",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-risco-alto-de-protocolo-propriet-rio-complexo",
+      "summary": "risco alto de protocolo propriet\u00e1rio complexo",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-risco-de-custo-total-acima-do-benef-cio-marginal",
+      "summary": "risco de custo total acima do benef\u00edcio marginal",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-risco-de-emiss-o-inadequada-em-2-4-ghz-se-a-tril",
+      "summary": "risco de emiss\u00e3o inadequada em `2.4 GHz` se a trilha evoluir para TX",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-risco-de-consumir-tempo-relevante-sem-chegar-a-u",
+      "summary": "risco de consumir tempo relevante sem chegar a uma solu\u00e7\u00e3o de produ\u00e7\u00e3o",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-risco-de-o-resultado-final-servir-para-laborat-r",
+      "summary": "risco de o resultado final servir para laborat\u00f3rio, mas n\u00e3o para opera\u00e7\u00e3o confi\u00e1vel em reuni\u00f5es reais",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "next_actions": [],
   "files_touched": [],
   "commands": []
 }

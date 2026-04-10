@@ -33,6 +33,7 @@ Referência transversal:
 - Timestamp completo do fechamento
 - Data da sessão
 - `feature/session id`
+- `Provider`, quando conhecido
 - Repositório
 - Branch ativa
 - Objetivo aprovado
@@ -170,3 +171,23 @@ Obrigatório em todo fechamento de sessão.
 ## Handoff Notes
 
 - Tudo que o próximo agente/provedor precisa preservar
+
+## Comando Canônico De Sync
+
+Depois que `report.md` estiver fechado, o sync canônico do fechamento passa a
+ser:
+
+```bash
+python3 /Users/philipegermano/code/jpglabs/docs/scripts/sync-session-close.py \
+  --report /Users/philipegermano/code/jpglabs/docs/projects/<repo>/sessions/<feature-id>/<yyyy-mm-dd-session>/report.md \
+  --write
+```
+
+Esse comando:
+
+- sincroniza a entrada correspondente em `/Users/philipegermano/code/daily/`
+- sincroniza um resumo operacional em `agents/AGENT_BRIDGE.md`
+- emite ou atualiza o sidecar JSON em `memory/events/`
+- tenta projetar o sidecar no grafo derivado
+- não invalida o fechamento se a projeção falhar, desde que `report.md`,
+  diário e sidecar tenham sido gravados com sucesso

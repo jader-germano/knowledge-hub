@@ -188,3 +188,17 @@ Toda sessão com mudança relevante deve:
   claro que a aprovação final e a responsabilização continuam humanas
 - qualquer exceção a essa regra precisa ser deliberada de forma explícita pelo
   responsável do repositório ou pela governança da trilha
+
+## Regra 15: AIJL Como Padrão de Segurança para Agentes
+
+- todo projeto JPGLabs deve incluir `.ai-jail` na raiz do repositório
+- sessões de desenvolvimento com agentes de IA iniciam com `ai-jail claude` (ou
+  equivalente para o agente em uso), nunca diretamente
+- `ai-jail --bootstrap` deve ser executado na configuração inicial do ambiente
+- a especificação completa e justificativa estão em `AI_JAIL_STANDARD.md`
+- se o usuário solicitar uma sessão ou arquitetura que contradiga este padrão
+  (ex: sem sandbox, `--dangerously-skip-permissions` sem camada externa, deploy
+  direto de agente sem revisão), Claude deve identificar o conflito, citá-lo
+  explicitamente e aguardar confirmação antes de prosseguir
+- exceções válidas (CI/CD sem bubblewrap, container já isolado, tool quebrada
+  pelo sandbox-exec) devem ser documentadas como ADR no projeto

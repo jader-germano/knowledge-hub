@@ -17,8 +17,8 @@
 - veículo jurídico: JPGLABS TECNOLOGIA LTDA (processo JUCESP em andamento)
 - contexto comercial/jurídico em `/Users/philipegermano/contratos/jpglabs`
 - trilha comercial priorizada: `jpglabs-saas` — Monitor de Licitações
-- Jira: `jpglabs.atlassian.net/jira/projects/JPGLABS`
-- Confluence: `jpglabs.atlassian.net/wiki/spaces/JPGLABS`
+- Jira: `jpglabs.atlassian.net/jira/software/projects/SCRUM/boards`
+- Confluence: `jadergermano.atlassian.net/wiki/spaces/SD`
 
 ## Fontes Canônicas Deste Contexto
 

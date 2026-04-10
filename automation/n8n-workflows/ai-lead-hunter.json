@@ -1,6 +1,6 @@
 [
   {
-    "updatedAt": "2026-03-08T13:30:00.000Z",
+    "updatedAt": "2026-04-09T08:00:00.000Z",
     "createdAt": "2026-03-08T13:30:00.000Z",
     "id": "lead-hunter-01",
     "name": "JPGLabs [Growth] - AI Lead Hunter",
@@ -65,7 +65,7 @@
             "parameters": [
               {
                 "name": "text",
-                "value": "={{ '🎯 New Lead Found!\\nUser: ' + $json.author + '\\nTopic: ' + $json.title + '\\nLink: ' + $json.url }}"
+                "value": "={{ '\ud83c\udfaf New Lead Found!\\nUser: ' + $json.author + '\\nTopic: ' + $json.title + '\\nLink: ' + $json.url }}"
               }
             ]
           }
@@ -73,7 +73,34 @@
         "name": "Notify Slack",
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4,
+        "position": [850, -150]
+      },
+      {
+        "parameters": {
+          "url": "={{ $env.DISCORD_WEBHOOK_URL }}",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "content",
+                "value": "={{ '\ud83c\udfaf **New Lead Found!**\\n**User:** ' + $json.author + '\\n**Topic:** ' + $json.title + '\\n**Link:** ' + $json.url }}"
+              }
+            ]
+          }
+        },
+        "name": "Notify Discord",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
         "position": [850, 0]
+      },
+      {
+        "parameters": {
+          "jsCode": "const now = new Date();\nconst date = now.toISOString().slice(0, 10);\nconst time = now.toISOString().slice(11, 19);\nconst fs = require('fs');\nconst dir = '/sync/jpglabs-docs/reports/lead-hunter';\nconst file = `${dir}/leads-${date}.md`;\n\nif (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });\n\nlet header = '';\nif (!fs.existsSync(file)) {\n  header = `---\\ntype: lead-hunter-diary\\ndate: \"${date}\"\\ntags:\\n  - \"#lead-hunter\"\\n  - \"#growth\"\\n---\\n\\n# Lead Hunter — ${date}\\n\\n`;\n}\n\nconst entry = `### ${time} UTC\\n- **User:** ${$json.author}\\n- **Topic:** ${$json.title}\\n- **Link:** ${$json.url}\\n\\n`;\n\nfs.appendFileSync(file, header + entry);\n\nreturn [{ json: { logged: true, file, date, time } }];"
+        },
+        "name": "Log to Diary",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [850, 150]
       }
     ],
     "connections": {
@@ -87,7 +114,7 @@
         "main": [[{ "node": "Filter Keywords", "type": "main", "index": 0 }]]
       },
       "Filter Keywords": {
-        "main": [[{ "node": "Notify Slack", "type": "main", "index": 0 }]]
+        "main": [[{ "node": "Notify Slack", "type": "main", "index": 0 }, { "node": "Notify Discord", "type": "main", "index": 0 }, { "node": "Log to Diary", "type": "main", "index": 0 }]]
       }
     }
   }

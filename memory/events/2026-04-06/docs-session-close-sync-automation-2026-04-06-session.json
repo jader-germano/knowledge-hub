@@ -1,0 +1,132 @@
+{
+  "$schema": "/Users/philipegermano/code/jpglabs/docs/memory/schemas/session-memory-sidecar.schema.json",
+  "schema_version": "1.0",
+  "session": {
+    "id": "docs-session-close-sync-automation-2026-04-06-session",
+    "timestamp": "2026-04-06T21:59:42-03:00",
+    "date": "2026-04-06",
+    "provider": "codex",
+    "workspace": "/Users/philipegermano/code/jpglabs/docs",
+    "status": "completed",
+    "feature_id": "session-close-sync-automation",
+    "summary": "Foi criado `scripts/session_close_support.py` como n\u00facleo reutiliz\u00e1vel para parsing de `report.md`, gera\u00e7\u00e3o de sidecar e sync idempotente de blocos markdown. | Foi criado `scripts/sync-session-close.py` para automatizar o fechamento can\u00f4nico a partir do `report.md`, sincronizando di\u00e1rio, `AGENT_BRIDGE`, sidecar e proje\u00e7\u00e3o derivada.",
+    "reported_session_id": "docs/session-close-sync-automation-2026-04-06",
+    "branch": "docs/session-contract-fixes",
+    "objective": "acoplar a emiss\u00e3o do sidecar ao fluxo padr\u00e3o de fechamento, curar sidecars hist\u00f3ricos quando houver metadata mais precisa e automatizar o fechamento can\u00f4nico sem recolocar o PI local web no centro"
+  },
+  "projects": [
+    {
+      "id": "docs",
+      "name": "jpglabs/docs",
+      "path": "/Users/philipegermano/code/jpglabs/docs",
+      "role": "canonical session report owner"
+    }
+  ],
+  "artifacts": {
+    "report": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/session-close-sync-automation/2026-04-06-session/report.md",
+    "daily": "/Users/philipegermano/code/daily/2026-04-06.md",
+    "evidence_dir": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/session-close-sync-automation/2026-04-06-session"
+  },
+  "tags": [
+    "docs",
+    "session-close-sync-automation",
+    "session-report"
+  ],
+  "decisions": [],
+  "findings": [
+    {
+      "id": "risk-o-script-novo-ainda-depende-de-report-md-suficie",
+      "summary": "o script novo ainda depende de `report.md` suficientemente bem estruturado; relat\u00f3rios muito fora do template continuam exigindo curadoria manual",
+      "status": "recorded",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-o-grafo-derivado-continua-sujeito-disponibilidad",
+      "summary": "o grafo derivado continua sujeito \u00e0 disponibilidade do runtime Docker MCP, embora isso n\u00e3o bloqueie mais o fechamento can\u00f4nico",
+      "status": "recorded",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-o-sidecar-manual-da-sess-o-anterior-continua-com",
+      "summary": "o sidecar manual da sess\u00e3o anterior continua com id legado, por escolha deliberada para n\u00e3o deixar res\u00edduo \u00f3rf\u00e3o no grafo durante esta fatia",
+      "status": "recorded",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "next_actions": [],
+  "files_touched": [
+    "/Users/philipegermano/code/jpglabs/docs/scripts/session_close_support.py",
+    "/Users/philipegermano/code/jpglabs/docs/scripts/sync-session-close.py",
+    "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/session-close-sync-automation/2026-04-06-session/report.md",
+    "/Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md",
+    "/Users/philipegermano/code/jpglabs/docs/agents/FEATURE_DELIVERY_RITUAL.md",
+    "/Users/philipegermano/code/jpglabs/docs/memory/EVENTS_CONTRACT.md",
+    "/Users/philipegermano/code/jpglabs/docs/memory/events/README.md",
+    "/Users/philipegermano/code/jpglabs/docs/memory/schemas/session-memory-sidecar.schema.json",
+    "/Users/philipegermano/code/jpglabs/docs/scripts/README.md",
+    "/Users/philipegermano/code/jpglabs/docs/scripts/backfill-session-sidecars.py",
+    "/Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py",
+    "/Users/philipegermano/code/jpglabs/docs/memory/events/2026-03-31/docs-claude-cli-teams-enable-2026-03-31-session.json",
+    "/Users/philipegermano/code/jpglabs/docs/memory/events/2026-03-31/docs-code-root-reclassify-and-llm-context-2026-03-31-session.json",
+    "/Users/philipegermano/code/jpglabs/docs/memory/events/2026-03-31/docs-root-bootstrap-decouple-2026-03-31-session.json",
+    "/Users/philipegermano/code/jpglabs/docs/memory/events/2026-04-02/docs-kaidi-sdr-recovery-case-2026-04-02-session.json"
+  ],
+  "commands": [
+    {
+      "command": "python3 -m py_compile /Users/philipegermano/code/jpglabs/docs/scripts/session_close_support.py",
+      "action": "validar a sintaxe do parser compartilhado",
+      "result": "compila\u00e7\u00e3o limpa"
+    },
+    {
+      "command": "python3 -m py_compile /Users/philipegermano/code/jpglabs/docs/scripts/sync-session-close.py",
+      "action": "validar a sintaxe do sync can\u00f4nico de fechamento",
+      "result": "compila\u00e7\u00e3o limpa"
+    },
+    {
+      "command": "python3 -m py_compile /Users/philipegermano/code/jpglabs/docs/scripts/backfill-session-sidecars.py",
+      "action": "revalidar o backfill ap\u00f3s a refatora\u00e7\u00e3o",
+      "result": "compila\u00e7\u00e3o limpa"
+    },
+    {
+      "command": "python3 -m py_compile /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py",
+      "action": "revalidar o projector ap\u00f3s ampliar os campos projetados",
+      "result": "compila\u00e7\u00e3o limpa"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/sync-session-close.py --report /Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/memory-hybrid-sidecar-projector/2026-04-06-session/report.md --daily-path /private/tmp/session-close-sync-test/2026-04-06.md --bridge-path /private/tmp/session-close-sync-test/AGENT_BRIDGE.md --sidecar-path /private/tmp/session-close-sync-test/docs-memory-hybrid-sidecar-projector.json --projector-mode none --write",
+      "action": "validar o fluxo completo de sync do fechamento sem tocar os artefatos can\u00f4nicos",
+      "result": "di\u00e1rio, bridge e sidecar tempor\u00e1rios foram criados corretamente"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/sync-session-close.py --report /Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/session-close-sync-automation/2026-04-06-session/report.md --write",
+      "action": "fechar esta pr\u00f3pria sess\u00e3o pelo fluxo can\u00f4nico",
+      "result": "di\u00e1rio, `AGENT_BRIDGE` e sidecar foram gravados; o apply interno do projector falhou no primeiro disparo por resolver `Docker Desktop is not running`"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/backfill-session-sidecars.py --report /Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/claude-cli-teams-enable/2026-03-31-session/report.md --report /Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/code-root-reclassify-and-llm-context/2026-03-31-session/report.md --report /Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/root-bootstrap-decouple/2026-03-31-session/report.md --report /Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/kaidi-sdr-recovery-case/2026-04-02-session/report.md --overwrite --write",
+      "action": "curar os sidecars hist\u00f3ricos j\u00e1 importados",
+      "result": "os quatro sidecars foram regravados com metadata mais rica"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --apply",
+      "action": "reprojetar o grafo derivado depois da curadoria dos sidecars",
+      "result": "primeira reaplica\u00e7\u00e3o ap\u00f3s a curadoria manteve o grafo em `49` entidades e `90` rela\u00e7\u00f5es, com `1` observa\u00e7\u00e3o removida e `7` observa\u00e7\u00f5es adicionadas"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --apply",
+      "action": "incorporar a sess\u00e3o atual no grafo derivado depois do endurecimento do sync",
+      "result": "grafo final em `55` entidades e `102` rela\u00e7\u00f5es, com `6` entidades novas, `1` observa\u00e7\u00e3o adicionada e `12` rela\u00e7\u00f5es novas"
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --apply",
+      "action": "limpar entidades e rela\u00e7\u00f5es \u00f3rf\u00e3s do namespace da sess\u00e3o depois da reconcilia\u00e7\u00e3o completa",
+      "result": "grafo consolidado em `54` entidades e `100` rela\u00e7\u00f5es, com `1` entidade \u00f3rf\u00e3 removida e `2` rela\u00e7\u00f5es antigas removidas"
+    }
+  ]
+}

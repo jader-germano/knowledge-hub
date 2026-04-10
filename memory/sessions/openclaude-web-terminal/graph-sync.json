@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-04-06T14:27:03.917Z",
+  "generatedAt": "2026-04-07T03:16:45.516Z",
   "source": {
     "system": "openclaude-web-terminal",
     "memoryMdPath": "/Users/philipegermano/code/jpglabs/docs/memory/sessions/openclaude-web-terminal/memory.md",
@@ -12,22 +12,244 @@
         "entityType": "service",
         "name": "openclaude-web-terminal",
         "observations": [
-          "Generated at 2026-04-06T14:27:03.917Z",
+          "Generated at 2026-04-07T03:16:45.516Z",
           "Session registry path: /Users/philipegermano/code/jpglabs/docs/memory/sessions/openclaude-web-terminal/web-sessions.json",
           "Markdown ledger path: /Users/philipegermano/code/jpglabs/docs/memory/sessions/openclaude-web-terminal/memory.md"
         ]
       },
       {
         "entityType": "session",
-        "name": "openclaude-web-session:fcd7773c-8a83-4f80-b14a-f8962bf3ba27",
+        "name": "openclaude-web-session:23b51309-4798-4d9e-bf1a-9e6c8907f1ea",
         "observations": [
-          "Web session id: fcd7773c-8a83-4f80-b14a-f8962bf3ba27",
-          "Transcript session id: 1e210a07-bd49-4a81-8977-d64bf7b02ea5",
-          "Status: idle",
+          "Web session id: 23b51309-4798-4d9e-bf1a-9e6c8907f1ea",
+          "Transcript session id: pending",
+          "Status: error",
           "CWD: /Users/philipegermano/code/openclaude",
-          "Title: teste",
-          "Created at: 2026-04-06T14:21:02.101Z",
-          "Last active at: 2026-04-06T14:27:03.914Z"
+          "Title: openai session · 2026-04-07 00:16",
+          "Model: gpt-5.4",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: max",
+          "Created at: 2026-04-07T03:16:36.672Z",
+          "Last active at: 2026-04-07T03:16:45.513Z"
+        ]
+      },
+      {
+        "entityType": "provider",
+        "name": "openclaude-provider:openai",
+        "observations": [
+          "Provider profile: openai"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:2e80aede-15e0-4f12-baf6-e134949e69a2",
+        "observations": [
+          "Web session id: 2e80aede-15e0-4f12-baf6-e134949e69a2",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: openai session · 2026-04-07 00:15",
+          "Model: gpt-5.4",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-07T03:15:54.184Z",
+          "Last active at: 2026-04-07T03:16:03.343Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:c6c7e78d-034e-4989-927a-91e1b4d5d0f8",
+        "observations": [
+          "Web session id: c6c7e78d-034e-4989-927a-91e1b4d5d0f8",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: openai session · 2026-04-07 00:15",
+          "Model: gpt-5.4",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-07T03:15:12.861Z",
+          "Last active at: 2026-04-07T03:15:22.604Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:55539297-ddab-45ae-ac80-6a9f2606be3f",
+        "observations": [
+          "Web session id: 55539297-ddab-45ae-ac80-6a9f2606be3f",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano",
+          "Title: openai session · 2026-04-06 23:11",
+          "Model: gpt-5.4",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: max",
+          "Created at: 2026-04-07T02:11:39.813Z",
+          "Last active at: 2026-04-07T02:11:48.293Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:3a339f9a-7a54-4653-aa4a-e8637bda5157",
+        "observations": [
+          "Web session id: 3a339f9a-7a54-4653-aa4a-e8637bda5157",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano",
+          "Title: openai session · 2026-04-06 23:10",
+          "Model: gpt-5.4",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: max",
+          "Created at: 2026-04-07T02:10:40.363Z",
+          "Last active at: 2026-04-07T02:10:51.157Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:f15b32aa-2240-4e15-9e96-7ef2f7bef416",
+        "observations": [
+          "Web session id: f15b32aa-2240-4e15-9e96-7ef2f7bef416",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano",
+          "Title: openai session · 2026-04-06 22:00",
+          "Model: gpt-5.4",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: max",
+          "Created at: 2026-04-07T01:00:36.942Z",
+          "Last active at: 2026-04-07T01:00:48.352Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:9d19b553-6503-46c6-958e-c79df2ee62ef",
+        "observations": [
+          "Web session id: 9d19b553-6503-46c6-958e-c79df2ee62ef",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano",
+          "Title: openai session · 2026-04-06 22:00",
+          "Model: gpt-5.4",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: max",
+          "Created at: 2026-04-07T01:00:17.364Z",
+          "Last active at: 2026-04-07T01:00:26.160Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:88581147-4fe0-4ad7-9c9c-d8a72c9d6d56",
+        "observations": [
+          "Web session id: 88581147-4fe0-4ad7-9c9c-d8a72c9d6d56",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: openai session · 2026-04-06 21:59",
+          "Model: gpt-5.4",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-07T00:59:51.855Z",
+          "Last active at: 2026-04-07T01:00:03.765Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:91fcde14-2101-4e85-9de0-8a0a27ec979b",
+        "observations": [
+          "Web session id: 91fcde14-2101-4e85-9de0-8a0a27ec979b",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano",
+          "Title: openai session · 2026-04-06 21:42",
+          "Model: gpt-5.4",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: max",
+          "Created at: 2026-04-07T00:42:37.650Z",
+          "Last active at: 2026-04-07T00:42:46.184Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:5fadff54-56be-4c5a-ac5a-06387a5edb3d",
+        "observations": [
+          "Web session id: 5fadff54-56be-4c5a-ac5a-06387a5edb3d",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano",
+          "Title: codex session · 2026-04-06 20:40",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T23:40:13.038Z",
+          "Last active at: 2026-04-06T23:40:22.927Z"
+        ]
+      },
+      {
+        "entityType": "provider",
+        "name": "openclaude-provider:codex",
+        "observations": [
+          "Provider profile: codex"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:39e29225-0a53-4c45-b10d-1e24475b2af3",
+        "observations": [
+          "Web session id: 39e29225-0a53-4c45-b10d-1e24475b2af3",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano",
+          "Title: codex session · 2026-04-06 20:40",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T23:40:12.207Z",
+          "Last active at: 2026-04-06T23:40:22.206Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:97cf28e9-fd00-4426-8b93-737c9ab7a5ca",
+        "observations": [
+          "Web session id: 97cf28e9-fd00-4426-8b93-737c9ab7a5ca",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano",
+          "Title: codex session · 2026-04-06 20:39",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T23:39:25.373Z",
+          "Last active at: 2026-04-06T23:39:33.791Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:f464c48f-3884-4663-9b6d-2d7abd56461a",
+        "observations": [
+          "Web session id: f464c48f-3884-4663-9b6d-2d7abd56461a",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: openai session · 2026-04-06 16:38",
+          "Model: qwen2.5-coder:7b",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T19:38:22.582Z",
+          "Last active at: 2026-04-06T19:39:22.469Z"
         ]
       },
       {
@@ -39,6 +261,856 @@
       },
       {
         "entityType": "session",
+        "name": "openclaude-web-session:4a070beb-8b23-494b-be09-ddb929439a8c",
+        "observations": [
+          "Web session id: 4a070beb-8b23-494b-be09-ddb929439a8c",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 16:35",
+          "Model: mistral:7b-instruct",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T19:35:55.749Z",
+          "Last active at: 2026-04-06T19:37:35.213Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:c2f76274-cfd8-4600-8441-7982568cdb98",
+        "observations": [
+          "Web session id: c2f76274-cfd8-4600-8441-7982568cdb98",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 16:35",
+          "Model: llama3.1:8b",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T19:35:20.234Z",
+          "Last active at: 2026-04-06T19:37:24.425Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:04b043e1-f926-4ea5-aed3-2a994be13992",
+        "observations": [
+          "Web session id: 04b043e1-f926-4ea5-aed3-2a994be13992",
+          "Transcript session id: 0439ccfa-23b6-4bd6-b858-36a3f6345fee",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 16:34",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T19:34:47.169Z",
+          "Last active at: 2026-04-06T19:36:57.493Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:e2bcb36b-9daa-45a6-97ba-6f1fdfa33a88",
+        "observations": [
+          "Web session id: e2bcb36b-9daa-45a6-97ba-6f1fdfa33a88",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 16:33",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T19:33:49.154Z",
+          "Last active at: 2026-04-06T19:36:14.514Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:207cf7bb-a3c4-4855-9dbf-58a676e8a2c2",
+        "observations": [
+          "Web session id: 207cf7bb-a3c4-4855-9dbf-58a676e8a2c2",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 16:15",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T19:15:32.801Z",
+          "Last active at: 2026-04-06T19:15:41.450Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:549207bb-b033-4c71-a14b-69a78323ab32",
+        "observations": [
+          "Web session id: 549207bb-b033-4c71-a14b-69a78323ab32",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 16:15",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T19:15:04.468Z",
+          "Last active at: 2026-04-06T19:15:13.609Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:6b5e0d7c-7769-41c8-b645-f1d3515bdefc",
+        "observations": [
+          "Web session id: 6b5e0d7c-7769-41c8-b645-f1d3515bdefc",
+          "Transcript session id: 2823988e-6339-41ec-96e3-41c0467d3fe7",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 15:35",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T18:35:59.461Z",
+          "Last active at: 2026-04-06T18:36:08.621Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:f4b07fd1-56e2-4453-a143-f4da2f4d9150",
+        "observations": [
+          "Web session id: f4b07fd1-56e2-4453-a143-f4da2f4d9150",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 15:35",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T18:35:35.455Z",
+          "Last active at: 2026-04-06T18:35:43.832Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:0536b806-10f5-4c5b-9ebc-339d75e3fa4d",
+        "observations": [
+          "Web session id: 0536b806-10f5-4c5b-9ebc-339d75e3fa4d",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 15:35",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T18:35:05.055Z",
+          "Last active at: 2026-04-06T18:35:13.059Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:fe544a4a-71e8-4eb3-a9ec-349f4ee3991d",
+        "observations": [
+          "Web session id: fe544a4a-71e8-4eb3-a9ec-349f4ee3991d",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 15:34",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T18:34:43.966Z",
+          "Last active at: 2026-04-06T18:34:52.360Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:92cc78af-6161-4d89-8bc3-a59667a4b7fc",
+        "observations": [
+          "Web session id: 92cc78af-6161-4d89-8bc3-a59667a4b7fc",
+          "Transcript session id: 2823988e-6339-41ec-96e3-41c0467d3fe7",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 15:34",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T18:34:04.063Z",
+          "Last active at: 2026-04-06T18:34:12.555Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:3e5ea308-e49f-4b8e-b46a-0935fcd016ba",
+        "observations": [
+          "Web session id: 3e5ea308-e49f-4b8e-b46a-0935fcd016ba",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 15:30",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T18:30:48.814Z",
+          "Last active at: 2026-04-06T18:30:58.261Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:43aa0aa1-97cc-4e65-84a7-39a8943ab093",
+        "observations": [
+          "Web session id: 43aa0aa1-97cc-4e65-84a7-39a8943ab093",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 15:26",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T18:26:56.286Z",
+          "Last active at: 2026-04-06T18:27:04.550Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:941e8c1f-9dce-4d3d-9138-cd9188dc67f8",
+        "observations": [
+          "Web session id: 941e8c1f-9dce-4d3d-9138-cd9188dc67f8",
+          "Transcript session id: 9a299609-23c5-4557-b6aa-c1e7deee177e",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:47",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T17:47:54.230Z",
+          "Last active at: 2026-04-06T17:48:02.996Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:a953e6e5-1ea3-44dc-8a49-2f302a512fa6",
+        "observations": [
+          "Web session id: a953e6e5-1ea3-44dc-8a49-2f302a512fa6",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:47",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: max",
+          "Created at: 2026-04-06T17:47:31.300Z",
+          "Last active at: 2026-04-06T17:47:39.875Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:265d5c62-dc6d-4677-9153-339cc31ec82b",
+        "observations": [
+          "Web session id: 265d5c62-dc6d-4677-9153-339cc31ec82b",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:47",
+          "Model: codexplan",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: max",
+          "Created at: 2026-04-06T17:47:21.768Z",
+          "Last active at: 2026-04-06T17:47:30.881Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:645d2859-e83f-4146-a3b5-887a680fe3ad",
+        "observations": [
+          "Web session id: 645d2859-e83f-4146-a3b5-887a680fe3ad",
+          "Transcript session id: 9a299609-23c5-4557-b6aa-c1e7deee177e",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 14:37",
+          "Model: gemini-3-flash",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T17:37:46.141Z",
+          "Last active at: 2026-04-06T17:37:54.248Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:20eb3619-4b9d-4698-8a45-83c226cf1b7b",
+        "observations": [
+          "Web session id: 20eb3619-4b9d-4698-8a45-83c226cf1b7b",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 14:37",
+          "Model: llama3.1:8b",
+          "Access mode: full",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:37:30.575Z",
+          "Last active at: 2026-04-06T17:37:39.114Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:6060a934-782a-4000-9cf4-2665c2015762",
+        "observations": [
+          "Web session id: 6060a934-782a-4000-9cf4-2665c2015762",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 14:36",
+          "Model: qwen2.5-coder:7b",
+          "Access mode: full",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:36:58.688Z",
+          "Last active at: 2026-04-06T17:37:07.015Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:31e626ca-e515-4be1-9364-f19860e931e5",
+        "observations": [
+          "Web session id: 31e626ca-e515-4be1-9364-f19860e931e5",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 14:36",
+          "Model: gemini-3-flash",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T17:36:24.291Z",
+          "Last active at: 2026-04-06T17:36:32.345Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:702106aa-5333-45cc-b68f-976b751ed262",
+        "observations": [
+          "Web session id: 702106aa-5333-45cc-b68f-976b751ed262",
+          "Transcript session id: 9a299609-23c5-4557-b6aa-c1e7deee177e",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:36",
+          "Model: gemini-3-flash",
+          "Access mode: full",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T17:36:16.482Z",
+          "Last active at: 2026-04-06T17:36:30.609Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:56defd5f-9acc-4de0-b81b-ba7b669c1ac0",
+        "observations": [
+          "Web session id: 56defd5f-9acc-4de0-b81b-ba7b669c1ac0",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:28",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T17:28:51.133Z",
+          "Last active at: 2026-04-06T17:29:02.404Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:eee2336d-6a5c-48a6-94a3-381f9168a0f4",
+        "observations": [
+          "Web session id: eee2336d-6a5c-48a6-94a3-381f9168a0f4",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 14:15",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:15:32.962Z",
+          "Last active at: 2026-04-06T17:15:41.340Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:a36ef187-cf31-4082-af3b-cdea807cd8c3",
+        "observations": [
+          "Web session id: a36ef187-cf31-4082-af3b-cdea807cd8c3",
+          "Transcript session id: 9a299609-23c5-4557-b6aa-c1e7deee177e",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:15",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:15:15.696Z",
+          "Last active at: 2026-04-06T17:15:32.268Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:4224247c-a8dd-4fed-867c-2d26ec5ddda1",
+        "observations": [
+          "Web session id: 4224247c-a8dd-4fed-867c-2d26ec5ddda1",
+          "Transcript session id: 0249de93-31cc-4a5c-9e8a-04561bbc5f2c",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:15",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:15:14.929Z",
+          "Last active at: 2026-04-06T17:15:32.133Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:66906ee3-5aa8-4dda-9c45-18d436d45ca6",
+        "observations": [
+          "Web session id: 66906ee3-5aa8-4dda-9c45-18d436d45ca6",
+          "Transcript session id: 0249de93-31cc-4a5c-9e8a-04561bbc5f2c",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:15",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:15:12.988Z",
+          "Last active at: 2026-04-06T17:15:29.837Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:6c916290-f2a0-46da-a709-b7deda2f6d92",
+        "observations": [
+          "Web session id: 6c916290-f2a0-46da-a709-b7deda2f6d92",
+          "Transcript session id: 0249de93-31cc-4a5c-9e8a-04561bbc5f2c",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:15",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:15:11.463Z",
+          "Last active at: 2026-04-06T17:15:29.288Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:2291c240-a9af-4776-ae40-debd3940bd63",
+        "observations": [
+          "Web session id: 2291c240-a9af-4776-ae40-debd3940bd63",
+          "Transcript session id: 0249de93-31cc-4a5c-9e8a-04561bbc5f2c",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:15",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:15:10.103Z",
+          "Last active at: 2026-04-06T17:15:26.838Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:6c7c1327-aef2-43cb-a2c8-3d8b3899d1cd",
+        "observations": [
+          "Web session id: 6c7c1327-aef2-43cb-a2c8-3d8b3899d1cd",
+          "Transcript session id: 0249de93-31cc-4a5c-9e8a-04561bbc5f2c",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:15",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:15:08.875Z",
+          "Last active at: 2026-04-06T17:15:24.369Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:e394e409-985d-44bb-aa74-5465a5ee91dc",
+        "observations": [
+          "Web session id: e394e409-985d-44bb-aa74-5465a5ee91dc",
+          "Transcript session id: 0249de93-31cc-4a5c-9e8a-04561bbc5f2c",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:15",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:15:06.935Z",
+          "Last active at: 2026-04-06T17:15:18.190Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:702f2293-ad93-4d19-83b4-18e6f13f3bf4",
+        "observations": [
+          "Web session id: 702f2293-ad93-4d19-83b4-18e6f13f3bf4",
+          "Transcript session id: 9a299609-23c5-4557-b6aa-c1e7deee177e",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:14",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:14:58.393Z",
+          "Last active at: 2026-04-06T17:15:07.190Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:27ac5fdc-a8b2-4e30-9c83-9a74eb993c5a",
+        "observations": [
+          "Web session id: 27ac5fdc-a8b2-4e30-9c83-9a74eb993c5a",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:14",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:14:10.096Z",
+          "Last active at: 2026-04-06T17:14:18.993Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:a0594660-7e78-4b41-9c64-c96f638558e9",
+        "observations": [
+          "Web session id: a0594660-7e78-4b41-9c64-c96f638558e9",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:12",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:12:34.748Z",
+          "Last active at: 2026-04-06T17:12:42.907Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:f744b0a3-a450-414b-8e32-6bce8d9710b3",
+        "observations": [
+          "Web session id: f744b0a3-a450-414b-8e32-6bce8d9710b3",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:12",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T17:12:32.429Z",
+          "Last active at: 2026-04-06T17:12:40.683Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:78140f2c-c031-4630-93c8-d71ff12db6bb",
+        "observations": [
+          "Web session id: 78140f2c-c031-4630-93c8-d71ff12db6bb",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: codex session · 2026-04-06 14:12",
+          "Model: codexplan",
+          "Access mode: strict",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T17:12:19.022Z",
+          "Last active at: 2026-04-06T17:12:28.503Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:b380d5fd-96f8-48d7-9266-0ed8d4047946",
+        "observations": [
+          "Web session id: b380d5fd-96f8-48d7-9266-0ed8d4047946",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: openai session · 2026-04-06 13:21",
+          "Model: llama3.2:3b",
+          "Access mode: strict",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T16:21:45.044Z",
+          "Last active at: 2026-04-06T16:21:53.221Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:c91696c5-bb86-445e-98f2-9e8fcba46019",
+        "observations": [
+          "Web session id: c91696c5-bb86-445e-98f2-9e8fcba46019",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 13:20",
+          "Model: llama3.2:3b",
+          "Access mode: strict",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T16:20:17.045Z",
+          "Last active at: 2026-04-06T16:20:25.336Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:3832cd2b-9ceb-4ae4-948e-b182ef485da1",
+        "observations": [
+          "Web session id: 3832cd2b-9ceb-4ae4-948e-b182ef485da1",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 13:20",
+          "Model: llama3.2:3b",
+          "Access mode: strict",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T16:20:06.684Z",
+          "Last active at: 2026-04-06T16:20:16.896Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:fee29794-abfb-42ab-b52b-bf011d267990",
+        "observations": [
+          "Web session id: fee29794-abfb-42ab-b52b-bf011d267990",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 13:07",
+          "Model: llama3.2:3b",
+          "Access mode: strict",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T16:07:22.334Z",
+          "Last active at: 2026-04-06T16:07:32.395Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:1edcb037-c40e-4031-bec1-492d168b83fc",
+        "observations": [
+          "Web session id: 1edcb037-c40e-4031-bec1-492d168b83fc",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 12:20",
+          "Model: llama3.2:3b",
+          "Access mode: full",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T15:20:39.786Z",
+          "Last active at: 2026-04-06T15:20:47.727Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:a5005b26-7723-4de4-967f-f63b3020db77",
+        "observations": [
+          "Web session id: a5005b26-7723-4de4-967f-f63b3020db77",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 12:20",
+          "Model: llama3.2:3b",
+          "Access mode: full",
+          "Thinking mode: enabled",
+          "Effort: max",
+          "Created at: 2026-04-06T15:20:30.849Z",
+          "Last active at: 2026-04-06T15:20:40.398Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:1bd1ff8c-4fd2-4105-82f6-4808d2e2c318",
+        "observations": [
+          "Web session id: 1bd1ff8c-4fd2-4105-82f6-4808d2e2c318",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-06 12:03",
+          "Model: llama3.2:3b",
+          "Access mode: strict",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-06T15:03:17.166Z",
+          "Last active at: 2026-04-06T15:03:25.625Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:9d66404f-0c64-4469-91d0-afe728fc64cd",
+        "observations": [
+          "Web session id: 9d66404f-0c64-4469-91d0-afe728fc64cd",
+          "Transcript session id: ea2603c3-be0d-493a-8a20-ad74b2c24f0b",
+          "Status: busy",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: Oba Alô alô Alô alô tudo Alô alô tudo bem Está Está f...",
+          "Model: default",
+          "Access mode: undefined",
+          "Thinking mode: undefined",
+          "Effort: undefined",
+          "Created at: 2026-04-06T14:55:09.620Z",
+          "Last active at: 2026-04-06T14:55:17.640Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:0c3a481c-d91f-436d-b218-94b0b6841edb",
+        "observations": [
+          "Web session id: 0c3a481c-d91f-436d-b218-94b0b6841edb",
+          "Transcript session id: pending",
+          "Status: starting",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: Resumed session",
+          "Model: default",
+          "Access mode: undefined",
+          "Thinking mode: undefined",
+          "Effort: undefined",
+          "Created at: 2026-04-06T14:54:54.443Z",
+          "Last active at: 2026-04-06T14:54:54.452Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:c7e244df-570c-45d8-aca1-3a2c3671403b",
+        "observations": [
+          "Web session id: c7e244df-570c-45d8-aca1-3a2c3671403b",
+          "Transcript session id: pending",
+          "Status: starting",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: Resumed session",
+          "Model: default",
+          "Access mode: undefined",
+          "Thinking mode: undefined",
+          "Effort: undefined",
+          "Created at: 2026-04-06T14:54:52.422Z",
+          "Last active at: 2026-04-06T14:54:52.441Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:3d07c57d-d791-4226-b8f0-819e37f01617",
+        "observations": [
+          "Web session id: 3d07c57d-d791-4226-b8f0-819e37f01617",
+          "Transcript session id: pending",
+          "Status: starting",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: Resumed session",
+          "Model: default",
+          "Access mode: undefined",
+          "Thinking mode: undefined",
+          "Effort: undefined",
+          "Created at: 2026-04-06T14:54:44.551Z",
+          "Last active at: 2026-04-06T14:54:44.643Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:90613939-b440-4f5e-a27f-1dd317d0e967",
+        "observations": [
+          "Web session id: 90613939-b440-4f5e-a27f-1dd317d0e967",
+          "Transcript session id: pending",
+          "Status: starting",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: Resumed session",
+          "Model: default",
+          "Access mode: undefined",
+          "Thinking mode: undefined",
+          "Effort: undefined",
+          "Created at: 2026-04-06T14:54:35.212Z",
+          "Last active at: 2026-04-06T14:54:35.281Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:024a2784-3cb0-47f2-a19c-1cb82165f44f",
+        "observations": [
+          "Web session id: 024a2784-3cb0-47f2-a19c-1cb82165f44f",
+          "Transcript session id: pending",
+          "Status: starting",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: New session",
+          "Model: default",
+          "Access mode: undefined",
+          "Thinking mode: undefined",
+          "Effort: undefined",
+          "Created at: 2026-04-06T14:54:11.635Z",
+          "Last active at: 2026-04-06T14:54:11.689Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:a18a9be2-e746-46be-b898-c075ca03be35",
+        "observations": [
+          "Web session id: a18a9be2-e746-46be-b898-c075ca03be35",
+          "Transcript session id: pending",
+          "Status: starting",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: New session",
+          "Model: default",
+          "Access mode: undefined",
+          "Thinking mode: undefined",
+          "Effort: undefined",
+          "Created at: 2026-04-06T14:52:58.374Z",
+          "Last active at: 2026-04-06T14:52:58.433Z"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:fcd7773c-8a83-4f80-b14a-f8962bf3ba27",
+        "observations": [
+          "Web session id: fcd7773c-8a83-4f80-b14a-f8962bf3ba27",
+          "Transcript session id: 1e210a07-bd49-4a81-8977-d64bf7b02ea5",
+          "Status: idle",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: teste",
+          "Model: default",
+          "Access mode: undefined",
+          "Thinking mode: undefined",
+          "Effort: undefined",
+          "Created at: 2026-04-06T14:21:02.101Z",
+          "Last active at: 2026-04-06T14:27:03.914Z"
+        ]
+      },
+      {
+        "entityType": "session",
         "name": "openclaude-web-session:8879f029-89a9-4d41-a087-a3dabdb40bbe",
         "observations": [
           "Web session id: 8879f029-89a9-4d41-a087-a3dabdb40bbe",
@@ -46,6 +1118,10 @@
           "Status: starting",
           "CWD: /Users/philipegermano/code/openclaude",
           "Title: New session",
+          "Model: default",
+          "Access mode: undefined",
+          "Thinking mode: undefined",
+          "Effort: undefined",
           "Created at: 2026-04-06T14:24:46.979Z",
           "Last active at: 2026-04-06T14:24:47.087Z"
         ]
@@ -59,6 +1135,10 @@
           "Status: starting",
           "CWD: /Users/philipegermano/code/openclaude",
           "Title: New session",
+          "Model: default",
+          "Access mode: undefined",
+          "Thinking mode: undefined",
+          "Effort: undefined",
           "Created at: 2026-04-06T14:20:58.311Z",
           "Last active at: 2026-04-06T14:20:58.312Z"
         ]
@@ -72,6 +1152,10 @@
           "Status: starting",
           "CWD: /Users/philipegermano/code/openclaude",
           "Title: New session",
+          "Model: default",
+          "Access mode: undefined",
+          "Thinking mode: undefined",
+          "Effort: undefined",
           "Created at: 2026-04-06T14:19:59.294Z",
           "Last active at: 2026-04-06T14:19:59.319Z"
         ]
@@ -79,17 +1163,630 @@
     ]
   },
   "add_observations": {
-    "observations": [
-      {
-        "entityName": "openclaude-web-session:fcd7773c-8a83-4f80-b14a-f8962bf3ba27",
-        "contents": [
-          "Last prompt: teste"
-        ]
-      }
-    ]
+    "observations": []
   },
   "create_relations": {
     "relations": [
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:23b51309-4798-4d9e-bf1a-9e6c8907f1ea"
+      },
+      {
+        "from": "openclaude-web-session:23b51309-4798-4d9e-bf1a-9e6c8907f1ea",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:openai"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:2e80aede-15e0-4f12-baf6-e134949e69a2"
+      },
+      {
+        "from": "openclaude-web-session:2e80aede-15e0-4f12-baf6-e134949e69a2",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:openai"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:c6c7e78d-034e-4989-927a-91e1b4d5d0f8"
+      },
+      {
+        "from": "openclaude-web-session:c6c7e78d-034e-4989-927a-91e1b4d5d0f8",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:openai"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:55539297-ddab-45ae-ac80-6a9f2606be3f"
+      },
+      {
+        "from": "openclaude-web-session:55539297-ddab-45ae-ac80-6a9f2606be3f",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:openai"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:3a339f9a-7a54-4653-aa4a-e8637bda5157"
+      },
+      {
+        "from": "openclaude-web-session:3a339f9a-7a54-4653-aa4a-e8637bda5157",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:openai"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:f15b32aa-2240-4e15-9e96-7ef2f7bef416"
+      },
+      {
+        "from": "openclaude-web-session:f15b32aa-2240-4e15-9e96-7ef2f7bef416",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:openai"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:9d19b553-6503-46c6-958e-c79df2ee62ef"
+      },
+      {
+        "from": "openclaude-web-session:9d19b553-6503-46c6-958e-c79df2ee62ef",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:openai"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:88581147-4fe0-4ad7-9c9c-d8a72c9d6d56"
+      },
+      {
+        "from": "openclaude-web-session:88581147-4fe0-4ad7-9c9c-d8a72c9d6d56",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:openai"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:91fcde14-2101-4e85-9de0-8a0a27ec979b"
+      },
+      {
+        "from": "openclaude-web-session:91fcde14-2101-4e85-9de0-8a0a27ec979b",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:openai"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:5fadff54-56be-4c5a-ac5a-06387a5edb3d"
+      },
+      {
+        "from": "openclaude-web-session:5fadff54-56be-4c5a-ac5a-06387a5edb3d",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:39e29225-0a53-4c45-b10d-1e24475b2af3"
+      },
+      {
+        "from": "openclaude-web-session:39e29225-0a53-4c45-b10d-1e24475b2af3",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:97cf28e9-fd00-4426-8b93-737c9ab7a5ca"
+      },
+      {
+        "from": "openclaude-web-session:97cf28e9-fd00-4426-8b93-737c9ab7a5ca",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:f464c48f-3884-4663-9b6d-2d7abd56461a"
+      },
+      {
+        "from": "openclaude-web-session:f464c48f-3884-4663-9b6d-2d7abd56461a",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:4a070beb-8b23-494b-be09-ddb929439a8c"
+      },
+      {
+        "from": "openclaude-web-session:4a070beb-8b23-494b-be09-ddb929439a8c",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:c2f76274-cfd8-4600-8441-7982568cdb98"
+      },
+      {
+        "from": "openclaude-web-session:c2f76274-cfd8-4600-8441-7982568cdb98",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:04b043e1-f926-4ea5-aed3-2a994be13992"
+      },
+      {
+        "from": "openclaude-web-session:04b043e1-f926-4ea5-aed3-2a994be13992",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:e2bcb36b-9daa-45a6-97ba-6f1fdfa33a88"
+      },
+      {
+        "from": "openclaude-web-session:e2bcb36b-9daa-45a6-97ba-6f1fdfa33a88",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:207cf7bb-a3c4-4855-9dbf-58a676e8a2c2"
+      },
+      {
+        "from": "openclaude-web-session:207cf7bb-a3c4-4855-9dbf-58a676e8a2c2",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:549207bb-b033-4c71-a14b-69a78323ab32"
+      },
+      {
+        "from": "openclaude-web-session:549207bb-b033-4c71-a14b-69a78323ab32",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:6b5e0d7c-7769-41c8-b645-f1d3515bdefc"
+      },
+      {
+        "from": "openclaude-web-session:6b5e0d7c-7769-41c8-b645-f1d3515bdefc",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:f4b07fd1-56e2-4453-a143-f4da2f4d9150"
+      },
+      {
+        "from": "openclaude-web-session:f4b07fd1-56e2-4453-a143-f4da2f4d9150",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:0536b806-10f5-4c5b-9ebc-339d75e3fa4d"
+      },
+      {
+        "from": "openclaude-web-session:0536b806-10f5-4c5b-9ebc-339d75e3fa4d",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:fe544a4a-71e8-4eb3-a9ec-349f4ee3991d"
+      },
+      {
+        "from": "openclaude-web-session:fe544a4a-71e8-4eb3-a9ec-349f4ee3991d",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:92cc78af-6161-4d89-8bc3-a59667a4b7fc"
+      },
+      {
+        "from": "openclaude-web-session:92cc78af-6161-4d89-8bc3-a59667a4b7fc",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:3e5ea308-e49f-4b8e-b46a-0935fcd016ba"
+      },
+      {
+        "from": "openclaude-web-session:3e5ea308-e49f-4b8e-b46a-0935fcd016ba",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:43aa0aa1-97cc-4e65-84a7-39a8943ab093"
+      },
+      {
+        "from": "openclaude-web-session:43aa0aa1-97cc-4e65-84a7-39a8943ab093",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:941e8c1f-9dce-4d3d-9138-cd9188dc67f8"
+      },
+      {
+        "from": "openclaude-web-session:941e8c1f-9dce-4d3d-9138-cd9188dc67f8",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:a953e6e5-1ea3-44dc-8a49-2f302a512fa6"
+      },
+      {
+        "from": "openclaude-web-session:a953e6e5-1ea3-44dc-8a49-2f302a512fa6",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:265d5c62-dc6d-4677-9153-339cc31ec82b"
+      },
+      {
+        "from": "openclaude-web-session:265d5c62-dc6d-4677-9153-339cc31ec82b",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:645d2859-e83f-4146-a3b5-887a680fe3ad"
+      },
+      {
+        "from": "openclaude-web-session:645d2859-e83f-4146-a3b5-887a680fe3ad",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:20eb3619-4b9d-4698-8a45-83c226cf1b7b"
+      },
+      {
+        "from": "openclaude-web-session:20eb3619-4b9d-4698-8a45-83c226cf1b7b",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:6060a934-782a-4000-9cf4-2665c2015762"
+      },
+      {
+        "from": "openclaude-web-session:6060a934-782a-4000-9cf4-2665c2015762",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:31e626ca-e515-4be1-9364-f19860e931e5"
+      },
+      {
+        "from": "openclaude-web-session:31e626ca-e515-4be1-9364-f19860e931e5",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:702106aa-5333-45cc-b68f-976b751ed262"
+      },
+      {
+        "from": "openclaude-web-session:702106aa-5333-45cc-b68f-976b751ed262",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:56defd5f-9acc-4de0-b81b-ba7b669c1ac0"
+      },
+      {
+        "from": "openclaude-web-session:56defd5f-9acc-4de0-b81b-ba7b669c1ac0",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:eee2336d-6a5c-48a6-94a3-381f9168a0f4"
+      },
+      {
+        "from": "openclaude-web-session:eee2336d-6a5c-48a6-94a3-381f9168a0f4",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:a36ef187-cf31-4082-af3b-cdea807cd8c3"
+      },
+      {
+        "from": "openclaude-web-session:a36ef187-cf31-4082-af3b-cdea807cd8c3",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:4224247c-a8dd-4fed-867c-2d26ec5ddda1"
+      },
+      {
+        "from": "openclaude-web-session:4224247c-a8dd-4fed-867c-2d26ec5ddda1",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:66906ee3-5aa8-4dda-9c45-18d436d45ca6"
+      },
+      {
+        "from": "openclaude-web-session:66906ee3-5aa8-4dda-9c45-18d436d45ca6",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:6c916290-f2a0-46da-a709-b7deda2f6d92"
+      },
+      {
+        "from": "openclaude-web-session:6c916290-f2a0-46da-a709-b7deda2f6d92",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:2291c240-a9af-4776-ae40-debd3940bd63"
+      },
+      {
+        "from": "openclaude-web-session:2291c240-a9af-4776-ae40-debd3940bd63",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:6c7c1327-aef2-43cb-a2c8-3d8b3899d1cd"
+      },
+      {
+        "from": "openclaude-web-session:6c7c1327-aef2-43cb-a2c8-3d8b3899d1cd",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:e394e409-985d-44bb-aa74-5465a5ee91dc"
+      },
+      {
+        "from": "openclaude-web-session:e394e409-985d-44bb-aa74-5465a5ee91dc",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:702f2293-ad93-4d19-83b4-18e6f13f3bf4"
+      },
+      {
+        "from": "openclaude-web-session:702f2293-ad93-4d19-83b4-18e6f13f3bf4",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:27ac5fdc-a8b2-4e30-9c83-9a74eb993c5a"
+      },
+      {
+        "from": "openclaude-web-session:27ac5fdc-a8b2-4e30-9c83-9a74eb993c5a",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:a0594660-7e78-4b41-9c64-c96f638558e9"
+      },
+      {
+        "from": "openclaude-web-session:a0594660-7e78-4b41-9c64-c96f638558e9",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:f744b0a3-a450-414b-8e32-6bce8d9710b3"
+      },
+      {
+        "from": "openclaude-web-session:f744b0a3-a450-414b-8e32-6bce8d9710b3",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:78140f2c-c031-4630-93c8-d71ff12db6bb"
+      },
+      {
+        "from": "openclaude-web-session:78140f2c-c031-4630-93c8-d71ff12db6bb",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:codex"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:b380d5fd-96f8-48d7-9266-0ed8d4047946"
+      },
+      {
+        "from": "openclaude-web-session:b380d5fd-96f8-48d7-9266-0ed8d4047946",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:c91696c5-bb86-445e-98f2-9e8fcba46019"
+      },
+      {
+        "from": "openclaude-web-session:c91696c5-bb86-445e-98f2-9e8fcba46019",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:3832cd2b-9ceb-4ae4-948e-b182ef485da1"
+      },
+      {
+        "from": "openclaude-web-session:3832cd2b-9ceb-4ae4-948e-b182ef485da1",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:fee29794-abfb-42ab-b52b-bf011d267990"
+      },
+      {
+        "from": "openclaude-web-session:fee29794-abfb-42ab-b52b-bf011d267990",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:1edcb037-c40e-4031-bec1-492d168b83fc"
+      },
+      {
+        "from": "openclaude-web-session:1edcb037-c40e-4031-bec1-492d168b83fc",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:a5005b26-7723-4de4-967f-f63b3020db77"
+      },
+      {
+        "from": "openclaude-web-session:a5005b26-7723-4de4-967f-f63b3020db77",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:1bd1ff8c-4fd2-4105-82f6-4808d2e2c318"
+      },
+      {
+        "from": "openclaude-web-session:1bd1ff8c-4fd2-4105-82f6-4808d2e2c318",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:9d66404f-0c64-4469-91d0-afe728fc64cd"
+      },
+      {
+        "from": "openclaude-web-session:9d66404f-0c64-4469-91d0-afe728fc64cd",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:0c3a481c-d91f-436d-b218-94b0b6841edb"
+      },
+      {
+        "from": "openclaude-web-session:0c3a481c-d91f-436d-b218-94b0b6841edb",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:c7e244df-570c-45d8-aca1-3a2c3671403b"
+      },
+      {
+        "from": "openclaude-web-session:c7e244df-570c-45d8-aca1-3a2c3671403b",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:3d07c57d-d791-4226-b8f0-819e37f01617"
+      },
+      {
+        "from": "openclaude-web-session:3d07c57d-d791-4226-b8f0-819e37f01617",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:90613939-b440-4f5e-a27f-1dd317d0e967"
+      },
+      {
+        "from": "openclaude-web-session:90613939-b440-4f5e-a27f-1dd317d0e967",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:024a2784-3cb0-47f2-a19c-1cb82165f44f"
+      },
+      {
+        "from": "openclaude-web-session:024a2784-3cb0-47f2-a19c-1cb82165f44f",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:a18a9be2-e746-46be-b898-c075ca03be35"
+      },
+      {
+        "from": "openclaude-web-session:a18a9be2-e746-46be-b898-c075ca03be35",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
       {
         "from": "openclaude-web-terminal",
         "relationType": "tracks",

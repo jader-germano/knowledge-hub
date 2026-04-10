@@ -145,9 +145,16 @@ graph.
 ## Recommended Workflow
 
 ```bash
+python3 /Users/philipegermano/code/jpglabs/docs/scripts/sync-session-close.py \
+  --report /Users/philipegermano/code/jpglabs/docs/projects/<repo>/sessions/<feature-id>/<yyyy-mm-dd-session>/report.md \
+  --write
+```
+
+Legacy import and curation workflow:
+
+```bash
 python3 /Users/philipegermano/code/jpglabs/docs/scripts/backfill-session-sidecars.py
 python3 /Users/philipegermano/code/jpglabs/docs/scripts/backfill-session-sidecars.py --write
-python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --dry-run
 python3 /Users/philipegermano/code/jpglabs/docs/scripts/project-memory-graph.py --apply
 ```
 

@@ -25,6 +25,23 @@ Example:
 memory/events/2026-04-06/docs-memory-hybrid-sidecar-projector.json
 ```
 
+## Canonical Close Flow
+
+For a new or updated `report.md`, use:
+
+```bash
+python3 /Users/philipegermano/code/jpglabs/docs/scripts/sync-session-close.py \
+  --report /Users/philipegermano/code/jpglabs/docs/projects/<repo>/sessions/<feature-id>/<yyyy-mm-dd-session>/report.md \
+  --write
+```
+
+This command:
+
+- syncs the corresponding `daily/<yyyy-mm-dd>.md` entry
+- syncs a concise `AGENT_BRIDGE.md` handoff entry
+- emits or updates the JSON sidecar under `memory/events/`
+- attempts to project the sidecar into the derived graph
+
 ## Projection
 
 Bootstrap legacy session reports into sidecars with:

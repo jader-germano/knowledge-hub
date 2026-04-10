@@ -21,7 +21,10 @@
         "name": "Every 5 Minutes",
         "type": "n8n-nodes-base.scheduleTrigger",
         "typeVersion": 1.1,
-        "position": [-400, 200],
+        "position": [
+          -400,
+          200
+        ],
         "id": "sched-01"
       },
       {
@@ -31,7 +34,10 @@
         "name": "Define Services",
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
-        "position": [-200, 200],
+        "position": [
+          -200,
+          200
+        ],
         "id": "code-services"
       },
       {
@@ -42,7 +48,10 @@
         "name": "Check Each Service",
         "type": "n8n-nodes-base.splitInBatches",
         "typeVersion": 3,
-        "position": [0, 200],
+        "position": [
+          0,
+          200
+        ],
         "id": "split-01"
       },
       {
@@ -52,7 +61,10 @@
         "name": "HTTP Health Check",
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
-        "position": [200, 200],
+        "position": [
+          200,
+          200
+        ],
         "id": "code-healthcheck"
       },
       {
@@ -62,7 +74,10 @@
         "name": "Track Consecutive Failures",
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
-        "position": [400, 200],
+        "position": [
+          400,
+          200
+        ],
         "id": "code-track"
       },
       {
@@ -142,7 +157,10 @@
         "name": "Route by Action",
         "type": "n8n-nodes-base.switch",
         "typeVersion": 3,
-        "position": [600, 200],
+        "position": [
+          600,
+          200
+        ],
         "id": "switch-action"
       },
       {
@@ -161,7 +179,10 @@
         "name": "Slack Alert",
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4,
-        "position": [850, 0],
+        "position": [
+          850,
+          0
+        ],
         "id": "slack-alert"
       },
       {
@@ -180,33 +201,44 @@
         "name": "Slack Recovery",
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4,
-        "position": [850, 150],
+        "position": [
+          850,
+          150
+        ],
         "id": "slack-recovery"
       },
       {
         "parameters": {
-          "toEmail": "={{ $env.OWNER_EMAIL || 'jader.germano@icloud.com' }}",
+          "toEmail": "={{ $env.OWNER_EMAIL || 'jader@jpglabs.com.br' }}",
           "subject": "={{ '[JPGLabs DOWN] ' + $json.name + ' is offline' }}",
           "text": "={{ $json.alertMessage }}",
-          "options": {}
+          "options": {},
+          "fromEmail": "jader@jpglabs.com.br"
         },
         "name": "Send Alert Email",
         "type": "n8n-nodes-base.emailSend",
         "typeVersion": 2,
-        "position": [1050, 0],
+        "position": [
+          1050,
+          0
+        ],
         "id": "email-alert"
       },
       {
         "parameters": {
-          "toEmail": "={{ $env.OWNER_EMAIL || 'jader.germano@icloud.com' }}",
+          "toEmail": "={{ $env.OWNER_EMAIL || 'jader@jpglabs.com.br' }}",
           "subject": "={{ '[JPGLabs RECOVERED] ' + $json.name + ' is back online' }}",
           "text": "={{ $json.recoveryMessage }}",
-          "options": {}
+          "options": {},
+          "fromEmail": "jader@jpglabs.com.br"
         },
         "name": "Send Recovery Email",
         "type": "n8n-nodes-base.emailSend",
         "typeVersion": 2,
-        "position": [1050, 150],
+        "position": [
+          1050,
+          150
+        ],
         "id": "email-recovery"
       },
       {
@@ -214,31 +246,102 @@
         "name": "All OK (No Action)",
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
-        "position": [850, 400],
+        "position": [
+          850,
+          400
+        ],
         "id": "noop-ok"
       }
     ],
     "connections": {
       "Every 5 Minutes": {
-        "main": [[{ "node": "Define Services", "type": "main", "index": 0 }]]
+        "main": [
+          [
+            {
+              "node": "Define Services",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       },
       "Define Services": {
-        "main": [[{ "node": "Check Each Service", "type": "main", "index": 0 }]]
+        "main": [
+          [
+            {
+              "node": "Check Each Service",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       },
       "Check Each Service": {
-        "main": [[{ "node": "HTTP Health Check", "type": "main", "index": 0 }]]
+        "main": [
+          [
+            {
+              "node": "HTTP Health Check",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       },
       "HTTP Health Check": {
-        "main": [[{ "node": "Track Consecutive Failures", "type": "main", "index": 0 }]]
+        "main": [
+          [
+            {
+              "node": "Track Consecutive Failures",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       },
       "Track Consecutive Failures": {
-        "main": [[{ "node": "Route by Action", "type": "main", "index": 0 }]]
+        "main": [
+          [
+            {
+              "node": "Route by Action",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       },
       "Route by Action": {
         "main": [
-          [{ "node": "Slack Alert", "type": "main", "index": 0 }, { "node": "Send Alert Email", "type": "main", "index": 0 }],
-          [{ "node": "Slack Recovery", "type": "main", "index": 0 }, { "node": "Send Recovery Email", "type": "main", "index": 0 }],
-          [{ "node": "All OK (No Action)", "type": "main", "index": 0 }]
+          [
+            {
+              "node": "Slack Alert",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Send Alert Email",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Slack Recovery",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Send Recovery Email",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "All OK (No Action)",
+              "type": "main",
+              "index": 0
+            }
+          ]
         ]
       }
     }

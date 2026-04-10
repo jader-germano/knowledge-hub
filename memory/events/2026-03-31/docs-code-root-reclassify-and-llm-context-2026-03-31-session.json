@@ -9,7 +9,8 @@
     "workspace": "/Users/philipegermano/code",
     "status": "partial",
     "feature_id": "code-root-reclassify-and-llm-context",
-    "summary": "documentos gen\u00e9ricos da raiz foram reclassificados dentro do reposit\u00f3rio `docs` | cada reposit\u00f3rio indexado passou a expor `GIT_HISTORY.md`"
+    "summary": "documentos gen\u00e9ricos da raiz foram reclassificados dentro do reposit\u00f3rio `docs` | cada reposit\u00f3rio indexado passou a expor `GIT_HISTORY.md`",
+    "objective": "reclassificar documentos soltos do root, padronizar hist\u00f3rico Git por repo e criar contexto por LLM em `projects/`"
   },
   "projects": [
     {
@@ -30,6 +31,7 @@
     "imported",
     "session-report"
   ],
+  "decisions": [],
   "findings": [
     {
       "id": "legacy-import",
@@ -41,14 +43,13 @@
     }
   ],
   "next_actions": [],
-  "decisions": [],
   "files_touched": [
-    "`DOC_INDEX.md`",
-    "`manifests/docs.index.yaml`",
-    "`manifests/workspace.index.yaml`",
-    "`daily/AUTOMATION_PROMPT.md`",
-    "`projects/*/GIT_HISTORY.md`",
-    "`projects/*/llms/*.md`"
+    "DOC_INDEX.md",
+    "manifests/docs.index.yaml",
+    "manifests/workspace.index.yaml",
+    "daily/AUTOMATION_PROMPT.md",
+    "projects/*/GIT_HISTORY.md",
+    "projects/*/llms/*.md"
   ],
   "commands": []
 }

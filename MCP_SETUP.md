@@ -31,11 +31,8 @@ JPG Labs products now live under `jpglabs/`:
 
 - `../apple-study-checklist`
 - `../knowledge-hub-app`
-- `../pi-local-app`
 - `../portfolio-backend`
 - `../portfolio-mobile`
-- `../piphone-ios`
-- `../pibar-macos`
 
 External or non-JPG Labs repositories remain at the workspace root:
 
@@ -159,10 +156,10 @@ Optional or adjacent lanes:
 - `.codex/config.toml` keeps `figma` enabled via `https://mcp.figma.com/mcp`
   and `FIGMA_OAUTH_TOKEN`; that is the canonical route for prototyping and
   design-system work on this host.
-- Atlassian MCP auth is currently partial on this host:
-  - Confluence scopes are available on `jadergermano.atlassian.net`
-  - Jira is not yet operational from the current runtime and currently fails in
-    JQL validation
+- Atlassian MCP auth (atualizado 07/04/2026):
+  - **Jira**: `jpglabs.atlassian.net/jira` — cloudId `d9f316a4-b4d8-40c9-a90a-0539675e39a1` — projeto SCRUM
+  - **Confluence**: `jadergermano.atlassian.net/wiki` — cloudId `f2d06056-c0d3-4c77-af10-8c964f76218f` — space SD
+  - MCP OAuth autorizado para Confluence; para Jira reconectar adicionando `jpglabs.atlassian.net`
 - `sonarqube` remains optional because the MCP lane still depends on
   `sonarqube.token`; the local support stack is now provisioned in
   `docker/docker-compose.yml`, and the recommended MCP URL is
@@ -256,9 +253,8 @@ Practical rule:
 - Add `anthropic` or `gemini` only as explicit secondary profiles after
   defining cost, latency, and credential policy; do not broaden the automatic
   fallback chain by default.
-- Do not silently invert the `pi-local-app` thin-client contract to
-  `local-first`; today that service still exposes a `cloudPriority` contract
-  for clients such as `PiPhone`, with `local` kept as protected fallback.
+- `pi-local-app`, `piphone-ios`, `pibar-macos` e `PieCenter` foram descontinuados
+  e arquivados; não há contrato de thin-client ou `cloudPriority` ativo a preservar.
 - Workspace bootstrap helper:
   - `cp /Users/philipegermano/code/config/opencloud/opencloud-local.env.example /Users/philipegermano/code/config/opencloud/.env.local`
   - `set -a; . /Users/philipegermano/code/config/opencloud/.env.local; set +a`

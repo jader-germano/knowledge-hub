@@ -246,15 +246,91 @@ dig TXT mail._domainkey.jpglabs.com.br @1.1.1.1 +short
 
 ---
 
-## 9. Próximos Passos
+## 9. Ollama na VPS
 
-1. ⏳ Aguardar propagação NS (verificar com `dig NS jpglabs.com.br @8.8.8.8 +short`)
-2. ▶️ Rodar `bash /docker/mailserver/finish-setup.sh`
-3. ▶️ Adicionar registro DKIM no Cloudflare (exibido pelo script)
-4. ▶️ Testar envio/recebimento de email em `jader@jpglabs.com.br`
-5. ▶️ Configurar Claude API no VPS
-6. ▶️ Fazer upgrade para Claude Team/Enterprise com `jader@jpglabs.com.br`
+**Endpoint:** `http://187.77.227.151:11434` (padrão Ollama)
+
+### Modelos disponíveis
+
+| Modelo | Tamanho | tok/s (CPU) | Finalidade | Status |
+|--------|---------|-------------|-----------|--------|
+| `qwen2.5-coder:7b` | 4.7 GB | **22.7** | Automação n8n, análise estruturada, delivery stack | ✅ Disponível |
+| `codellama:7b` | 3.8 GB | ~20 | Geração de código | ✅ Disponível |
+| `llava:latest` | 4.7 GB | ~18 | Multimodal (imagem + texto) | ✅ Disponível |
+| `qwen2.5:32b-instruct-q4_K_M` | 19 GB | **5.2** | Raciocínio avançado (lento — 90s load) | ✅ Disponível |
+| `nemotron-3-super:latest` | 86 GB | <2 (mmap disco) | Excede RAM disponível (32 GB) — inviável sem upgrade | ⚠️ Não utilizável |
+| `deepseek-r1:7b` | ~4.7 GB | ~20 | Raciocínio | ✅ Disponível |
+
+### Hardware da VPS
+
+| Recurso | Valor |
+|---------|-------|
+| RAM | 32 GB (7 GB usado) |
+| vCPU | 8 × AMD EPYC 9355P |
+| Disco | 387 GB (124 GB usado, 263 GB livre) |
+| GPU | Nenhuma |
+| Swap | 0 (não configurado) |
+
+> `nemotron-3-super` (86 GB) requer upgrade de VPS para ser utilizável.
+> Modelo recomendado para delivery/automação agora: `qwen2.5-coder:7b` (22 tok/s).
+
+### Acesso remoto
+
+```bash
+# Via SSH direto (público)
+ssh root@187.77.227.151 -i ~/.ssh/id_ed25519_vps
+
+# Via Tailscale (preferencial — desde 2026-04-08)
+ssh root@100.68.217.36 -i ~/.ssh/id_ed25519_vps
+
+# Testar Ollama via Tailscale (sem túnel SSH)
+curl http://100.68.217.36:11434/api/tags
+
+# Fallback: túnel SSH se Tailscale indisponível
+ssh -L 11434:localhost:11434 -N -i ~/.ssh/id_ed25519_vps root@187.77.227.151 &
+curl http://localhost:11434/api/tags
+```
+
+### Segurança
+- Porta 11434 **não está** exposta publicamente (firewall VPS bloqueia)
+- Acesso via Tailscale IP `100.68.217.36:11434` (tailnet privada — seguro)
+- Para integração com pi-local-app e AwesomePie, usar `http://100.68.217.36:11434`
 
 ---
 
-*JPG Labs Infrastructure — Documentação gerada automaticamente em 07/03/2026*
+## 10. Tailscale
+
+**Status:** ✅ Instalado e conectado (2026-04-08)
+
+| Campo | Valor |
+|-------|-------|
+| IP Tailscale VPS | `100.68.217.36` |
+| Hostname | `srv1443703` |
+| Tailnet | `jader-germano@` |
+| Ollama via Tailscale | `http://100.68.217.36:11434` |
+
+```bash
+# Verificar status
+ssh -i ~/.ssh/id_ed25519_vps root@187.77.227.151 "tailscale status"
+
+# Reinstalar / reconectar (se necessário)
+curl -fsSL https://tailscale.com/install.sh | sh
+tailscale up
+```
+
+---
+
+## 11. Próximos Passos
+
+1. ✅ Propagação NS Cloudflare (concluído)
+2. ✅ Ollama na VPS com qwen2.5-coder:7b ativo (22.7 tok/s)
+3. ✅ Tailscale instalado e conectado (IP: 100.68.217.36)
+4. ✅ n8n deployado no k3s (https://n8n.jpglabs.com.br)
+5. ▶️ Rodar `bash /docker/mailserver/finish-setup.sh` (aguardando NS final)
+6. ▶️ Adicionar SLACK_WEBHOOK_URL ao secret do n8n
+7. ▶️ Configurar SMTP credential no n8n UI
+8. ▶️ Instalar Tailscale no MacBook (se não instalado) para acesso via IP tailnet
+
+---
+
+*JPG Labs Infrastructure — Última atualização: 2026-04-08 (Tailscale instalado, n8n deployado)*

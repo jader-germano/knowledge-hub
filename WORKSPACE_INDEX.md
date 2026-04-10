@@ -66,26 +66,6 @@
   - Papel no workspace: UI web do hub e fluxos financeiros
   - Contexto: `projects/knowledge-hub-app/PROJECT_CONTEXT.md`
 
-- `pi-local-app`
-  - Nicho: runtime local do Pi com memória e superfície HTTP
-  - Papel no workspace: contrato central do ecossistema Pi
-  - Contexto: `projects/pi-local-app/PROJECT_CONTEXT.md`
-
-- `pibar-macos`
-  - Nicho: cliente macOS do ecossistema Pi
-  - Papel no workspace: shell desktop com UI recente em Liquid Glass
-  - Contexto: `projects/pibar-macos/PROJECT_CONTEXT.md`
-
-- `piphone-ios`
-  - Nicho: cliente iOS do ecossistema Pi
-  - Papel no workspace: shell iPhone integrada ao Pi service
-  - Contexto: `projects/piphone-ios/PROJECT_CONTEXT.md`
-
-- `PieCenter`
-  - Nicho: shell Apple unificado para substituir PiPhone e PiBar
-  - Papel no workspace: novo cliente compartilhado iPhone + macOS com menu bar e janela expandida
-  - Contexto: `projects/PieCenter/PROJECT_CONTEXT.md`
-
 - `openclaude`
   - Nicho: open-source coding-agent CLI para cloud e local model providers
   - Papel no workspace: alternativa aberta e agnóstica ao Claude Code integrada ao hub
@@ -95,6 +75,33 @@
   - Nicho: SaaS B2B Monitor de Licitações — produto comercial priorizado da JPGLabs
   - Papel no workspace: trilha de receita principal via JPGLABS TECNOLOGIA LTDA
   - Contexto: `projects/jpglabs-saas/PROJECT_CONTEXT.md`
+
+## Legado Arquivado
+
+- `pi-local-app`
+  - Status: descontinuado — diretório real vazio (apenas `.idea/workspace.xml`)
+  - Referência histórica: `projects/pi-local-app/PROJECT_CONTEXT.md`
+  - Git/GitLab: arquivado como projeto encerrado
+
+- `pibar-macos`
+  - Status: descontinuado — sem git history local
+  - Referência histórica: `projects/pibar-macos/PROJECT_CONTEXT.md`
+  - Git/GitLab: arquivado como projeto encerrado
+
+- `piphone-ios`
+  - Status: descontinuado — sem git history local
+  - Referência histórica: `projects/piphone-ios/PROJECT_CONTEXT.md`
+  - Git/GitLab: arquivado como projeto encerrado
+
+- `PieCenter`
+  - Status: descontinuado — tinha git history mas projeto foi descontinuado
+  - Referência histórica: `projects/PieCenter/PROJECT_CONTEXT.md`
+  - Git/GitLab: arquivado como projeto encerrado
+
+- `awesomepie-ios`
+  - Status: descontinuado — arquivado em 2026-04-07
+  - Repo: `~/code/pessoal/awesomepie-ios` (Swift + SFSpeechRecognizer + AVAudioEngine)
+  - Git/GitLab: arquivado como projeto encerrado
 
 ## Legado Absorvido
 

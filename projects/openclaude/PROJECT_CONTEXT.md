@@ -43,9 +43,27 @@
 - [x] Repositório clonado e buildado
 - [x] Runtime Bun instalado e validado
 - [x] Suporte a Gemini verificado via source shims
+- [x] Surface web ganhou `Workspace View` orientada a capability de MCP e handoff por agente
 
-## 6. Próximos Passos
+## 6. Prioridade Atual
 
-- [ ] Integrar configuração de Gemini com o novo modelo `Gemini 3 Flash`
-- [ ] Validar execução de ferramentas em modo bare
-- [ ] Indexar na governança global do workspace
+- **Prioridade 0:** transformar o OpenClaude em um cockpit nativo de
+  operabilidade para times agentic, em vez de manter a evolucao focada apenas
+  em provedores e chat shell
+- **Tese central:** handoff entre agentes precisa ser nativo no produto,
+  baseado em `memory`, markdown por papel, readiness real de MCP e evidencias
+  de entrega
+- **Lanes principais:**
+  - `Sistema`: `Workspace View`, dominios por agente, adapters nativos para
+    `Jira`, `Figma`, `Git`, `GitHub/GitLab`, `Apple Speech` para transcript
+    local, quality gates e proposals
+  - `Renda`: empacotar o cockpit como oferta de operabilidade agentic depois
+    que a trilha nativa estiver demoavel e repetivel
+
+## 7. Próximos Passos
+
+- [ ] consolidar `ROADMAP.md` do repo como surface oficial da prioridade de natividade
+- [ ] conectar `Jira` e `Figma` como adapters nativos do contrato operacional
+- [ ] definir e implementar a lane de transcript local com `Apple Speech` no macOS
+- [ ] expor `GitLab/GitHub` e quality gates como readiness verificavel no cockpit
+- [ ] manter a trilha de provedores subordinada a essa direcao de produto

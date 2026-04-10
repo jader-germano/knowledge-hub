@@ -185,6 +185,9 @@ def build_projection(sidecars: list[tuple[Path, dict[str, Any]]]) -> ProjectionP
                 stable_text("Workspace", session["workspace"]),
                 stable_text("Status", session["status"]),
                 stable_text("Feature", session.get("feature_id")),
+                stable_text("Reported session id", session.get("reported_session_id")),
+                stable_text("Branch", session.get("branch")),
+                stable_text("Objective", session.get("objective")),
                 stable_text("Summary", session["summary"]),
                 stable_text("Report", artifacts["report"]),
                 stable_text("Daily", artifacts["daily"]),
@@ -198,6 +201,9 @@ def build_projection(sidecars: list[tuple[Path, dict[str, Any]]]) -> ProjectionP
                 "Workspace",
                 "Status",
                 "Feature",
+                "Reported session id",
+                "Branch",
+                "Objective",
                 "Summary",
                 "Report",
                 "Daily",
@@ -389,6 +395,8 @@ def batched(items: list[Any], size: int) -> list[list[Any]]:
 
 def sync_plan(plan: ProjectionPlan, command: list[str]) -> dict[str, Any]:
     created_entities = 0
+    deleted_entities = 0
+    deleted_relations = 0
     deleted_observations = 0
     added_observations = 0
     created_relations = 0
@@ -398,11 +406,23 @@ def sync_plan(plan: ProjectionPlan, command: list[str]) -> dict[str, Any]:
         existing_entities = {
             item["name"]: set(item.get("observations", [])) for item in graph.get("entities", [])
         }
-        existing_relations = {
+        existing_relations = [
             (item["from"], item["relationType"], item["to"]) for item in graph.get("relations", [])
+        ]
+        existing_relation_set = set(existing_relations)
+
+        managed_session_names = {
+            name for name, entity in plan.entities.items() if entity.entity_type == "session"
         }
+        managed_child_prefixes = [
+            f"{entity_type}:{session_name.removeprefix('session:')}:"
+            for session_name in managed_session_names
+            for entity_type in ("action", "decision", "finding")
+        ]
 
         missing_entities = []
+        stale_entities = []
+        stale_relations = []
         observation_deletes = []
         observation_delta = []
         for entity in plan.entities.values():
@@ -431,6 +451,12 @@ def sync_plan(plan: ProjectionPlan, command: list[str]) -> dict[str, Any]:
                         {"entityName": entity.name, "contents": missing}
                     )
 
+        for entity_name in existing_entities:
+            if entity_name in plan.entities:
+                continue
+            if any(entity_name.startswith(prefix) for prefix in managed_child_prefixes):
+                stale_entities.append(entity_name)
+
         missing_relations = [
             {
                 "from": relation.source,
@@ -440,12 +466,36 @@ def sync_plan(plan: ProjectionPlan, command: list[str]) -> dict[str, Any]:
             for relation in sorted(
                 plan.relations, key=lambda item: (item.source, item.relation_type, item.target)
             )
-            if (relation.source, relation.relation_type, relation.target) not in existing_relations
+            if (relation.source, relation.relation_type, relation.target) not in existing_relation_set
         ]
+
+        plan_relation_set = {
+            (relation.source, relation.relation_type, relation.target) for relation in plan.relations
+        }
+        for source, relation_type, target in existing_relations:
+            source_managed = source in managed_session_names or any(
+                source.startswith(prefix) for prefix in managed_child_prefixes
+            )
+            target_managed = any(target.startswith(prefix) for prefix in managed_child_prefixes)
+            if (source_managed or target_managed) and (source, relation_type, target) not in plan_relation_set:
+                stale_relations.append(
+                    {"from": source, "relationType": relation_type, "to": target}
+                )
 
         for chunk in batched(missing_entities, 25):
             client.call_tool("create_entities", {"entities": chunk})
             created_entities += len(chunk)
+
+        for chunk in batched(stale_relations, 50):
+            client.call_tool("delete_relations", {"relations": chunk})
+            deleted_relations += len(chunk)
+
+        for chunk in batched(
+            [{"entityName": name, "observations": sorted(existing_entities[name])} for name in stale_entities],
+            25,
+        ):
+            client.call_tool("delete_entities", {"entityNames": [item["entityName"] for item in chunk]})
+            deleted_entities += len(chunk)
 
         for chunk in batched(observation_deletes, 25):
             client.call_tool("delete_observations", {"deletions": chunk})
@@ -461,6 +511,8 @@ def sync_plan(plan: ProjectionPlan, command: list[str]) -> dict[str, Any]:
 
     return {
         "created_entities": created_entities,
+        "deleted_entities": deleted_entities,
+        "deleted_relations": deleted_relations,
         "deleted_observations": deleted_observations,
         "added_observations": added_observations,
         "created_relations": created_relations,

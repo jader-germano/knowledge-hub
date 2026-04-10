@@ -9,7 +9,10 @@
     "workspace": "/Users/philipegermano/code",
     "status": "partial",
     "feature_id": "claude-cli-teams-enable",
-    "summary": "O Claude Code foi atualizado de `2.1.87` para `2.1.88`. | O bin\u00e1rio nativo atualizado ficou dispon\u00edvel em `~/.local/bin/claude`."
+    "summary": "O Claude Code foi atualizado de `2.1.87` para `2.1.88`. | O bin\u00e1rio nativo atualizado ficou dispon\u00edvel em `~/.local/bin/claude`.",
+    "reported_session_id": "claude-cli-teams-enable/2026-03-31-session",
+    "branch": "N/A neste workspace espelhado",
+    "objective": "atualizar o Claude Code, habilitar o Claude CLI neste workspace e preparar agent teams com a mesma base MCP do Claude Desktop"
   },
   "projects": [
     {
@@ -30,6 +33,7 @@
     "imported",
     "session-report"
   ],
+  "decisions": [],
   "findings": [
     {
       "id": "legacy-import",
@@ -106,14 +110,74 @@
       ]
     }
   ],
-  "decisions": [],
   "files_touched": [
-    "`/Users/philipegermano/code/.mcp.json`",
-    "`/Users/philipegermano/code/.claude/settings.json`",
-    "`/Users/philipegermano/code/.claude/skills/teams/SKILL.md`",
-    "`/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/claude-cli-teams-enable/2026-03-31-session/report.md`",
-    "`/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/claude-cli-teams-enable/2026-03-31-session/prototype.md`",
-    "`/Users/philipegermano/.zshrc`"
+    "/Users/philipegermano/code/.mcp.json",
+    "/Users/philipegermano/code/.claude/settings.json",
+    "/Users/philipegermano/code/.claude/skills/teams/SKILL.md",
+    "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/claude-cli-teams-enable/2026-03-31-session/report.md",
+    "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/claude-cli-teams-enable/2026-03-31-session/prototype.md",
+    "/Users/philipegermano/.zshrc"
   ],
-  "commands": []
+  "commands": [
+    {
+      "command": "\"/Users/philipegermano/Library/Application Support/Claude/claude-code/2.1.87/claude.app/Contents/MacOS/claude\" --version",
+      "action": "verificar a vers\u00e3o instalada",
+      "result": "`2.1.87 (Claude Code)`"
+    },
+    {
+      "command": "\"/Users/philipegermano/Library/Application Support/Claude/claude-code/2.1.87/claude.app/Contents/MacOS/claude\" update",
+      "action": "atualizar o Claude Code pelo updater nativo",
+      "result": "atualiza\u00e7\u00e3o conclu\u00edda para `2.1.88`"
+    },
+    {
+      "command": "\"$HOME/.local/bin/claude\" --version",
+      "action": "validar o bin\u00e1rio atualizado exposto em `~/.local/bin`",
+      "result": "`2.1.88 (Claude Code)`"
+    },
+    {
+      "command": "docker mcp client ls --global",
+      "action": "identificar clientes MCP dispon\u00edveis",
+      "result": "`claude-desktop` e `codex` conectados; `claude-code` desconectado"
+    },
+    {
+      "command": "docker mcp server ls",
+      "action": "listar servidores MCP do Docker Toolkit",
+      "result": "bloqueado porque `Docker Desktop is not running`"
+    },
+    {
+      "command": "\"$HOME/.local/bin/claude\" mcp add-from-claude-desktop --scope project",
+      "action": "importar a base MCP do Desktop para o contexto do CLI",
+      "result": "comando executado sem erro; a configura\u00e7\u00e3o local foi materializada em `.mcp.json`"
+    },
+    {
+      "command": "grep -Fqx 'export PATH=\"$HOME/.local/bin:$PATH\"' \"$HOME/.zshrc\" || printf '\\nexport PATH=\"$HOME/.local/bin:$PATH\"\\n' >> \"$HOME/.zshrc\"",
+      "action": "expor o bin\u00e1rio do Claude Code no `PATH` das shells interativas",
+      "result": "linha adicionada de forma idempotente ao `~/.zshrc`"
+    },
+    {
+      "command": "zsh -ic 'command -v claude && claude --version'",
+      "action": "validar o comando `claude` em uma shell interativa nova",
+      "result": "`claude` resolvido em `~/.local/bin/claude` com vers\u00e3o `2.1.88`"
+    },
+    {
+      "command": "docker version",
+      "action": "validar o runtime Docker ativo no host",
+      "result": "Docker Desktop `4.66.0` e Engine `29.3.0`"
+    },
+    {
+      "command": "docker mcp server ls",
+      "action": "revalidar o cat\u00e1logo MCP com Docker Desktop ativo",
+      "result": "`22 enabled` no host atual"
+    },
+    {
+      "command": "docker mcp tools ls",
+      "action": "listar o invent\u00e1rio de ferramentas publicado pelo cat\u00e1logo ativo",
+      "result": "`231 tools` no cat\u00e1logo global do host"
+    },
+    {
+      "command": "docker mcp gateway run ... --dry-run",
+      "action": "validar a baseline efetiva definida em `.mcp.json`",
+      "result": "`git`, `filesystem`, `desktop-commander`, `playwright`, `fetch`, `context7`, `memory`, `sequentialthinking` e `ast-grep` iniciaram; `semgrep` falhou com `Unauthorized`"
+    }
+  ]
 }

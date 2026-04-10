@@ -1,1 +1,813 @@
-[{"updatedAt":"2026-03-06T03:21:33.272Z","createdAt":"2026-03-05T22:49:03.199Z","id":"1w34rK2QP45XmmvE","name":"WhatsApp Chatbot - Assistente Philipe","description":null,"active":false,"isArchived":false,"nodes":[{"parameters":{"updates":["messages"],"options":{}},"id":"n000","name":"WhatsApp Trigger","type":"n8n-nodes-base.whatsappTrigger","typeVersion":1,"position":[208,304],"webhookId":"wh-philipe-chatbot-v1"},{"parameters":{"jsCode":"// HMAC-SHA256 Webhook Signature Validation\nconst crypto = require('crypto');\n\nconst webhookSecret = $env.WHATSAPP_WEBHOOK_SECRET;\nif (!webhookSecret) {\n  throw new Error('Security: WHATSAPP_WEBHOOK_SECRET env variable not configured');\n}\n\nconst signature = $request?.headers?.['x-hub-signature-256'];\nif (!signature) {\n  throw new Error('Security Violation: Missing x-hub-signature-256 header');\n}\n\nconst rawBody = JSON.stringify($input.first().json);\nconst expectedSignature = 'sha256=' + crypto.createHmac('sha256', webhookSecret).update(rawBody).digest('hex');\n\nif (signature !== expectedSignature) {\n  throw new Error('Security Violation: Invalid webhook signature');\n}\n\nreturn $input.all();"},"id":"n100","name":"Validate Webhook Signature","type":"n8n-nodes-base.code","typeVersion":2,"position":[320,304],"alwaysOutputData":false},{"parameters":{"jsCode":"// Rate Limiting: max 5 messages per minute per user\nconst raw = $input.first().json;\nconst changes = raw.entry?.[0]?.changes?.[0];\nconst value = changes?.value;\nconst messages = value?.messages;\nif (!messages || !messages.length) return [];\nconst msg = messages[0];\nconst userId = msg.from;\n\n// Use staticData for rate limit tracking\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.rateLimits) staticData.rateLimits = {};\n\nconst now = Date.now();\nconst windowMs = 60000; // 1 minute\nconst maxMessages = 5;\n\n// Clean old entries\nif (staticData.rateLimits[userId]) {\n  staticData.rateLimits[userId] = staticData.rateLimits[userId].filter(ts => now - ts < windowMs);\n}\n\nconst userHits = staticData.rateLimits[userId] || [];\n\nif (userHits.length >= maxMessages) {\n  throw new Error(`Rate limit exceeded for user ${userId}: ${userHits.length} messages in last minute`);\n}\n\nuserHits.push(now);\nstaticData.rateLimits[userId] = userHits;\n\nreturn $input.all();"},"id":"n101","name":"Rate Limit Check","type":"n8n-nodes-base.code","typeVersion":2,"position":[520,304],"alwaysOutputData":false},{"parameters":{"jsCode":"// Configuracoes via environment variables\nconst raw = $input.first().json;\nreturn [{ json: {\n  _raw: raw,\n  CONFIG: {\n    OPENAI_KEY:        $env.OPENAI_API_KEY || '',\n    WA_ACCESS_TOKEN:   $env.WHATSAPP_ACCESS_TOKEN || '',\n    PUSHOVER_TOKEN:    $env.PUSHOVER_APP_TOKEN || '',\n    PUSHOVER_USER_KEY: $env.PUSHOVER_USER_KEY || '',\n    OWNER_EMAIL:       $env.OWNER_EMAIL || 'jader.germano@icloud.com'\n  }\n}}];"},"id":"n001","name":"Configuracoes","type":"n8n-nodes-base.code","typeVersion":2,"position":[720,304],"alwaysOutputData":false},{"parameters":{"jsCode":"const raw = $json._raw;\nconst changes = raw.entry?.[0]?.changes?.[0];\nconst value = changes?.value;\nconst messages = value?.messages;\nif (!messages || !messages.length) return [];\nconst msg = messages[0];\n\n// Handle unrecognized message types\nconst supportedTypes = ['text'];\nif (!supportedTypes.includes(msg.type)) {\n  // Route to unrecognized type handler\n  return [{ json: {\n    CONFIG: $json.CONFIG,\n    _unrecognizedType: true,\n    messageType: msg.type,\n    from: msg.from,\n    senderName: value.contacts?.[0]?.profile?.name || msg.from,\n    timestamp: new Date(parseInt(msg.timestamp)*1000).toISOString(),\n    phoneNumberId: value.metadata.phone_number_id\n  }}];\n}\n\nif (!value.contacts?.length) return [];\nconst contact = value.contacts[0];\nreturn [{ json: {\n  CONFIG: $json.CONFIG,\n  _unrecognizedType: false,\n  messageId: msg.id,\n  from: msg.from,\n  senderName: contact?.profile?.name || msg.from,\n  text: msg.text.body,\n  timestamp: new Date(parseInt(msg.timestamp)*1000).toISOString(),\n  phoneNumberId: value.metadata.phone_number_id,\n  displayPhoneNumber: value.metadata.display_phone_number\n}}];"},"id":"n002","name":"Extrair Mensagem","type":"n8n-nodes-base.code","typeVersion":2,"position":[920,304]},{"parameters":{"conditions":{"options":{"caseSensitive":false,"leftValue":"","typeValidation":"loose"},"conditions":[{"leftValue":"={{ $json._unrecognizedType }}","rightValue":true,"operator":{"type":"boolean","operation":"true"}}],"combinator":"and"},"options":{}},"id":"n102","name":"Is Unrecognized Type?","type":"n8n-nodes-base.if","typeVersion":2,"position":[1120,304]},{"parameters":{"jsCode":"// Log unrecognized message type for debugging\nconst m = $json;\nconsole.log(`Unrecognized message type: ${m.messageType} from ${m.from} at ${m.timestamp}`);\n\n// Send a polite reply via WhatsApp informing the user\nconst waPayload = {\n  messaging_product: 'whatsapp',\n  recipient_type: 'individual',\n  to: m.from,\n  type: 'text',\n  text: {\n    preview_url: false,\n    body: 'Desculpe, no momento consigo processar apenas mensagens de texto. Por favor, envie sua mensagem como texto. Obrigado!'\n  }\n};\n\nreturn [{ json: {\n  CONFIG: m.CONFIG,\n  from: m.from,\n  senderName: m.senderName,\n  messageType: m.messageType,\n  phoneNumberId: m.phoneNumberId,\n  wa_payload: waPayload\n}}];"},"id":"n103","name":"Handle Unrecognized Type","type":"n8n-nodes-base.code","typeVersion":2,"position":[1320,450]},{"parameters":{"method":"POST","url":"={{ 'https://graph.facebook.com/v18.0/' + $json.phoneNumberId + '/messages' }}","sendHeaders":true,"headerParameters":{"parameters":[{"name":"Authorization","value":"={{ 'Bearer ' + $json.CONFIG.WA_ACCESS_TOKEN }}"},{"name":"Content-Type","value":"application/json"}]},"sendBody":true,"specifyBody":"json","jsonBody":"={{ JSON.stringify($json.wa_payload) }}","options":{}},"id":"n104","name":"Reply Unsupported Type","type":"n8n-nodes-base.httpRequest","typeVersion":4,"position":[1520,450]},{"parameters":{"jsCode":"const m = $json;\nreturn [{ json: {\n  ...m,\n  openai_classify: {\n    model:\"gpt-4o-mini\",\n    messages:[\n      { role:\"system\", content:\"Classifique e retorne APENAS JSON: {\\\"category\\\":\\\"recruitment|product_service|personal_urgent|personal_normal\\\",\\\"reason\\\":\\\"explicacao\\\"}\\n\\n- recruitment: emprego, vaga, recrutamento, headhunter\\n- product_service: compra, venda, orcamento, produto, servico\\n- personal_urgent: emergencia, urgente, hospital, acidente\\n- personal_normal: conversa pessoal rotineira\\n\\nApenas JSON puro.\" },\n      { role:\"user\", content:\"De: \"+m.senderName+\"\\nMsg: \"+m.text }\n    ],\n    max_tokens:120, temperature:0.1\n  }\n}}];"},"id":"n003","name":"Prep Classificar","type":"n8n-nodes-base.code","typeVersion":2,"position":[1320,200]},{"parameters":{"method":"POST","url":"https://api.openai.com/v1/chat/completions","sendHeaders":true,"headerParameters":{"parameters":[{"name":"Authorization","value":"={{ 'Bearer ' + $('Configuracoes').first().json.CONFIG.OPENAI_KEY }}"},{"name":"Content-Type","value":"application/json"}]},"sendBody":true,"specifyBody":"json","jsonBody":"={{ JSON.stringify($json.openai_classify) }}","options":{}},"id":"n004","name":"IA Classificar","type":"n8n-nodes-base.httpRequest","typeVersion":4,"position":[1520,200]},{"parameters":{"jsCode":"const ai = $input.first().json;\nconst m = $('Prep Classificar').first().json;\nlet cat={category:'personal_normal',reason:'fallback'};\ntry {\n  let c=ai.choices?.[0]?.message?.content||'{}';\n  c=c.replace(/```json\\n?/g,'').replace(/```/g,'').trim();\n  cat=JSON.parse(c);\n}catch(e){}\nreturn [{ json:{\n  CONFIG:m.CONFIG, messageId:m.messageId, from:m.from,\n  senderName:m.senderName, text:m.text, timestamp:m.timestamp,\n  phoneNumberId:m.phoneNumberId, displayPhoneNumber:m.displayPhoneNumber,\n  category:cat.category||'personal_normal', classificationReason:cat.reason||''\n}}];"},"id":"n005","name":"Processar Classificacao","type":"n8n-nodes-base.code","typeVersion":2,"position":[1720,200]},{"parameters":{"rules":{"values":[{"conditions":{"options":{"caseSensitive":false,"leftValue":"","typeValidation":"loose"},"conditions":[{"leftValue":"={{ $json.category }}","rightValue":"recruitment","operator":{"type":"string","operation":"equals"}}],"combinator":"and"},"renameOutput":true,"outputKey":"Recrutamento"},{"conditions":{"options":{"caseSensitive":false,"leftValue":"","typeValidation":"loose"},"conditions":[{"leftValue":"={{ $json.category }}","rightValue":"product_service","operator":{"type":"string","operation":"equals"}}],"combinator":"and"},"renameOutput":true,"outputKey":"Produto Servico"},{"conditions":{"options":{"caseSensitive":false,"leftValue":"","typeValidation":"loose"},"conditions":[{"leftValue":"={{ $json.category }}","rightValue":"personal_urgent","operator":{"type":"string","operation":"equals"}}],"combinator":"and"},"renameOutput":true,"outputKey":"Pessoal Urgente"},{"conditions":{"options":{"caseSensitive":false,"leftValue":"","typeValidation":"loose"},"conditions":[{"leftValue":"={{ $json.category }}","rightValue":"personal_normal","operator":{"type":"string","operation":"equals"}}],"combinator":"and"},"renameOutput":true,"outputKey":"Pessoal Normal"}]},"options":{}},"id":"n006","name":"Roteador","type":"n8n-nodes-base.switch","typeVersion":3,"position":[1920,200]},{"parameters":{"jsCode":"const m=$json;\nconst ctx={\n  recruitment:\"Proposta de emprego. Agradeca, informe que Philipe avalia oportunidades e retornara para conversar.\",\n  product_service:\"Produto ou servico. Seja prestativo, colete detalhes, informe que Philipe retorna em breve.\"\n};\nreturn [{ json:{\n  ...m,\n  openai_reply:{\n    model:\"gpt-4o-mini\",\n    messages:[\n      { role:\"system\", content:\"Voce e o assistente de Jader Philipe Germano, dev senior. Responda em nome dele.\\nContexto: \"+(ctx[m.category]||\"Responda profissionalmente.\")+\"\\n\\nRegras: max 3 paragrafos, mesmo idioma, profissional e cordial, assine como 'Assistente do Philipe', sem compromissos definitivos.\" },\n      { role:\"user\", content:\"Remetente: \"+m.senderName+\"\\nCategoria: \"+m.category+\"\\nMensagem: \"+m.text }\n    ],\n    max_tokens:450, temperature:0.7\n  }\n}}];"},"id":"n007","name":"Prep Resposta IA","type":"n8n-nodes-base.code","typeVersion":2,"position":[2144,60]},{"parameters":{"method":"POST","url":"https://api.openai.com/v1/chat/completions","sendHeaders":true,"headerParameters":{"parameters":[{"name":"Authorization","value":"={{ 'Bearer ' + $('Configuracoes').first().json.CONFIG.OPENAI_KEY }}"},{"name":"Content-Type","value":"application/json"}]},"sendBody":true,"specifyBody":"json","jsonBody":"={{ JSON.stringify($json.openai_reply) }}","options":{}},"id":"n008","name":"IA Gerar Resposta","type":"n8n-nodes-base.httpRequest","typeVersion":4,"position":[2368,60]},{"parameters":{"jsCode":"const ai=$input.first().json;\nconst m=$('Prep Resposta IA').first().json;\nconst reply=ai.choices?.[0]?.message?.content||'Obrigado pelo contato. Philipe retornara em breve.';\nreturn [{ json:{\n  ...m, replyText:reply,\n  wa_payload:{\n    messaging_product:\"whatsapp\", recipient_type:\"individual\",\n    to:m.from, type:\"text\",\n    text:{ preview_url:false, body:reply }\n  }\n}}];"},"id":"n009","name":"Prep Envio WA","type":"n8n-nodes-base.code","typeVersion":2,"position":[2592,60]},{"parameters":{"method":"POST","url":"={{ 'https://graph.facebook.com/v18.0/' + $json.phoneNumberId + '/messages' }}","sendHeaders":true,"headerParameters":{"parameters":[{"name":"Authorization","value":"={{ 'Bearer ' + $('Configuracoes').first().json.CONFIG.WA_ACCESS_TOKEN }}"},{"name":"Content-Type","value":"application/json"}]},"sendBody":true,"specifyBody":"json","jsonBody":"={{ JSON.stringify($json.wa_payload) }}","options":{}},"id":"n010","name":"Enviar WhatsApp","type":"n8n-nodes-base.httpRequest","typeVersion":4,"position":[2800,60]},{"parameters":{"jsCode":"const d=$input.first().json;\nconst t=(d.text||'').toLowerCase();\nconst sig=['obrigado','obrigada','valeu','ate mais','tchau','bye','goodbye','thank you','thanks','see you','nao tenho interesse','no thanks','vou pensar','combinado','falaremos','agendaremos'];\nconst done=sig.some(s=>t.includes(s));\nconst body='<html><body style=\"font-family:Arial;max-width:600px;margin:0 auto\"><h2 style=\"color:#075e54\">WhatsApp Bot - Resumo</h2><p><b>Contato:</b> '+d.senderName+' (+'+d.from+')</p><p><b>Categoria:</b> '+d.category+'</p><p><b>Horario:</b> '+d.timestamp+'</p><hr><h3>Mensagem recebida:</h3><div style=\"background:#dcf8c6;padding:12px;border-radius:8px\">'+d.text+'</div><h3>Resposta enviada:</h3><div style=\"background:#f0f0f0;padding:12px;border-radius:8px\">'+d.replyText+'</div><hr><p style=\"color:#888;font-size:11px\">Gerado pelo assistente do Philipe</p></body></html>';\nreturn [{ json:{ ...d, conversationDone:done, emailSubject:'[WA Bot] Conversa - '+d.senderName+' ('+d.category+')', emailBody:body }}];"},"id":"n011","name":"Verificar Fim Dialogo","type":"n8n-nodes-base.code","typeVersion":2,"position":[3024,60]},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":1},"conditions":[{"leftValue":"={{ $json.conversationDone }}","rightValue":true,"operator":{"type":"boolean","operation":"true"},"id":"15899523-ac77-4761-bd41-53fe8b3f60d1"}],"combinator":"and"},"options":{}},"id":"n012","name":"Dialogo Encerrado","type":"n8n-nodes-base.if","typeVersion":2,"position":[3248,60]},{"parameters":{"toEmail":"={{ $('Configuracoes').first().json.CONFIG.OWNER_EMAIL }}","subject":"={{ $json.emailSubject }}","options":{}},"id":"n013","name":"Email Resumo","type":"n8n-nodes-base.emailSend","typeVersion":2,"position":[3472,0],"webhookId":"f47e3d40-14b6-4e17-88bc-294016247b5b"},{"parameters":{"method":"POST","url":"https://api.pushover.net/1/messages.json","sendBody":true,"contentType":"form-urlencoded","bodyParameters":{"parameters":[{"name":"token","value":"={{ $('Configuracoes').first().json.CONFIG.PUSHOVER_TOKEN }}"},{"name":"user","value":"={{ $('Configuracoes').first().json.CONFIG.PUSHOVER_USER_KEY }}"},{"name":"title","value":"={{ 'URGENTE: ' + $json.senderName }}"},{"name":"message","value":"={{ 'De: ' + $json.senderName + ' (+' + $json.from + ')\\n\\n' + $json.text }}"},{"name":"priority","value":"1"},{"name":"sound","value":"siren"}]},"options":{}},"id":"n014","name":"Pushover Urgente","type":"n8n-nodes-base.httpRequest","typeVersion":4,"position":[2144,380]},{"parameters":{},"id":"n015","name":"Pessoal Normal Log","type":"n8n-nodes-base.noOp","typeVersion":1,"position":[2144,480]},{"parameters":{"jsCode":"// Error handler for workflow-level errors\nconst error = $input.first().json;\nconsole.error('WhatsApp Bot Error:', JSON.stringify({\n  message: error.message || 'Unknown error',\n  node: error.node?.name || 'unknown',\n  timestamp: new Date().toISOString()\n}));\n\nreturn [{ json: {\n  error: error.message || 'Unknown error',\n  node: error.node?.name || 'unknown',\n  timestamp: new Date().toISOString()\n}}];"},"id":"n105","name":"Error Handler","type":"n8n-nodes-base.code","typeVersion":2,"position":[600,600]},{"parameters":{"errorTriggerType":"allErrors"},"id":"n106","name":"Error Trigger","type":"n8n-nodes-base.errorTrigger","typeVersion":1,"position":[400,600]}],"connections":{"WhatsApp Trigger":{"main":[[{"node":"Validate Webhook Signature","type":"main","index":0}]]},"Validate Webhook Signature":{"main":[[{"node":"Rate Limit Check","type":"main","index":0}]]},"Rate Limit Check":{"main":[[{"node":"Configuracoes","type":"main","index":0}]]},"Configuracoes":{"main":[[{"node":"Extrair Mensagem","type":"main","index":0}]]},"Extrair Mensagem":{"main":[[{"node":"Is Unrecognized Type?","type":"main","index":0}]]},"Is Unrecognized Type?":{"main":[[{"node":"Handle Unrecognized Type","type":"main","index":0}],[{"node":"Prep Classificar","type":"main","index":0}]]},"Handle Unrecognized Type":{"main":[[{"node":"Reply Unsupported Type","type":"main","index":0}]]},"Prep Classificar":{"main":[[{"node":"IA Classificar","type":"main","index":0}]]},"IA Classificar":{"main":[[{"node":"Processar Classificacao","type":"main","index":0}]]},"Processar Classificacao":{"main":[[{"node":"Roteador","type":"main","index":0}]]},"Roteador":{"main":[[{"node":"Prep Resposta IA","type":"main","index":0}],[{"node":"Prep Resposta IA","type":"main","index":0}],[{"node":"Pushover Urgente","type":"main","index":0}],[{"node":"Pessoal Normal Log","type":"main","index":0}]]},"Prep Resposta IA":{"main":[[{"node":"IA Gerar Resposta","type":"main","index":0}]]},"IA Gerar Resposta":{"main":[[{"node":"Prep Envio WA","type":"main","index":0}]]},"Prep Envio WA":{"main":[[{"node":"Enviar WhatsApp","type":"main","index":0}]]},"Enviar WhatsApp":{"main":[[{"node":"Verificar Fim Dialogo","type":"main","index":0}]]},"Verificar Fim Dialogo":{"main":[[{"node":"Dialogo Encerrado","type":"main","index":0}]]},"Dialogo Encerrado":{"main":[[{"node":"Email Resumo","type":"main","index":0}],[]]},"Error Trigger":{"main":[[{"node":"Error Handler","type":"main","index":0}]]}},"settings":{"executionOrder":"v1","saveManualExecutions":true,"callerPolicy":"workflowsFromSameOwner","availableInMCP":false},"staticData":null,"meta":null,"pinData":{},"versionId":"bc9fe008-02e3-47e6-a4d0-8866edf4fc2a","activeVersionId":null,"versionCounter":4,"triggerCount":0,"tags":[],"shared":[{"updatedAt":"2026-03-05T22:49:03.202Z","createdAt":"2026-03-05T22:49:03.202Z","role":"workflow:owner","workflowId":"1w34rK2QP45XmmvE","projectId":"wL0S2fKSRlDG069V","project":{"updatedAt":"2026-03-07T10:28:02.232Z","createdAt":"2026-02-28T17:22:21.227Z","id":"wL0S2fKSRlDG069V","name":"Jader Germano <jader@jpglabs.com.br>","type":"personal","icon":null,"description":null,"creatorId":"d303e6c3-d3f4-49b6-8a20-cc1a2464f67e"}}],"versionMetadata":{"name":null,"description":null}}]
+[
+  {
+    "updatedAt": "2026-03-06T03:21:33.272Z",
+    "createdAt": "2026-03-05T22:49:03.199Z",
+    "id": "1w34rK2QP45XmmvE",
+    "name": "WhatsApp Chatbot - Assistente Philipe",
+    "description": null,
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "updates": [
+            "messages"
+          ],
+          "options": {}
+        },
+        "id": "n000",
+        "name": "WhatsApp Trigger",
+        "type": "n8n-nodes-base.whatsappTrigger",
+        "typeVersion": 1,
+        "position": [
+          208,
+          304
+        ],
+        "webhookId": "wh-philipe-chatbot-v1"
+      },
+      {
+        "parameters": {
+          "jsCode": "// HMAC-SHA256 Webhook Signature Validation\nconst crypto = require('crypto');\n\nconst webhookSecret = $env.WHATSAPP_WEBHOOK_SECRET;\nif (!webhookSecret) {\n  throw new Error('Security: WHATSAPP_WEBHOOK_SECRET env variable not configured');\n}\n\nconst signature = $request?.headers?.['x-hub-signature-256'];\nif (!signature) {\n  throw new Error('Security Violation: Missing x-hub-signature-256 header');\n}\n\nconst rawBody = JSON.stringify($input.first().json);\nconst expectedSignature = 'sha256=' + crypto.createHmac('sha256', webhookSecret).update(rawBody).digest('hex');\n\nif (signature !== expectedSignature) {\n  throw new Error('Security Violation: Invalid webhook signature');\n}\n\nreturn $input.all();"
+        },
+        "id": "n100",
+        "name": "Validate Webhook Signature",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          320,
+          304
+        ],
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "jsCode": "// Rate Limiting: max 5 messages per minute per user\nconst raw = $input.first().json;\nconst changes = raw.entry?.[0]?.changes?.[0];\nconst value = changes?.value;\nconst messages = value?.messages;\nif (!messages || !messages.length) return [];\nconst msg = messages[0];\nconst userId = msg.from;\n\n// Use staticData for rate limit tracking\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.rateLimits) staticData.rateLimits = {};\n\nconst now = Date.now();\nconst windowMs = 60000; // 1 minute\nconst maxMessages = 5;\n\n// Clean old entries\nif (staticData.rateLimits[userId]) {\n  staticData.rateLimits[userId] = staticData.rateLimits[userId].filter(ts => now - ts < windowMs);\n}\n\nconst userHits = staticData.rateLimits[userId] || [];\n\nif (userHits.length >= maxMessages) {\n  throw new Error(`Rate limit exceeded for user ${userId}: ${userHits.length} messages in last minute`);\n}\n\nuserHits.push(now);\nstaticData.rateLimits[userId] = userHits;\n\nreturn $input.all();"
+        },
+        "id": "n101",
+        "name": "Rate Limit Check",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          520,
+          304
+        ],
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "jsCode": "// Configuracoes via environment variables\nconst raw = $input.first().json;\nreturn [{ json: {\n  _raw: raw,\n  CONFIG: {\n    OLLAMA_URL:        $env.OLLAMA_BASE_URL || 'http://100.68.217.36:11434/v1/chat/completions',\n    OLLAMA_MODEL:      $env.OLLAMA_MODEL || 'qwen2.5-coder:7b',\n    NIM_URL:           $env.NIM_BASE_URL || 'https://integrate.api.nvidia.com/v1/chat/completions',\n    NIM_KEY:           $env.NIM_API_KEY || '',\n    NIM_MODEL:         $env.NIM_MODEL || 'nvidia/llama-3.3-nemotron-super-49b-v1.5',\n    WA_ACCESS_TOKEN:   $env.WHATSAPP_ACCESS_TOKEN || '',\n    PUSHOVER_TOKEN:    $env.PUSHOVER_APP_TOKEN || '',\n    PUSHOVER_USER_KEY: $env.PUSHOVER_USER_KEY || '',\n    OWNER_EMAIL:       $env.OWNER_EMAIL || 'jader@jpglabs.com.br'\n  }\n}}];"
+        },
+        "id": "n001",
+        "name": "Configuracoes",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          720,
+          304
+        ],
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "jsCode": "const raw = $json._raw;\nconst changes = raw.entry?.[0]?.changes?.[0];\nconst value = changes?.value;\nconst messages = value?.messages;\nif (!messages || !messages.length) return [];\nconst msg = messages[0];\n\n// Handle unrecognized message types\nconst supportedTypes = ['text'];\nif (!supportedTypes.includes(msg.type)) {\n  // Route to unrecognized type handler\n  return [{ json: {\n    CONFIG: $json.CONFIG,\n    _unrecognizedType: true,\n    messageType: msg.type,\n    from: msg.from,\n    senderName: value.contacts?.[0]?.profile?.name || msg.from,\n    timestamp: new Date(parseInt(msg.timestamp)*1000).toISOString(),\n    phoneNumberId: value.metadata.phone_number_id\n  }}];\n}\n\nif (!value.contacts?.length) return [];\nconst contact = value.contacts[0];\nreturn [{ json: {\n  CONFIG: $json.CONFIG,\n  _unrecognizedType: false,\n  messageId: msg.id,\n  from: msg.from,\n  senderName: contact?.profile?.name || msg.from,\n  text: msg.text.body,\n  timestamp: new Date(parseInt(msg.timestamp)*1000).toISOString(),\n  phoneNumberId: value.metadata.phone_number_id,\n  displayPhoneNumber: value.metadata.display_phone_number\n}}];"
+        },
+        "id": "n002",
+        "name": "Extrair Mensagem",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          920,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "loose"
+            },
+            "conditions": [
+              {
+                "leftValue": "={{ $json._unrecognizedType }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "n102",
+        "name": "Is Unrecognized Type?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          1120,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Log unrecognized message type for debugging\nconst m = $json;\nconsole.log(`Unrecognized message type: ${m.messageType} from ${m.from} at ${m.timestamp}`);\n\n// Send a polite reply via WhatsApp informing the user\nconst waPayload = {\n  messaging_product: 'whatsapp',\n  recipient_type: 'individual',\n  to: m.from,\n  type: 'text',\n  text: {\n    preview_url: false,\n    body: 'Desculpe, no momento consigo processar apenas mensagens de texto. Por favor, envie sua mensagem como texto. Obrigado!'\n  }\n};\n\nreturn [{ json: {\n  CONFIG: m.CONFIG,\n  from: m.from,\n  senderName: m.senderName,\n  messageType: m.messageType,\n  phoneNumberId: m.phoneNumberId,\n  wa_payload: waPayload\n}}];"
+        },
+        "id": "n103",
+        "name": "Handle Unrecognized Type",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1320,
+          450
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "={{ 'https://graph.facebook.com/v18.0/' + $json.phoneNumberId + '/messages' }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "={{ 'Bearer ' + $json.CONFIG.WA_ACCESS_TOKEN }}"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json.wa_payload) }}",
+          "options": {}
+        },
+        "id": "n104",
+        "name": "Reply Unsupported Type",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          1520,
+          450
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const m = $json;\nreturn [{ json: {\n  ...m,\n  openai_classify: {\n    model:\"gpt-4o-mini\",\n    messages:[\n      { role:\"system\", content:\"Classifique e retorne APENAS JSON: {\\\"category\\\":\\\"recruitment|product_service|personal_urgent|personal_normal\\\",\\\"reason\\\":\\\"explicacao\\\"}\\n\\n- recruitment: emprego, vaga, recrutamento, headhunter\\n- product_service: compra, venda, orcamento, produto, servico\\n- personal_urgent: emergencia, urgente, hospital, acidente\\n- personal_normal: conversa pessoal rotineira\\n\\nApenas JSON puro.\" },\n      { role:\"user\", content:\"De: \"+m.senderName+\"\\nMsg: \"+m.text }\n    ],\n    max_tokens:120, temperature:0.1\n  }\n}}];"
+        },
+        "id": "n003",
+        "name": "Prep Classificar",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1320,
+          200
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $('Configuracoes').first().json.CONFIG.OLLAMA_URL }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json.openai_classify) }}",
+          "options": {}
+        },
+        "id": "n004",
+        "name": "IA Classificar",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          1520,
+          200
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const ai = $input.first().json;\nconst m = $('Prep Classificar').first().json;\nlet cat={category:'personal_normal',reason:'fallback'};\ntry {\n  let c=ai.choices?.[0]?.message?.content||'{}';\n  c=c.replace(/```json\\n?/g,'').replace(/```/g,'').trim();\n  cat=JSON.parse(c);\n}catch(e){}\nreturn [{ json:{\n  CONFIG:m.CONFIG, messageId:m.messageId, from:m.from,\n  senderName:m.senderName, text:m.text, timestamp:m.timestamp,\n  phoneNumberId:m.phoneNumberId, displayPhoneNumber:m.displayPhoneNumber,\n  category:cat.category||'personal_normal', classificationReason:cat.reason||''\n}}];"
+        },
+        "id": "n005",
+        "name": "Processar Classificacao",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1720,
+          200
+        ]
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "loose"
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.category }}",
+                      "rightValue": "recruitment",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Recrutamento"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "loose"
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.category }}",
+                      "rightValue": "product_service",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Produto Servico"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "loose"
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.category }}",
+                      "rightValue": "personal_urgent",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Pessoal Urgente"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "loose"
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.category }}",
+                      "rightValue": "personal_normal",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Pessoal Normal"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "n006",
+        "name": "Roteador",
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3,
+        "position": [
+          1920,
+          200
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const m=$json;\nconst ctx={\n  recruitment:\"Proposta de emprego. Agradeca, informe que Philipe avalia oportunidades e retornara para conversar.\",\n  product_service:\"Produto ou servico. Seja prestativo, colete detalhes, informe que Philipe retorna em breve.\"\n};\nreturn [{ json:{\n  ...m,\n  openai_reply:{\n    model:\"gpt-4o-mini\",\n    messages:[\n      { role:\"system\", content:\"Voce e o assistente de Jader Philipe Germano, dev senior. Responda em nome dele.\\nContexto: \"+(ctx[m.category]||\"Responda profissionalmente.\")+\"\\n\\nRegras: max 3 paragrafos, mesmo idioma, profissional e cordial, assine como 'Assistente do Philipe', sem compromissos definitivos.\" },\n      { role:\"user\", content:\"Remetente: \"+m.senderName+\"\\nCategoria: \"+m.category+\"\\nMensagem: \"+m.text }\n    ],\n    max_tokens:450, temperature:0.7\n  }\n}}];"
+        },
+        "id": "n007",
+        "name": "Prep Resposta IA",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2144,
+          60
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $('Configuracoes').first().json.CONFIG.OLLAMA_URL }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json.openai_reply) }}",
+          "options": {}
+        },
+        "id": "n008",
+        "name": "IA Gerar Resposta",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          2368,
+          60
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const ai=$input.first().json;\nconst m=$('Prep Resposta IA').first().json;\nconst reply=ai.choices?.[0]?.message?.content||'Obrigado pelo contato. Philipe retornara em breve.';\nreturn [{ json:{\n  ...m, replyText:reply,\n  wa_payload:{\n    messaging_product:\"whatsapp\", recipient_type:\"individual\",\n    to:m.from, type:\"text\",\n    text:{ preview_url:false, body:reply }\n  }\n}}];"
+        },
+        "id": "n009",
+        "name": "Prep Envio WA",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2592,
+          60
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "={{ 'https://graph.facebook.com/v18.0/' + $json.phoneNumberId + '/messages' }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "={{ 'Bearer ' + $('Configuracoes').first().json.CONFIG.WA_ACCESS_TOKEN }}"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json.wa_payload) }}",
+          "options": {}
+        },
+        "id": "n010",
+        "name": "Enviar WhatsApp",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          2800,
+          60
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const d=$input.first().json;\nconst t=(d.text||'').toLowerCase();\nconst sig=['obrigado','obrigada','valeu','ate mais','tchau','bye','goodbye','thank you','thanks','see you','nao tenho interesse','no thanks','vou pensar','combinado','falaremos','agendaremos'];\nconst done=sig.some(s=>t.includes(s));\nconst body='<html><body style=\"font-family:Arial;max-width:600px;margin:0 auto\"><h2 style=\"color:#075e54\">WhatsApp Bot - Resumo</h2><p><b>Contato:</b> '+d.senderName+' (+'+d.from+')</p><p><b>Categoria:</b> '+d.category+'</p><p><b>Horario:</b> '+d.timestamp+'</p><hr><h3>Mensagem recebida:</h3><div style=\"background:#dcf8c6;padding:12px;border-radius:8px\">'+d.text+'</div><h3>Resposta enviada:</h3><div style=\"background:#f0f0f0;padding:12px;border-radius:8px\">'+d.replyText+'</div><hr><p style=\"color:#888;font-size:11px\">Gerado pelo assistente do Philipe</p></body></html>';\nreturn [{ json:{ ...d, conversationDone:done, emailSubject:'[WA Bot] Conversa - '+d.senderName+' ('+d.category+')', emailBody:body }}];"
+        },
+        "id": "n011",
+        "name": "Verificar Fim Dialogo",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3024,
+          60
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "leftValue": "={{ $json.conversationDone }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true"
+                },
+                "id": "15899523-ac77-4761-bd41-53fe8b3f60d1"
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "n012",
+        "name": "Dialogo Encerrado",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          3248,
+          60
+        ]
+      },
+      {
+        "parameters": {
+          "toEmail": "={{ $('Configuracoes').first().json.CONFIG.OWNER_EMAIL }}",
+          "subject": "={{ $json.emailSubject }}",
+          "options": {},
+          "fromEmail": "jader@jpglabs.com.br"
+        },
+        "id": "n013",
+        "name": "Email Resumo",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 2,
+        "position": [
+          3472,
+          0
+        ],
+        "webhookId": "f47e3d40-14b6-4e17-88bc-294016247b5b"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.pushover.net/1/messages.json",
+          "sendBody": true,
+          "contentType": "form-urlencoded",
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "token",
+                "value": "={{ $('Configuracoes').first().json.CONFIG.PUSHOVER_TOKEN }}"
+              },
+              {
+                "name": "user",
+                "value": "={{ $('Configuracoes').first().json.CONFIG.PUSHOVER_USER_KEY }}"
+              },
+              {
+                "name": "title",
+                "value": "={{ 'URGENTE: ' + $json.senderName }}"
+              },
+              {
+                "name": "message",
+                "value": "={{ 'De: ' + $json.senderName + ' (+' + $json.from + ')\\n\\n' + $json.text }}"
+              },
+              {
+                "name": "priority",
+                "value": "1"
+              },
+              {
+                "name": "sound",
+                "value": "siren"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "n014",
+        "name": "Pushover Urgente",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4,
+        "position": [
+          2144,
+          380
+        ]
+      },
+      {
+        "parameters": {},
+        "id": "n015",
+        "name": "Pessoal Normal Log",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          2144,
+          480
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Error handler for workflow-level errors\nconst error = $input.first().json;\nconsole.error('WhatsApp Bot Error:', JSON.stringify({\n  message: error.message || 'Unknown error',\n  node: error.node?.name || 'unknown',\n  timestamp: new Date().toISOString()\n}));\n\nreturn [{ json: {\n  error: error.message || 'Unknown error',\n  node: error.node?.name || 'unknown',\n  timestamp: new Date().toISOString()\n}}];"
+        },
+        "id": "n105",
+        "name": "Error Handler",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          600,
+          600
+        ]
+      },
+      {
+        "parameters": {
+          "errorTriggerType": "allErrors"
+        },
+        "id": "n106",
+        "name": "Error Trigger",
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          400,
+          600
+        ]
+      }
+    ],
+    "connections": {
+      "WhatsApp Trigger": {
+        "main": [
+          [
+            {
+              "node": "Validate Webhook Signature",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Validate Webhook Signature": {
+        "main": [
+          [
+            {
+              "node": "Rate Limit Check",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Rate Limit Check": {
+        "main": [
+          [
+            {
+              "node": "Configuracoes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Configuracoes": {
+        "main": [
+          [
+            {
+              "node": "Extrair Mensagem",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extrair Mensagem": {
+        "main": [
+          [
+            {
+              "node": "Is Unrecognized Type?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Is Unrecognized Type?": {
+        "main": [
+          [
+            {
+              "node": "Handle Unrecognized Type",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Prep Classificar",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Handle Unrecognized Type": {
+        "main": [
+          [
+            {
+              "node": "Reply Unsupported Type",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prep Classificar": {
+        "main": [
+          [
+            {
+              "node": "IA Classificar",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "IA Classificar": {
+        "main": [
+          [
+            {
+              "node": "Processar Classificacao",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Processar Classificacao": {
+        "main": [
+          [
+            {
+              "node": "Roteador",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Roteador": {
+        "main": [
+          [
+            {
+              "node": "Prep Resposta IA",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Prep Resposta IA",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Pushover Urgente",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Pessoal Normal Log",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prep Resposta IA": {
+        "main": [
+          [
+            {
+              "node": "IA Gerar Resposta",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "IA Gerar Resposta": {
+        "main": [
+          [
+            {
+              "node": "Prep Envio WA",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prep Envio WA": {
+        "main": [
+          [
+            {
+              "node": "Enviar WhatsApp",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Enviar WhatsApp": {
+        "main": [
+          [
+            {
+              "node": "Verificar Fim Dialogo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Verificar Fim Dialogo": {
+        "main": [
+          [
+            {
+              "node": "Dialogo Encerrado",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Dialogo Encerrado": {
+        "main": [
+          [
+            {
+              "node": "Email Resumo",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Error Handler",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "saveManualExecutions": true,
+      "callerPolicy": "workflowsFromSameOwner",
+      "availableInMCP": false
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "bc9fe008-02e3-47e6-a4d0-8866edf4fc2a",
+    "activeVersionId": null,
+    "versionCounter": 4,
+    "triggerCount": 0,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-03-05T22:49:03.202Z",
+        "createdAt": "2026-03-05T22:49:03.202Z",
+        "role": "workflow:owner",
+        "workflowId": "1w34rK2QP45XmmvE",
+        "projectId": "wL0S2fKSRlDG069V",
+        "project": {
+          "updatedAt": "2026-03-07T10:28:02.232Z",
+          "createdAt": "2026-02-28T17:22:21.227Z",
+          "id": "wL0S2fKSRlDG069V",
+          "name": "Jader Germano <jader@jpglabs.com.br>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "creatorId": "d303e6c3-d3f4-49b6-8a20-cc1a2464f67e"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": null,
+      "description": null
+    }
+  }
+]
