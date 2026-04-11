@@ -7759,3 +7759,60 @@ code
 - Preservar a separacao entre `voice_stream` remoto atual e a futura lane nativa local.
 - Manter a linguagem da `Workspace View` curta, calma e orientada a verdade operacional.
 <!-- session-bridge:openclaude-apple-speech-local-transcript-2026-04-07-session:end -->
+
+<!-- session-bridge:maratona-2026-04-08-session:start -->
+## 2026-04-08 — maratona workspace
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-11 (sessão de 2026-04-08, fechamento com atraso)`
+- Feature/session id: `ops/maratona-close-2026-04-08`
+- Repositório: `/Users/philipegermano/code` (workspace raiz)
+- Branch ativa: `feature/unified-memory-center`
+- Provider: `Claude Code (claude-sonnet-4-6)`
+- Objetivo aprovado: ~15 tasks cobrindo infra VPS, memória, wiki, portfolio, freelas e deploy
+
+### Summary
+
+- Commit Unified Memory Center (`d586a8e`) com scripts `sync-ecosystem.sh` e `sync-memory.sh`, crons configurados.
+- VPS Nemotron registrada no `PI_MEMORY.md`; SSH key `id_ed25519_vps` confirmada; Windows jprdtr adicionado ao Tailscale (4 peers).
+- Projetos Pi legacy arquivados (`pi-local-app`, `pibar-macos`, `piphone-ios`, `PieCenter`, `awesomepie-ios`).
+- Banana Slides deployado na VPS com patch pt-BR — voltou ao backlog (não funcional para produção, sem capital até 20/04).
+- LLM Wiki structure implementada: `raw/`, `memory/wiki/`, ADR-001, transcrições Karpathy + Zechner.
+- Obsidian vault configurado em `~/code/` (movido de `jpglabs/docs/`): graph view colorido, 5 templates, MOC, 74 filtros.
+- OpenClaude ROADMAP atualizado com FG-01 a FG-04 (Nemotron, ImageGen, Banana Slides Skill, LLM Wiki).
+- `reference/freela-upfront-lane.md` criado com estratégia completa de entrada no mercado upfront.
+- Claude Code + OpenClaude instalados na VPS.
+- Rsync workspace Mac→VPS: 7494 `.md` files, 2.7 GB em `/opt/jpglabs/workspace/`.
+- Liberados ~7.2 GB no Mac (caches npm, uv, Codex logs, releases OpenClaude movidas para VPS).
+- Compartilhamento de Tela ativado no Mac Air; Tailscale MagicDNS corrigido (`accept-dns=true`).
+- Portfolio PR #6 aberto (i18n completo, CI/CD) — pendente merge + liquid glass palette.
+
+### Risks And Gaps
+
+- VPS IP público (`187.77.227.151`) bloqueado pela Hostinger — requer desbloqueio para expor serviços.
+- Portfolio PR #6 não mergeado; liquid glass palette e refactory React+Vite+NestJS pendentes.
+- Agent dashboard plano de 7 tasks desenhado mas não executado.
+- Atlassian MCP desconectado — FG-01 a FG-04 não criados no Jira.
+- Script Python de padronização de frontmatter Obsidian aprovado mas não rodado.
+
+### Next Actions
+
+1. Desbloquear IP público VPS na Hostinger
+2. Portfolio: merge PR #6 → deploy → liquid glass palette → refactory React+Vite+NestJS
+3. Freelas: criar conta Upwork + Codementor (base: `reference/freela-upfront-lane.md`)
+4. Agent dashboard: executar plano de 7 tasks na VPS
+5. Obsidian frontmatter: rodar script Python de padronização
+6. Reconectar Atlassian MCP → criar FG-01 a FG-04 no Jira
+
+### Handoff Notes
+
+- SSH VPS canônico: `ssh -i ~/.ssh/id_ed25519_vps root@srv1443703.tail4c4f3a.ts.net`
+- IP Tailscale VPS: `100.68.217.36` | IP público (bloqueado): `187.77.227.151`
+- Banana Slides em `/docker/banana-slides` na VPS — backlog, não tocar
+- Branch ativa: `feature/unified-memory-center` (commits `d586a8e`, `09f3bf8`)
+- Portfolio: `feature/portfolio-showcase-update`, PR #6 aberto
+- Cores JPGLabs: azul e roxo BANIDOS de todos os projetos (exceção temporária: portfolio Next.js atual)
+- Sync cross-agent: executar NO INÍCIO da sessão, não no final
+- Prioridade financeira até 20/04: portfolio (#1) + freelas upfront (#2)
+<!-- session-bridge:maratona-2026-04-08-session:end -->
