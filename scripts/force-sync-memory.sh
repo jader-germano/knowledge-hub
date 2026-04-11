@@ -8,8 +8,8 @@ log() { echo "$TS | $1" | tee -a "$LOG"; }
 log "=== FORCE SYNC MEMORY START ==="
 
 BRANCH="feature/unified-memory-center"
-WINDOWS="jader@100.77.34.128"
-MAC="jadergermano@100.64.53.33"
+WINDOWS="jader@jprdtr.tail4c4f3a.ts.net"
+MAC="jadergermano@macbook-air-de-jader.tail4c4f3a.ts.net"
 
 # --- 1. VPS vault: commit local changes, push to remotes ---
 cd /sync/jpglabs-docs

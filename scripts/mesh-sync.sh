@@ -17,7 +17,7 @@ git pull origin "$BRANCH" 2>&1 | tee -a "$LOG"
 log "VPS atualizada"
 
 # 2. Windows (JPRDTR) — sync via Tailscale
-WINDOWS="jader@100.77.34.128"
+WINDOWS="jader@jprdtr.tail4c4f3a.ts.net"
 if ssh -o ConnectTimeout=5 -o BatchMode=yes "$WINDOWS" "echo ok" 2>/dev/null; then
   ssh "$WINDOWS" "cd /c/docker/jpglabs-docs 2>/dev/null && git pull origin $BRANCH 2>&1 || echo repo nao existe no Windows — skip" | tee -a "$LOG"
   log "Windows sync OK"
@@ -26,7 +26,7 @@ else
 fi
 
 # 3. Mac (MacBook Air) — sync via Tailscale
-MAC="jadergermano@100.64.53.33"
+MAC="jadergermano@macbook-air-de-jader.tail4c4f3a.ts.net"
 if ssh -o ConnectTimeout=5 -o BatchMode=yes "$MAC" "echo ok" 2>/dev/null; then
   ssh "$MAC" "cd ~/code/jpglabs/docs 2>/dev/null && git pull origin $BRANCH 2>&1 || echo repo nao existe no Mac — skip" | tee -a "$LOG"
   log "Mac sync OK"
