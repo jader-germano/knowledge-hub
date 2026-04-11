@@ -1,0 +1,338 @@
+{
+  "updatedAt": "2026-04-11T12:00:00.000Z",
+  "createdAt": "2026-04-11T12:00:00.000Z",
+  "id": "kR9mTx4vLnB2qWz",
+  "name": "JPGLabs [GitOps] - GitLab Merge Sync to GitHub",
+  "description": "When a MR is merged into develop/staging/main on GitLab, syncs ONLY that branch to GitHub via git-bridge on VPS. Validates webhook token, filters protected branches, executes git fetch+push, notifies Slack.",
+  "active": false,
+  "settings": {
+    "timezone": "America/Sao_Paulo",
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": ""
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "gitlab-merge-sync",
+        "options": {
+          "responseMode": "lastNode"
+        }
+      },
+      "name": "GitLab MR Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 200],
+      "id": "wh-mr-recv",
+      "webhookId": "gitlab-merge-sync"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate GitLab webhook token and extract MR data\nconst headers = $input.first().json.headers;\nconst body = $input.first().json.body;\n\n// --- Token validation ---\nconst receivedToken = headers['x-gitlab-token'] || headers['X-Gitlab-Token'] || '';\nconst expectedToken = $env.GITLAB_WEBHOOK_SECRET;\n\nif (!receivedToken || receivedToken !== expectedToken) {\n  return [{ json: {\n    valid: false,\n    reason: 'Invalid or missing X-Gitlab-Token header',\n    timestamp: new Date().toISOString()\n  }}];\n}\n\n// --- Event type validation ---\nconst eventType = headers['x-gitlab-event'] || headers['X-Gitlab-Event'] || '';\nif (eventType !== 'Merge Request Hook') {\n  return [{ json: {\n    valid: false,\n    reason: `Unexpected event type: ${eventType}`,\n    timestamp: new Date().toISOString()\n  }}];\n}\n\n// --- MR state validation ---\nconst attrs = body.object_attributes || {};\nif (attrs.state !== 'merged' || attrs.action !== 'merge') {\n  return [{ json: {\n    valid: false,\n    reason: `MR not merged (state=${attrs.state}, action=${attrs.action})`,\n    timestamp: new Date().toISOString()\n  }}];\n}\n\n// --- Extract fields ---\nconst project = body.project || {};\nconst user = body.user || {};\n\nreturn [{ json: {\n  valid: true,\n  target_branch: attrs.target_branch,\n  source_branch: attrs.source_branch,\n  merge_commit_sha: attrs.merge_commit_sha || attrs.last_commit?.id || 'unknown',\n  mr_title: attrs.title,\n  mr_iid: attrs.iid,\n  mr_url: attrs.url,\n  project_name: project.name,\n  project_path: project.path_with_namespace,\n  project_git_url: project.git_ssh_url || project.git_http_url,\n  project_id: project.id,\n  author: user.username || user.name || 'unknown',\n  timestamp: new Date().toISOString()\n}}];"
+      },
+      "name": "Validate & Extract",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [250, 200],
+      "id": "code-validate-mr"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "name": "Is Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [500, 200],
+      "id": "if-valid"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.target_branch }}",
+              "rightValue": "develop",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "leftValue": "={{ $json.target_branch }}",
+              "rightValue": "staging",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "leftValue": "={{ $json.target_branch }}",
+              "rightValue": "main",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        }
+      },
+      "name": "Is Protected Branch?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [750, 100],
+      "id": "if-branch"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build git sync commands for the VPS git-bridge\nconst data = $json;\nconst project = data.project_name;\nconst branch = data.target_branch;\nconst gitlabUrl = data.project_git_url;\nconst bridgeBase = '/docker/git-bridge';\nconst repoDir = `${bridgeBase}/${project}`;\n\n// First-time setup: clone bare + add github remote\n// Subsequent: fetch from gitlab, push to github\nconst setupCmd = [\n  `mkdir -p ${bridgeBase}`,\n  `if [ ! -d \"${repoDir}\" ]; then`,\n  `  git clone --bare ${gitlabUrl} ${repoDir}`,\n  `  cd ${repoDir}`,\n  `  git remote add github \\\"https://\\${GITHUB_TOKEN}@github.com/\\${GITHUB_OWNER}/${project}.git\\\"`,\n  `else`,\n  `  cd ${repoDir}`,\n  `fi`\n].join('\\n');\n\nconst syncCmd = [\n  `cd ${repoDir}`,\n  `git fetch origin`,\n  `git push github refs/heads/${branch}:refs/heads/${branch} --force`\n].join(' && ');\n\nconst fullCmd = `${setupCmd}\\n${syncCmd}`;\n\nreturn [{ json: {\n  ...data,\n  bridge_dir: repoDir,\n  sync_command: fullCmd,\n  sync_branch: branch,\n  sync_description: `Sync ${project}/${branch} (${data.merge_commit_sha.substring(0, 8)}) GitLab -> GitHub`\n}}];"
+      },
+      "name": "Build Sync Command",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 0],
+      "id": "code-build-cmd"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Execute git sync via child_process\n// Requires n8n to have filesystem access to /docker/git-bridge (volume mount)\nconst { execSync } = require('child_process');\nconst data = $json;\n\nlet result = { success: false, stdout: '', stderr: '', exitCode: -1 };\n\ntry {\n  // Set env vars for the git commands\n  const env = {\n    ...process.env,\n    GITHUB_TOKEN: $env.GITHUB_TOKEN,\n    GITHUB_OWNER: $env.GITHUB_OWNER,\n    GIT_TERMINAL_PROMPT: '0'\n  };\n\n  const stdout = execSync(data.sync_command, {\n    encoding: 'utf8',\n    timeout: 60000,\n    env,\n    shell: '/bin/bash'\n  });\n\n  result = {\n    success: true,\n    stdout: stdout.trim(),\n    stderr: '',\n    exitCode: 0\n  };\n} catch (err) {\n  result = {\n    success: false,\n    stdout: (err.stdout || '').trim(),\n    stderr: (err.stderr || err.message || '').trim(),\n    exitCode: err.status || 1\n  };\n}\n\nreturn [{ json: {\n  ...data,\n  sync_result: result,\n  completed_at: new Date().toISOString()\n}}];"
+      },
+      "name": "Execute Sync",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1250, 0],
+      "id": "code-exec-sync"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.sync_result.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "name": "Sync OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1500, 0],
+      "id": "if-sync-ok"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: '[GitOps] Sync OK: ' + $json.project_name + '/' + $json.sync_branch + ' (' + $json.merge_commit_sha.substring(0, 8) + ')\\nMR: ' + $json.mr_title + ' (!' + $json.mr_iid + ')\\nAuthor: ' + $json.author + '\\nGitLab -> GitHub sync completed.' }) }}"
+      },
+      "name": "Slack Success",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1750, -100],
+      "id": "http-slack-ok"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: '[GitOps] SYNC FAILED: ' + $json.project_name + '/' + $json.sync_branch + '\\nMR: ' + $json.mr_title + ' (!' + $json.mr_iid + ')\\nError: ' + $json.sync_result.stderr + '\\nExit code: ' + $json.sync_result.exitCode }) }}"
+      },
+      "name": "Slack Failure",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1750, 100],
+      "id": "http-slack-fail"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Return webhook response for success\nreturn [{ json: {\n  status: 'ok',\n  message: `Synced ${$json.project_name}/${$json.sync_branch} to GitHub`,\n  sha: $json.merge_commit_sha\n}}];"
+      },
+      "name": "Response OK",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, -100],
+      "id": "code-resp-ok"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Return webhook response for failure\nreturn [{ json: {\n  status: 'error',\n  message: `Sync failed for ${$json.project_name}/${$json.sync_branch}`,\n  error: $json.sync_result.stderr\n}}];"
+      },
+      "name": "Response Error",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 100],
+      "id": "code-resp-err"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Rejected: invalid token, wrong event, or non-protected branch\nreturn [{ json: {\n  status: 'ignored',\n  reason: $json.reason || `Branch '${$json.target_branch || 'unknown'}' not in protected list`,\n  timestamp: new Date().toISOString()\n}}];"
+      },
+      "name": "Ignored Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [750, 350],
+      "id": "code-ignored"
+    }
+  ],
+  "connections": {
+    "GitLab MR Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate & Extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Extract": {
+      "main": [
+        [
+          {
+            "node": "Is Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Valid?": {
+      "main": [
+        [
+          {
+            "node": "Is Protected Branch?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ignored Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Protected Branch?": {
+      "main": [
+        [
+          {
+            "node": "Build Sync Command",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ignored Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Sync Command": {
+      "main": [
+        [
+          {
+            "node": "Execute Sync",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Sync": {
+      "main": [
+        [
+          {
+            "node": "Sync OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sync OK?": {
+      "main": [
+        [
+          {
+            "node": "Slack Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Success": {
+      "main": [
+        [
+          {
+            "node": "Response OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Failure": {
+      "main": [
+        [
+          {
+            "node": "Response Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

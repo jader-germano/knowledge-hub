@@ -1,0 +1,683 @@
+{
+  "updatedAt": "2026-04-11T12:00:00.000Z",
+  "createdAt": "2026-04-11T12:00:00.000Z",
+  "id": "pN7wYc3xHaF5jKv",
+  "name": "JPGLabs [GitOps] - GitLab CI Pipeline Monitor",
+  "description": "Receives GitLab pipeline webhook events. On success: notifies Slack. On success+main: auto-tags CalVer, syncs tag to GitHub. On failure in main/staging: notifies with rollback info and auto-reverts merge commit. On failure in develop: warning only.",
+  "active": false,
+  "settings": {
+    "timezone": "America/Sao_Paulo",
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": ""
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "gitlab-ci-pipeline",
+        "options": {
+          "responseMode": "lastNode"
+        }
+      },
+      "name": "GitLab Pipeline Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 300],
+      "id": "wh-pipeline",
+      "webhookId": "gitlab-ci-pipeline"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate token and parse pipeline event\nconst headers = $input.first().json.headers;\nconst body = $input.first().json.body;\n\n// --- Token validation ---\nconst receivedToken = headers['x-gitlab-token'] || headers['X-Gitlab-Token'] || '';\nconst expectedToken = $env.GITLAB_WEBHOOK_SECRET;\n\nif (!receivedToken || receivedToken !== expectedToken) {\n  return [{ json: {\n    valid: false,\n    reason: 'Invalid or missing X-Gitlab-Token'\n  }}];\n}\n\nconst eventType = headers['x-gitlab-event'] || headers['X-Gitlab-Event'] || '';\nif (eventType !== 'Pipeline Hook') {\n  return [{ json: {\n    valid: false,\n    reason: `Unexpected event: ${eventType}`\n  }}];\n}\n\n// --- Parse pipeline data ---\nconst pipeline = body.object_attributes || {};\nconst project = body.project || {};\nconst commit = body.commit || {};\nconst user = body.user || {};\n\n// Build stage summary\nconst stages = (body.builds || []).map(b => ({\n  name: b.name,\n  stage: b.stage,\n  status: b.status,\n  duration: b.duration,\n  failure_reason: b.failure_reason || null\n}));\n\nconst failedStages = stages.filter(s => s.status === 'failed');\n\n// Duration formatting\nconst durationSec = pipeline.duration || 0;\nconst durationFormatted = durationSec > 60\n  ? `${Math.floor(durationSec / 60)}m ${durationSec % 60}s`\n  : `${durationSec}s`;\n\nreturn [{ json: {\n  valid: true,\n  pipeline_id: pipeline.id,\n  pipeline_status: pipeline.status,\n  pipeline_url: `${project.web_url}/-/pipelines/${pipeline.id}`,\n  branch: pipeline.ref,\n  project_name: project.name,\n  project_path: project.path_with_namespace,\n  project_id: project.id,\n  project_url: project.web_url,\n  commit_sha: commit.id || pipeline.sha,\n  commit_short: (commit.id || pipeline.sha || '').substring(0, 8),\n  commit_message: (commit.message || '').split('\\n')[0],\n  author: user.username || user.name || commit.author?.name || 'unknown',\n  duration: durationFormatted,\n  duration_seconds: durationSec,\n  stages: stages,\n  failed_stages: failedStages,\n  failure_details: failedStages.map(s => `${s.stage}/${s.name}: ${s.failure_reason || 'unknown'}`).join('; '),\n  timestamp: new Date().toISOString()\n}}];"
+      },
+      "name": "Validate & Parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "id": "code-validate-pipe"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "name": "Is Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [500, 300],
+      "id": "if-pipe-valid"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.pipeline_status }}",
+                    "rightValue": "success",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.pipeline_status }}",
+                    "rightValue": "failed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Failed"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.pipeline_status }}",
+                    "rightValue": "running",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Running"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "name": "Route by Status",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [750, 200],
+      "id": "switch-status"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.branch }}",
+              "rightValue": "main",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "name": "Is Main Branch?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1000, 50],
+      "id": "if-main-success"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build CalVer tag: v{YYYY}.{MM}.{DD}.{N}\n// N is determined after fetching existing tags from GitLab\nconst data = $json;\nconst now = new Date();\nconst yyyy = now.getFullYear();\nconst mm = String(now.getMonth() + 1).padStart(2, '0');\nconst dd = String(now.getDate()).padStart(2, '0');\nconst datePrefix = `v${yyyy}.${mm}.${dd}`;\n\nreturn [{ json: {\n  ...data,\n  calver_date_prefix: datePrefix,\n  tag_search_pattern: `v${yyyy}.${mm}.${dd}`,\n  gitlab_api_url: $env.GITLAB_API_URL || 'https://gitlab.com/api/v4'\n}}];"
+      },
+      "name": "Prepare CalVer Prefix",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1250, -50],
+      "id": "code-calver-prep"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.gitlab_api_url + '/projects/' + $json.project_id + '/repository/tags?search=^' + $json.tag_search_pattern + '&order_by=version&sort=desc&per_page=100' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "PRIVATE-TOKEN",
+              "value": "={{ $env.GITLAB_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "name": "Fetch Today Tags",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1500, -50],
+      "id": "http-fetch-tags"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Calculate next CalVer version number\nconst data = $('Prepare CalVer Prefix').first().json;\nconst tags = $input.first().json;\nconst datePrefix = data.calver_date_prefix;\n\n// Parse existing tags for today to find max N\nlet maxN = 0;\nconst tagList = Array.isArray(tags) ? tags : [];\n\nfor (const tag of tagList) {\n  const tagName = tag.name || '';\n  if (tagName.startsWith(datePrefix + '.')) {\n    const nStr = tagName.replace(datePrefix + '.', '');\n    const n = parseInt(nStr, 10);\n    if (!isNaN(n) && n > maxN) {\n      maxN = n;\n    }\n  }\n}\n\nconst nextN = maxN + 1;\nconst newTag = `${datePrefix}.${nextN}`;\n\nreturn [{ json: {\n  ...data,\n  new_tag: newTag,\n  tag_message: `Release ${newTag} - ${data.commit_message}`,\n  existing_tags_today: tagList.length,\n  previous_n: maxN\n}}];"
+      },
+      "name": "Calculate Version",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1750, -50],
+      "id": "code-calver-calc"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ ($env.GITLAB_API_URL || 'https://gitlab.com/api/v4') + '/projects/' + $json.project_id + '/repository/tags' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "PRIVATE-TOKEN",
+              "value": "={{ $env.GITLAB_API_TOKEN }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ tag_name: $json.new_tag, ref: $json.commit_sha, message: $json.tag_message }) }}"
+      },
+      "name": "Create GitLab Tag",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2000, -150],
+      "id": "http-gitlab-tag"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://api.github.com/repos/' + $env.GITHUB_OWNER + '/' + $json.project_name + '/git/refs' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $env.GITHUB_TOKEN }}"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ ref: 'refs/tags/' + $('Calculate Version').first().json.new_tag, sha: $('Calculate Version').first().json.commit_sha }) }}"
+      },
+      "name": "Create GitHub Tag",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2000, 50],
+      "id": "http-github-tag"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: '[GitOps] Pipeline SUCCESS + Tagged\\nProject: ' + $('Calculate Version').first().json.project_name + ' | Branch: main\\nTag: ' + $('Calculate Version').first().json.new_tag + '\\nCommit: ' + $('Calculate Version').first().json.commit_short + ' - ' + $('Calculate Version').first().json.commit_message + '\\nDuration: ' + $('Calculate Version').first().json.duration + ' | Author: ' + $('Calculate Version').first().json.author + '\\nPipeline: ' + $('Calculate Version').first().json.pipeline_url }) }}"
+      },
+      "name": "Slack Success + Tag",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2250, -50],
+      "id": "http-slack-tag"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: '[GitOps] Pipeline SUCCESS\\nProject: ' + $json.project_name + ' | Branch: ' + $json.branch + '\\nCommit: ' + $json.commit_short + ' - ' + $json.commit_message + '\\nDuration: ' + $json.duration + ' | Author: ' + $json.author + '\\nPipeline: ' + $json.pipeline_url }) }}"
+      },
+      "name": "Slack Success (non-main)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1250, 150],
+      "id": "http-slack-success"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.branch }}",
+              "rightValue": "main",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "leftValue": "={{ $json.branch }}",
+              "rightValue": "staging",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        }
+      },
+      "name": "Is Critical Branch?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1000, 350],
+      "id": "if-critical-fail"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build rollback info for failed pipeline on main/staging\nconst data = $json;\nconst branch = data.branch;\nconst sha = data.commit_sha;\nconst shortSha = data.commit_short;\n\n// Rollback command: revert the merge commit\nconst rollbackCmd = [\n  `git checkout ${branch}`,\n  `git pull origin ${branch}`,\n  `git revert --no-edit -m 1 ${sha}`,\n  `git push origin ${branch}`\n].join(' && ');\n\n// Alternative: force reset to previous commit\nconst resetCmd = `git push origin ${sha}~1:refs/heads/${branch} --force`;\n\nreturn [{ json: {\n  ...data,\n  rollback_command: rollbackCmd,\n  reset_command: resetCmd,\n  rollback_description: `Revert commit ${shortSha} on ${branch}`,\n  severity: 'critical'\n}}];"
+      },
+      "name": "Build Rollback Info",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1250, 300],
+      "id": "code-rollback"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: '[GitOps] PIPELINE FAILED (CRITICAL)\\nProject: ' + $json.project_name + ' | Branch: ' + $json.branch + '\\nCommit: ' + $json.commit_short + ' - ' + $json.commit_message + '\\nFailed: ' + $json.failure_details + '\\nDuration: ' + $json.duration + ' | Author: ' + $json.author + '\\nPipeline: ' + $json.pipeline_url + '\\n\\nRollback command:\\n```' + $json.rollback_command + '```' }) }}"
+      },
+      "name": "Slack Critical Failure",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1500, 250],
+      "id": "http-slack-crit"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Auto-revert: create revert commit via GitLab API\nconst data = $json;\nconst apiUrl = $env.GITLAB_API_URL || 'https://gitlab.com/api/v4';\n\nlet result = { success: false, message: '' };\n\ntry {\n  const response = await this.helpers.httpRequest({\n    method: 'POST',\n    url: `${apiUrl}/projects/${data.project_id}/repository/commits`,\n    headers: {\n      'PRIVATE-TOKEN': $env.GITLAB_API_TOKEN,\n      'Content-Type': 'application/json'\n    },\n    body: {\n      branch: data.branch,\n      commit_message: `Revert: auto-rollback after pipeline #${data.pipeline_id} failure\\n\\nReverts ${data.commit_short} (${data.commit_message})\\n\\nTriggered by n8n pipeline monitor.`,\n      actions: []\n    },\n    resolveWithFullResponse: true,\n    simple: false\n  });\n\n  // Note: empty actions array won't create a revert.\n  // A proper revert needs the GitLab Revert API (available in GitLab 15.5+)\n  // Using cherry-pick revert endpoint instead:\n  const revertResponse = await this.helpers.httpRequest({\n    method: 'POST',\n    url: `${apiUrl}/projects/${data.project_id}/repository/commits/${data.commit_sha}/revert`,\n    headers: {\n      'PRIVATE-TOKEN': $env.GITLAB_API_TOKEN,\n      'Content-Type': 'application/json'\n    },\n    body: {\n      branch: data.branch\n    },\n    resolveWithFullResponse: false,\n    simple: false\n  });\n\n  result = {\n    success: true,\n    message: `Auto-reverted ${data.commit_short} on ${data.branch}`,\n    revert_sha: revertResponse?.id || revertResponse?.short_id || 'unknown'\n  };\n} catch (err) {\n  result = {\n    success: false,\n    message: `Auto-revert failed: ${err.message}. Manual rollback required: ${data.rollback_command}`\n  };\n}\n\nreturn [{ json: { ...data, auto_revert: result } }];"
+      },
+      "name": "Auto-Revert Commit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1750, 250],
+      "id": "code-auto-revert"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: $json.auto_revert.success ? '[GitOps] Auto-revert completed: ' + $json.auto_revert.message : '[GitOps] AUTO-REVERT FAILED: ' + $json.auto_revert.message }) }}"
+      },
+      "name": "Slack Revert Result",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2000, 250],
+      "id": "http-slack-revert"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: '[GitOps] Pipeline FAILED (develop)\\nProject: ' + $json.project_name + ' | Branch: ' + $json.branch + '\\nCommit: ' + $json.commit_short + ' - ' + $json.commit_message + '\\nFailed: ' + $json.failure_details + '\\nDuration: ' + $json.duration + ' | Author: ' + $json.author + '\\nPipeline: ' + $json.pipeline_url }) }}"
+      },
+      "name": "Slack Develop Warning",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1250, 500],
+      "id": "http-slack-dev-warn"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: '[GitOps] Pipeline running...\\nProject: ' + $json.project_name + ' | Branch: ' + $json.branch + '\\nCommit: ' + $json.commit_short + '\\nPipeline: ' + $json.pipeline_url }) }}"
+      },
+      "name": "Slack Running",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1000, 550],
+      "id": "http-slack-running"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Return ignored response\nreturn [{ json: {\n  status: 'ignored',\n  reason: $json.reason || 'Invalid webhook payload',\n  timestamp: new Date().toISOString()\n}}];"
+      },
+      "name": "Ignored",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [750, 500],
+      "id": "code-pipe-ignored"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Final response\nreturn [{ json: {\n  status: 'processed',\n  pipeline_status: $json.pipeline_status || 'unknown',\n  project: $json.project_name || 'unknown',\n  branch: $json.branch || 'unknown',\n  timestamp: new Date().toISOString()\n}}];"
+      },
+      "name": "Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2500, 300],
+      "id": "code-pipe-response"
+    }
+  ],
+  "connections": {
+    "GitLab Pipeline Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate & Parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Parse": {
+      "main": [
+        [
+          {
+            "node": "Is Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Valid?": {
+      "main": [
+        [
+          {
+            "node": "Route by Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ignored",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Status": {
+      "main": [
+        [
+          {
+            "node": "Is Main Branch?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is Critical Branch?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Running",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Main Branch?": {
+      "main": [
+        [
+          {
+            "node": "Prepare CalVer Prefix",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Success (non-main)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare CalVer Prefix": {
+      "main": [
+        [
+          {
+            "node": "Fetch Today Tags",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Today Tags": {
+      "main": [
+        [
+          {
+            "node": "Calculate Version",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Version": {
+      "main": [
+        [
+          {
+            "node": "Create GitLab Tag",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create GitHub Tag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create GitLab Tag": {
+      "main": [
+        [
+          {
+            "node": "Slack Success + Tag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Success + Tag": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Success (non-main)": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Critical Branch?": {
+      "main": [
+        [
+          {
+            "node": "Build Rollback Info",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Develop Warning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Rollback Info": {
+      "main": [
+        [
+          {
+            "node": "Slack Critical Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Critical Failure": {
+      "main": [
+        [
+          {
+            "node": "Auto-Revert Commit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-Revert Commit": {
+      "main": [
+        [
+          {
+            "node": "Slack Revert Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Revert Result": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Develop Warning": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Running": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

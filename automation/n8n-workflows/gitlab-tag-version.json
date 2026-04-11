@@ -1,0 +1,347 @@
+{
+  "updatedAt": "2026-04-11T12:00:00.000Z",
+  "createdAt": "2026-04-11T12:00:00.000Z",
+  "id": "dQ5sJr8hWcX6mAe",
+  "name": "JPGLabs [GitOps] - GitLab Tag & Version Sync",
+  "description": "Auto-tags releases with CalVer (vYYYY.MM.DD.N) when a MR is merged to main on GitLab. Creates matching tag on GitHub, creates GitLab release with auto-generated changelog, and notifies Slack. Standalone workflow for on-demand tagging outside the CI pipeline flow.",
+  "active": false,
+  "settings": {
+    "timezone": "America/Sao_Paulo",
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "errorWorkflow": ""
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "gitlab-tag-version",
+        "options": {
+          "responseMode": "lastNode"
+        }
+      },
+      "name": "GitLab MR Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 200],
+      "id": "wh-tag-recv",
+      "webhookId": "gitlab-tag-version"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate webhook token and ensure MR merged into main\nconst headers = $input.first().json.headers;\nconst body = $input.first().json.body;\n\n// --- Token validation ---\nconst receivedToken = headers['x-gitlab-token'] || headers['X-Gitlab-Token'] || '';\nconst expectedToken = $env.GITLAB_WEBHOOK_SECRET;\n\nif (!receivedToken || receivedToken !== expectedToken) {\n  return [{ json: {\n    valid: false,\n    reason: 'Invalid or missing X-Gitlab-Token'\n  }}];\n}\n\n// --- Event type ---\nconst eventType = headers['x-gitlab-event'] || headers['X-Gitlab-Event'] || '';\nif (eventType !== 'Merge Request Hook') {\n  return [{ json: {\n    valid: false,\n    reason: `Expected Merge Request Hook, got: ${eventType}`\n  }}];\n}\n\n// --- MR merged into main ---\nconst attrs = body.object_attributes || {};\nif (attrs.state !== 'merged' || attrs.action !== 'merge') {\n  return [{ json: {\n    valid: false,\n    reason: `MR not merged (state=${attrs.state}, action=${attrs.action})`\n  }}];\n}\n\nif (attrs.target_branch !== 'main') {\n  return [{ json: {\n    valid: false,\n    reason: `Target branch is '${attrs.target_branch}', not 'main'`\n  }}];\n}\n\n// --- Extract ---\nconst project = body.project || {};\nconst user = body.user || {};\nconst lastCommit = attrs.last_commit || {};\n\nreturn [{ json: {\n  valid: true,\n  project_id: project.id,\n  project_name: project.name,\n  project_path: project.path_with_namespace,\n  project_url: project.web_url,\n  commit_sha: attrs.merge_commit_sha || lastCommit.id || 'unknown',\n  commit_short: (attrs.merge_commit_sha || lastCommit.id || '').substring(0, 8),\n  commit_message: lastCommit.message || attrs.title || '',\n  mr_title: attrs.title,\n  mr_iid: attrs.iid,\n  mr_url: attrs.url,\n  source_branch: attrs.source_branch,\n  author: user.username || user.name || 'unknown',\n  gitlab_api_url: $env.GITLAB_API_URL || 'https://gitlab.com/api/v4',\n  timestamp: new Date().toISOString()\n}}];"
+      },
+      "name": "Validate MR to Main",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [250, 200],
+      "id": "code-validate-tag"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "name": "Is Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [500, 200],
+      "id": "if-tag-valid"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.gitlab_api_url + '/projects/' + $json.project_id + '/repository/tags?order_by=version&sort=desc&per_page=100' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "PRIVATE-TOKEN",
+              "value": "={{ $env.GITLAB_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false
+            }
+          }
+        }
+      },
+      "name": "Fetch All Tags",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [750, 100],
+      "id": "http-all-tags"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Calculate CalVer: v{YYYY}.{MM}.{DD}.{N}\nconst prevData = $('Validate MR to Main').first().json;\nconst tags = $input.first().json;\n\nconst now = new Date();\nconst yyyy = now.getFullYear();\nconst mm = String(now.getMonth() + 1).padStart(2, '0');\nconst dd = String(now.getDate()).padStart(2, '0');\nconst datePrefix = `v${yyyy}.${mm}.${dd}`;\n\n// Find max N for today\nlet maxN = 0;\nconst tagList = Array.isArray(tags) ? tags : [];\n\nfor (const tag of tagList) {\n  const name = tag.name || '';\n  if (name.startsWith(datePrefix + '.')) {\n    const nStr = name.replace(datePrefix + '.', '');\n    const n = parseInt(nStr, 10);\n    if (!isNaN(n) && n > maxN) maxN = n;\n  }\n}\n\nconst nextN = maxN + 1;\nconst newTag = `${datePrefix}.${nextN}`;\n\n// Find previous tag for changelog range\nconst previousTag = tagList.length > 0 ? tagList[0].name : null;\n\nreturn [{ json: {\n  ...prevData,\n  new_tag: newTag,\n  previous_tag: previousTag,\n  tag_message: `Release ${newTag}\\n\\nMR !${prevData.mr_iid}: ${prevData.mr_title}\\nBranch: ${prevData.source_branch} -> main\\nAuthor: ${prevData.author}`,\n  existing_tags_today: tagList.filter(t => (t.name || '').startsWith(datePrefix + '.')).length\n}}];"
+      },
+      "name": "Calculate CalVer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1000, 100],
+      "id": "code-calver"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.gitlab_api_url + '/projects/' + $json.project_id + '/repository/tags' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "PRIVATE-TOKEN",
+              "value": "={{ $env.GITLAB_API_TOKEN }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ tag_name: $json.new_tag, ref: $json.commit_sha, message: $json.tag_message }) }}"
+      },
+      "name": "Create GitLab Tag",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1250, 0],
+      "id": "http-create-gl-tag"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare data for GitHub tag + GitLab release (run after GitLab tag created)\nconst data = $('Calculate CalVer').first().json;\nconst tagResult = $input.first().json;\n\nreturn [{ json: {\n  ...data,\n  gitlab_tag_created: !!(tagResult && (tagResult.name || tagResult.tag_name)),\n  gitlab_tag_response: tagResult\n}}];"
+      },
+      "name": "Tag Created Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1500, 0],
+      "id": "code-tag-check"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://api.github.com/repos/' + $env.GITHUB_OWNER + '/' + $json.project_name + '/git/refs' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $env.GITHUB_TOKEN }}"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ ref: 'refs/tags/' + $json.new_tag, sha: $json.commit_sha }) }}"
+      },
+      "name": "Create GitHub Tag Ref",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1750, -100],
+      "id": "http-create-gh-tag"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.gitlab_api_url + '/projects/' + $json.project_id + '/releases' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "PRIVATE-TOKEN",
+              "value": "={{ $env.GITLAB_API_TOKEN }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ tag_name: $('Calculate CalVer').first().json.new_tag, name: 'Release ' + $('Calculate CalVer').first().json.new_tag, description: '## ' + $('Calculate CalVer').first().json.new_tag + '\\n\\n**MR:** !' + $('Calculate CalVer').first().json.mr_iid + ' - ' + $('Calculate CalVer').first().json.mr_title + '\\n**Branch:** ' + $('Calculate CalVer').first().json.source_branch + ' -> main\\n**Author:** ' + $('Calculate CalVer').first().json.author + '\\n**Commit:** ' + $('Calculate CalVer').first().json.commit_short + '\\n\\n---\\n_Auto-generated by n8n GitOps workflow_' }) }}"
+      },
+      "name": "Create GitLab Release",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1750, 100],
+      "id": "http-create-gl-release"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: '[GitOps] New Release Tagged\\nProject: ' + $('Calculate CalVer').first().json.project_name + '\\nTag: ' + $('Calculate CalVer').first().json.new_tag + '\\nMR: !' + $('Calculate CalVer').first().json.mr_iid + ' - ' + $('Calculate CalVer').first().json.mr_title + '\\nAuthor: ' + $('Calculate CalVer').first().json.author + '\\nCommit: ' + $('Calculate CalVer').first().json.commit_short + '\\nGitLab tag + release created\\nGitHub tag synced' }) }}"
+      },
+      "name": "Slack Tag Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2000, 0],
+      "id": "http-slack-tag-notif"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Final webhook response with full tag summary\nconst data = $('Calculate CalVer').first().json;\n\nreturn [{ json: {\n  status: 'tagged',\n  tag: data.new_tag,\n  project: data.project_name,\n  commit: data.commit_short,\n  mr_iid: data.mr_iid,\n  gitlab_tag: true,\n  gitlab_release: true,\n  github_tag: true,\n  timestamp: new Date().toISOString()\n}}];"
+      },
+      "name": "Response Tagged",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2250, 0],
+      "id": "code-resp-tagged"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Rejected: invalid token, wrong event, not merged to main\nreturn [{ json: {\n  status: 'ignored',\n  reason: $json.reason || 'Validation failed',\n  timestamp: new Date().toISOString()\n}}];"
+      },
+      "name": "Ignored Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [750, 350],
+      "id": "code-tag-ignored"
+    }
+  ],
+  "connections": {
+    "GitLab MR Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate MR to Main",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate MR to Main": {
+      "main": [
+        [
+          {
+            "node": "Is Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Valid?": {
+      "main": [
+        [
+          {
+            "node": "Fetch All Tags",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ignored Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch All Tags": {
+      "main": [
+        [
+          {
+            "node": "Calculate CalVer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate CalVer": {
+      "main": [
+        [
+          {
+            "node": "Create GitLab Tag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create GitLab Tag": {
+      "main": [
+        [
+          {
+            "node": "Tag Created Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tag Created Check": {
+      "main": [
+        [
+          {
+            "node": "Create GitHub Tag Ref",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create GitLab Release",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create GitHub Tag Ref": {
+      "main": [
+        [
+          {
+            "node": "Slack Tag Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Tag Notification": {
+      "main": [
+        [
+          {
+            "node": "Response Tagged",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
