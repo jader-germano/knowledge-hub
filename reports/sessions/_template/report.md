@@ -65,6 +65,20 @@ feature-root
 - Links estudados
 - Termos novos
 
+## Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+Quando aplicável, substituir a linha acima por:
+
+| Termo (pt-BR) | English | Français | Italiano | 日本語 |
+|---|---|---|---|---|
+| | | | | |
+
+### Curiosidades linguísticas
+
+- Registrar apenas notas que preservem contexto técnico ou semântico relevante
+
 ## Risks And Gaps
 
 - Pendências

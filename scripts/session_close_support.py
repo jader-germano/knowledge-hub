@@ -43,6 +43,14 @@ def parse_sections(markdown: str) -> dict[str, str]:
     return {name: "\n".join(lines).strip() for name, lines in sections.items()}
 
 
+def get_first_section(sections: dict[str, str], *names: str) -> str:
+    for name in names:
+        value = sections.get(name, "").strip()
+        if value:
+            return value
+    return ""
+
+
 def parse_list_items(section_text: str) -> list[str]:
     items: list[str] = []
     current: str | None = None
@@ -75,6 +83,14 @@ def first_nonempty_line(section_text: str) -> str | None:
             continue
         return re.sub(r"^(?:-|\d+\.)\s+", "", stripped)
     return None
+
+
+def shift_markdown_headings(section_text: str, increment: int = 1) -> str:
+    def repl(match: re.Match[str]) -> str:
+        hashes = match.group(1)
+        return f"{'#' * min(len(hashes) + increment, 6)} "
+
+    return re.sub(r"^(#{1,6})\s+", repl, section_text, flags=re.MULTILINE)
 
 
 def parse_metadata_items(items: list[str]) -> dict[str, str]:
@@ -278,6 +294,7 @@ class ParsedReport:
     objective: str | None
     summary_items: list[str]
     summary_text: str
+    language_glossary_markdown: str | None
     decision_items: list[str]
     finding_items: list[str]
     next_action_items: list[str]
@@ -399,6 +416,13 @@ def parse_report(
             or f"Session report for {context.feature_dir}."
         )
     )
+    language_glossary_markdown = get_first_section(
+        sections,
+        "Glossário multilíngue",
+        "Glossario multilingue",
+        "Glossário de idiomas",
+        "Glossario de idiomas",
+    )
 
     decision_items = (
         parse_list_items(sections.get("Decision", ""))
@@ -442,6 +466,7 @@ def parse_report(
         objective=objective,
         summary_items=summary_items,
         summary_text=summary_text,
+        language_glossary_markdown=language_glossary_markdown or None,
         decision_items=decision_items,
         finding_items=finding_items,
         next_action_items=next_action_items,
@@ -483,6 +508,8 @@ def build_sidecar_payload(
     tags = {report.context.project_id, report.context.feature_dir, "session-report"}
     if imported:
         tags.add("imported")
+    if report.language_glossary_markdown:
+        tags.add("language-glossary")
 
     findings = []
     if imported:
@@ -602,6 +629,10 @@ def render_bridge_block(report: ParsedReport) -> str:
 
     lines.extend(["", "### Summary", ""])
     lines.extend([f"- {item}" for item in summary_items])
+
+    if report.language_glossary_markdown:
+        lines.extend(["", "### Glossário multilíngue", ""])
+        lines.append(shift_markdown_headings(report.language_glossary_markdown.strip()))
 
     lines.extend(["", "### Risks And Gaps", ""])
     lines.extend([f"- {item}" for item in risk_items])

@@ -39,6 +39,10 @@ projects: []
 
 ## Glossário multilíngue
 
+Se não se aplicar nesta sessão, declarar explicitamente:
+
+`Glossário multilíngue: não aplicável nesta sessão.`
+
 | Termo (pt-BR) | English | Français | Italiano | 日本語 (Nihongo) |
 |---|---|---|---|---|
 | | | | | |

@@ -17,6 +17,8 @@ Obrigatoriedade adicional para qualquer resumo final de sessão:
   truncada
 - sempre incluir `References And Glossary`, mesmo quando não houver termo novo
   para registrar
+- quando a sessão introduzir, traduzir, normalizar ou corrigir terminologia em
+  múltiplos idiomas, incluir também a assinatura `Glossário multilíngue`
 - quando não houver comandos relevantes ou alterações em arquivo, declarar isso
   explicitamente em vez de omitir a seção
 - sempre registrar a mesma sessão no diário raiz do workspace
@@ -155,6 +157,29 @@ Obrigatório em todo fechamento de sessão.
   - Formato: `` `termo` — definição curta ``
   - Após registrar, referenciar aqui apenas o link âncora:
     `[termo](/Users/philipegermano/code/jpglabs/docs/GLOSSARY.md#termo)`
+
+## Glossário multilíngue
+
+Assinatura adicional do fechamento.
+
+Obrigatório quando a sessão introduzir ou consolidar termos em mais de um
+idioma, ou quando houver decisão relevante de nomenclatura, tradução, prompt,
+copy, UX ou documentação bilíngue/multilíngue.
+
+Quando não se aplicar, declarar explicitamente:
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+Formato mínimo quando aplicável:
+
+- tabela com colunas `Termo (pt-BR) | English | Français | Italiano | 日本語`
+- listar apenas os termos realmente introduzidos, corrigidos, validados ou
+  harmonizados na sessão
+- após a tabela, usar `Curiosidades linguísticas` apenas quando isso preservar
+  contexto técnico, etimologia útil, diferença semântica entre idiomas ou
+  convenção operacional importante
+- se o termo também precisar entrar no glossário canônico do workspace,
+  registrar em `GLOSSARY.md` e citar a referência em `References And Glossary`
 
 ## Risks And Gaps
 

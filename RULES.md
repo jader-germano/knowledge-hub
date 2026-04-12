@@ -59,6 +59,10 @@ Toda sessão com mudança relevante deve:
   `Nenhum novo termo precisou entrar em GLOSSARY.md nesta rodada.`
 - quando houver termo novo, ele deve ser adicionado ao `GLOSSARY.md` canônico e
   referenciado no fechamento
+- quando a sessão introduzir ou harmonizar terminologia em múltiplos idiomas,
+  o fechamento deve conter também `Glossário multilíngue`
+- quando essa assinatura adicional não se aplicar, o agente deve declarar
+  explicitamente: `Glossário multilíngue: não aplicável nesta sessão.`
 
 ## Regra 7: Idioma
 

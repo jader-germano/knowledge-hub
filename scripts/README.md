@@ -12,6 +12,8 @@ Sincroniza o fechamento canônico de uma sessão a partir do `report.md`.
 - sincronizar a entrada correspondente em `/Users/philipegermano/code/daily/`
 - sincronizar um resumo operacional em `agents/AGENT_BRIDGE.md`
 - emitir ou atualizar o sidecar JSON em `memory/events/`
+- preservar no diário e no bridge a assinatura `Glossário multilíngue` quando
+  ela existir no `report.md`
 - tentar projetar o sidecar no grafo derivado sem transformar o grafo em
   blocker de fechamento
 
