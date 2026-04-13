@@ -3,6 +3,218 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Session Handoff - 2026-04-13 08:37 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 08:37:03 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `fix/openclaude-mcp-provider-baseline-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code/openclaude`
+- Branch ativa: `main`
+- Objetivo aprovado: estabilizar a instalação local do `openclaude`,
+  corrigindo a seleção quebrada de provider/modelo, o saneamento de schemas MCP
+  para OpenAI/Codex e a validação da stack Docker MCP compartilhada.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - remover a referência local quebrada que forçava `OpenAI/Codex`
+  - corrigir o path de `OLLAMA_BASE_URL` no provider `ollama`
+  - corrigir a sanitização de schema MCP para tools com `properties` sem
+    `type`
+  - validar o baseline Docker MCP realmente utilizável no host
+- O que ficou fora do escopo:
+  - subir `SonarQube` local
+  - insistir em `semgrep` no baseline apesar de falha real de inicialização
+  - criar integração Figma inexistente no catálogo Docker atual do host
+
+### Prototype And Evidence
+
+- Esta sessão foi estabilização de runtime/configuração local, não entrega de
+  feature de produto.
+- Evidências principais:
+  - `/Users/philipegermano/code/openclaude/.mcp.json`
+  - `/Users/philipegermano/code/openclaude/src/utils/providerFlag.ts`
+  - `/Users/philipegermano/code/openclaude/src/utils/schemaSanitizer.ts`
+  - `/Users/philipegermano/code/config/mcp/docker-mcp-config.yaml`
+  - `/Users/philipegermano/code/config/mcp/docker-mcp-shared-catalog.yaml`
+
+### Summary
+
+- A instalação local do `openclaude` deixou de iniciar presa em uma referência
+  quebrada de `OpenAI/Codex`; o profile local que apontava para
+  `https://chatgpt.com/backend-api/codex` foi removido.
+- O provider `ollama` passou a respeitar `OLLAMA_BASE_URL` também na trilha do
+  CLI, permitindo usar a VPS como fallback sem virar default.
+- O saneamento de schema MCP foi endurecido para inferir `type` ausente em
+  leaf/object/array schemas; isso elimina o erro `Invalid schema for function
+  'mcp__MCP_DOCKER__edit_block'`.
+- O baseline Docker MCP compartilhado foi validado no host:
+  `git`, `filesystem`, `desktop-commander`, `playwright`, `fetch`, `context7`,
+  `memory` e `sequentialthinking` estão operacionais para `openclaude`.
+- A lane de qualidade não entrou no baseline:
+  `semgrep` falha em `initialize` no host atual e `SonarQube` local não está
+  escutando em `localhost:9000`.
+
+### Validation
+
+- Builds executados:
+  - `bun run build`
+- Testes executados:
+  - `bun test src/utils/providerFlag.test.ts`
+  - `bun test src/utils/schemaSanitizer.test.ts src/services/api/openaiShim.test.ts src/services/api/codexShim.test.ts`
+  - `openclaude mcp doctor --json MCP_DOCKER` executado fora do sandbox
+- Cobertura atingida na fatia entregue:
+  - cobertura direcionada por testes unitários dos pontos corrigidos; cobertura
+    global do repositório não foi medida nesta sessão
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - não houve medição de cobertura total porque a sessão foi focada em
+    estabilização de runtime/configuração e health-check MCP
+- Validação em macOS:
+  - `openclaude` local confirmou `MCP_DOCKER` saudável fora do sandbox
+  - `docker mcp server ls` confirmou o catálogo disponível no host
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `openclaude mcp doctor --config-only --json`
+  - Action: validar a configuração efetiva de MCP sem conectar.
+  - Result: config limpa com `MCP_DOCKER` no escopo do projeto.
+- `openclaude mcp doctor --json MCP_DOCKER`
+  - Action: validar o handshake real do baseline MCP.
+  - Result: fora do sandbox, `MCP_DOCKER` conectou com sucesso.
+- `docker mcp server ls`
+  - Action: listar os servidores Docker MCP disponíveis no host.
+  - Result: 21 servidores habilitados no catálogo; `semgrep` e `sonarqube`
+    disponíveis, porém não prontos para baseline.
+- `docker mcp gateway run --dry-run --servers semgrep`
+  - Action: testar a lane opcional de análise estática.
+  - Result: falha real de `initialize`/`Internal Server Error`; mantido fora do
+    baseline.
+- `curl -I http://localhost:9000`
+  - Action: validar a disponibilidade do `SonarQube` local.
+  - Result: conexão recusada; serviço indisponível no host.
+- `bun test src/utils/providerFlag.test.ts`
+  - Action: validar o respeito a `OLLAMA_BASE_URL`.
+  - Result: suíte passou.
+- `bun test src/utils/schemaSanitizer.test.ts src/services/api/openaiShim.test.ts src/services/api/codexShim.test.ts`
+  - Action: validar o saneamento de schema MCP em OpenAI/Codex.
+  - Result: suíte passou.
+- `bun run build`
+  - Action: regenerar o binário local do `openclaude`.
+  - Result: build concluído com sucesso.
+
+### Files Created
+
+- nenhum arquivo novo funcional nesta sessão
+
+### Files Modified
+
+- `/Users/philipegermano/code/openclaude/src/utils/providerFlag.ts`
+- `/Users/philipegermano/code/openclaude/src/utils/providerFlag.test.ts`
+- `/Users/philipegermano/code/openclaude/src/utils/schemaSanitizer.ts`
+- `/Users/philipegermano/code/openclaude/src/utils/schemaSanitizer.test.ts`
+- `/Users/philipegermano/code/openclaude/src/services/api/openaiShim.test.ts`
+- `/Users/philipegermano/code/openclaude/src/services/api/codexShim.test.ts`
+- `/Users/philipegermano/code/openclaude/.mcp.json`
+- `/Users/philipegermano/.claude.json`
+
+### Change Tree
+
+```text
+openclaude
+├── .mcp.json [modified]
+└── src
+    ├── services
+    │   └── api
+    │       ├── codexShim.test.ts [modified]
+    │       └── openaiShim.test.ts [modified]
+    └── utils
+        ├── providerFlag.test.ts [modified]
+        ├── providerFlag.ts [modified]
+        ├── schemaSanitizer.test.ts [modified]
+        └── schemaSanitizer.ts [modified]
+```
+
+### Versioning Proposal
+
+- Branch proposta: `fix/openclaude-mcp-provider-baseline`
+- Commit message proposta:
+  `fix(openclaude): stabilize local providers and docker mcp schemas`
+- Review request: revisar staging e diff do `openclaude` antes de consolidar,
+  porque a worktree local continua com muito resíduo fora da fatia corrigida.
+- Distinção MCP desta sessão:
+  - servidores apenas disponíveis no catálogo:
+    `atlassian`, `dynatrace`, `firecrawl`, `grafana`, `kubernetes`,
+    `node-code-sandbox`, `notion`, `obsidian`, `wikipedia-mcp`,
+    `youtube_transcript`, `sonarqube`, `semgrep`
+  - servidores configurados no `.mcp.json`:
+    `git`, `filesystem`, `desktop-commander`, `playwright`, `fetch`,
+    `context7`, `memory`, `sequentialthinking`
+  - servidores realmente validados no host:
+    `git`, `filesystem`, `desktop-commander`, `playwright`, `fetch`,
+    `context7`, `memory`, `sequentialthinking`
+
+### Language Policy
+
+- Os títulos estruturais seguem em English por interoperabilidade com o
+  template canônico do workspace.
+- O conteúdo narrativo foi mantido em `pt-BR`.
+- Paths, comandos, nomes de providers, MCPs, variáveis de ambiente e símbolos
+  de código ficaram em English para preservar contrato técnico.
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — relido para cumprir o
+  contrato de fechamento, diário e handoff.
+- `/Users/philipegermano/code/config/mcp/docker-mcp-config.yaml` — validado
+  como baseline de configuração compartilhada do gateway Docker MCP.
+- `/Users/philipegermano/code/config/mcp/docker-mcp-shared-catalog.yaml` —
+  validado como overlay compartilhado, especialmente para `memory`.
+- `/Users/philipegermano/code/config/mcp/docker-mcp-quality.yaml` — consultado
+  para a lane opcional de qualidade; mantida fora do baseline pela ausência de
+  `SonarQube` local.
+- `docker mcp server ls` — catálogo local listado e classificado entre
+  disponível vs realmente utilizável.
+- `openclaude mcp doctor --json MCP_DOCKER` — health-check real do baseline no
+  host.
+- Glossário canônico: nenhum termo novo foi registrado em `GLOSSARY.md` nesta
+  sessão.
+
+### Glossário multilíngue
+
+- Não aplicável nesta sessão.
+
+### Risks And Gaps
+
+- `semgrep` segue instável no host atual e não deve entrar no baseline
+  compartilhado até parar de falhar em `initialize`.
+- `SonarQube` não está ativo em `localhost:9000`; sem isso, a lane `sonarqube`
+  deve permanecer opcional e desabilitada.
+- Não há servidor Figma no catálogo Docker MCP atual deste host; a integração
+  de design system precisa de um provider/plugin separado.
+- A worktree do `openclaude` continua bastante suja e com muitos untracked fora
+  desta fatia; consolidar sem staging cirúrgico é risco de misturar escopo.
+
+### Next Actions
+
+- Se o usuário aprovar, ligar um `SonarQube` local saudável e retestar a lane
+  `sonarqube`.
+- Se o usuário quiser análise estática via MCP, reautorizar/estabilizar
+  `semgrep` antes de promovê-lo ao baseline compartilhado.
+- Separar a fatia corrigida do `openclaude` em branch própria antes de commit.
+
+### Handoff Notes
+
+- O falso negativo anterior de `MCP_DOCKER` vinha do sandbox do Codex; fora do
+  sandbox, o baseline funciona.
+- Não trocar `MCP_DOCKER` para `sse/http` neste momento; o problema observado
+  não era de transporte do `openclaude`, e sim do ambiente de execução do
+  agente.
+
 ## Session Handoff - 2026-04-13 02:35 -0300
 
 ### Session Metadata
@@ -217,6 +429,240 @@ jpglabs/docs
   regularizar dados segundo um conjunto maior de regras.
 - `Upstream` e `downstream` usam metáfora de fluxo de rio. Em Git e integração,
   isso ajuda a visualizar de onde a mudança vem e para onde ela desce.
+
+## Session Close - 2026-04-13 08:20:34 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 08:20:34 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `ops/vps-memory-projects-taxonomy-cutover-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `ops/portfolio-gitlab-worktree-isolation-2026-04-13`
+- Objetivo aprovado: aplicar na VPS a proposta canônica de taxonomia em
+  `memory/ + projects/`, usando o pre-flight já executado como baseline e sem
+  quebrar o runtime atual.
+
+### Delivery Contract
+
+- Entregáveis explícitos:
+  - materializar `/root/memory` como raiz canônica global de contexto
+  - materializar `/root/projects` como raiz canônica dos repositórios
+  - manter compatibilidade dos paths legados via `symlink`
+  - preservar o legado deslocado em `archive/`
+  - corrigir o manifesto local para refletir `.agents/skills` como raiz
+    canônica de skills
+- Fora do escopo:
+  - mover fisicamente os repositórios produtivos para fora de `/root/build`
+  - eliminar `Sync/`, `provider-configs/`, `mcp-config/`, `obsidian-vault/` e
+    `backup/` nesta mesma onda
+  - abrir `merge request`
+
+### Prototype And Evidence
+
+- Esta sessão foi cutover estrutural de taxonomia na VPS, não entrega
+  funcional de produto.
+- Evidências principais:
+  - árvore validada em `/root/memory`
+  - árvore validada em `/root/projects`
+  - shims de root validados em `/root/README.md`, `/root/WORKSPACE_BOOTSTRAP.md`,
+    `/root/AGENTS.md`, `/root/CODEX.md`, `/root/CLAUDE.md`, `/root/GEMINI.md`
+    e `/root/.mcp.json`
+  - legado preservado em `/root/archive/taxonomy-cutover-20260413`
+
+### Summary
+
+- A proposta correta da VPS ficou materializada em `/root/memory` e
+  `/root/projects`.
+- `/root/memory` passou a expor:
+  - `bootstrap`
+  - `agents`
+  - `providers`
+  - `mcp`
+  - `skills`
+  - `daily`
+  - `archive`
+  - `scripts`
+- `/root/projects` passou a expor, por `symlink` seguro nesta rodada:
+  - `portfolio-backend`
+  - `portfolio-v2`
+  - `portfolio-v2-new`
+  - `jpglabs-dashboard`
+  - `openclaude`
+- Os aliases legados de root foram repontados para a nova taxonomia:
+  - `agents`, `daily`, `manifests`, `workspace-context`, `mcp`, `skills` e
+    `claude-skills` agora resolvem via `/root/memory`
+  - `README.md`, `WORKSPACE_BOOTSTRAP.md`, `AGENTS.md`, `CODEX.md`,
+    `CLAUDE.md`, `GEMINI.md` e `.mcp.json` agora funcionam como shims de root
+    para o contrato canônico
+- O `/root/code` criado no primeiro cutover deixou de ser raiz canônica e ficou
+  explicitamente rebaixado a staging transitório de compatibilidade.
+- O legado anterior de governança foi preservado em
+  `/root/archive/taxonomy-cutover-20260413`.
+- No hub local, `workspace.index.yaml` foi corrigido para apontar
+  `.agents/skills` como raiz canônica de skills, alinhando manifesto e
+  bootstrap.
+
+### Validation
+
+- Builds executados:
+  - nenhum
+- Testes executados:
+  - validação por `ssh` da árvore de `/root`
+  - validação por `ssh` da árvore de `/root/memory`
+  - validação por `ssh` da árvore de `/root/projects`
+  - validação dos `symlinks` de compatibilidade e dos shims de root
+  - limpeza de `._*` e `.DS_Store` no staging remoto
+- Cobertura atingida na fatia entregue:
+  - não aplicável; sessão de filesystem/layout e governança operacional
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - os repositórios produtivos continuam fisicamente em `/root/build`; nesta
+    rodada ficaram apenas expostos em `/root/projects` para evitar quebra de
+    runtime
+  - `/root/code` permanece como staging transitório até a validação final da
+    nova taxonomia
+  - ainda restam superfícies legadas fora do lookup canônico:
+    `/root/Sync`, `/root/provider-configs`, `/root/mcp-config`,
+    `/root/obsidian-vault`, `/root/k8s`, `/root/openclaude.backup-20260411-172400`
+    e `/root/backup`
+- Validação em macOS:
+  - manifesto local saneado para `/.agents/skills`
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `ssh jpglabs-vps-tailnet 'find /root ...'`
+  - Action: inventariar a árvore real da VPS antes do cutover.
+  - Result: confirmado host híbrido entre `/root/*`, `/root/Sync/code/*` e
+    `/root/build/*`.
+- `tar -C /Users/philipegermano/code -cf - ... | ssh jpglabs-vps-tailnet 'tar -C /root/code -xf -'`
+  - Action: montar staging canônico inicial em `/root/code`.
+  - Result: baseline local copiada para a VPS.
+- `ssh jpglabs-vps-tailnet 'find /root/code \\( -name ".DS_Store" -o -name "._*" \\) -delete ...'`
+  - Action: limpar lixo de metadado do macOS e arquivar as raízes legadas do
+    primeiro cutover.
+  - Result: staging remoto limpo; legado preservado em
+    `/root/archive/taxonomy-cutover-20260413`.
+- `ssh jpglabs-vps-tailnet 'mkdir -p /root/memory.new/... /root/projects ...'`
+  - Action: aplicar a taxonomia correta em `memory/ + projects/`.
+  - Result: `/root/memory` e `/root/projects` materializados com compatibilidade
+    por `symlink`.
+- `ssh jpglabs-vps-tailnet 'find /root /root/memory /root/projects ...'`
+  - Action: validar a árvore final e os shims de root.
+  - Result: resolução canônica confirmada.
+- `python3 ... workspace.index.yaml`
+  - Action: corrigir o path canônico de skills no manifesto local.
+  - Result: `canonical_roots.skills` alinhado a `/.agents/skills`.
+
+### Files Created
+
+- `n/a` no hub local
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+- `/Users/philipegermano/code/jpglabs/docs/manifests/workspace.index.yaml`
+- `/Users/philipegermano/code/daily/2026-04-13.md`
+
+### Change Tree
+
+```text
+/root
+├── memory
+│   ├── bootstrap
+│   ├── agents
+│   ├── providers
+│   ├── mcp
+│   ├── skills
+│   ├── daily
+│   ├── archive
+│   └── scripts
+├── projects
+│   ├── portfolio-backend -> /root/build/portfolio-backend
+│   ├── portfolio-v2 -> /root/build/portfolio-v2
+│   ├── portfolio-v2-new -> /root/build/portfolio-v2-new
+│   ├── jpglabs-dashboard -> /root/build/dashboard
+│   └── openclaude -> /root/openclaude
+├── code [transitional staging]
+└── archive
+    └── taxonomy-cutover-20260413
+```
+
+### Versioning Proposal
+
+- Branch proposta: manter `ops/portfolio-gitlab-worktree-isolation-2026-04-13`
+  até consolidar a rodada VPS + manifesto
+- Commit message proposta:
+  `docs(vps): record memory-projects taxonomy cutover`
+- Review request: validar a nova taxonomia da VPS antes de remover o staging
+  `/root/code` e antes de mover fisicamente os repos de `/root/build`
+
+### Language Policy
+
+- Os títulos estruturais foram mantidos em English por compatibilidade com o
+  template canônico.
+- O conteúdo narrativo desta sessão permanece em `pt-BR`.
+- Símbolos técnicos ficaram em English quando isso preserva contrato e precisão:
+  `memory`, `projects`, `symlink`, `shim`, `staging`, `cutover`, paths e
+  comandos.
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — usado como contrato da
+  taxonomia local já canônica no Mac
+- `/Users/philipegermano/code/jpglabs/docs/README.md` — usado para confirmar o
+  papel de `config/`, `daily/` e `docs`
+- `/Users/philipegermano/code/jpglabs/docs/manifests/workspace.index.yaml` —
+  corrigido para alinhar `skills` com `/.agents/skills`
+- `ssh jpglabs-vps-tailnet` — usado para listar, mover, arquivar e validar a
+  nova árvore da VPS
+- Glossário canônico: não houve novo verbete em `GLOSSARY.md`; os termos abaixo
+  ficam como apoio contextual da sessão
+
+### Glossário multilíngue
+
+| Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文 |
+|---|---|---|---|---|---|---|
+| Link simbólico | Enlace simbólico | Symlink | Collegamento simbolico | Lien symbolique | シンボリックリンク | 符号链接 |
+| Shim | Capa shim | Shim | Shim | Shim | シム | 垫片层 |
+| Virada controlada | Cambio controlado | Cutover | Passaggio controllato | Bascule contrôlée | 切替 / きりかえ (kirikae) | 切换 |
+| Área de staging | Área de staging | Staging area | Area di staging | Zone de staging | ステージング領域 | 预备区 |
+| Raiz canônica | Raíz canónica | Canonical root | Radice canonica | Racine canonique | 正準ルート / せいじゅんるーと (seijun ruto) | 规范根 |
+
+#### Curiosidades linguísticas
+
+- `Shim` veio de calço fino de ajuste mecânico; em software, virou a peça de
+  compatibilidade entre duas superfícies que ainda não conversam nativamente.
+- `Cutover` é termo comum de infraestrutura e migração porque descreve a
+  “virada” de produção para uma nova rota, não só a cópia dos arquivos.
+- `Symlink` não move dado; ele move resolução. Por isso foi a escolha mais
+  segura nesta rodada.
+
+### Risks And Gaps
+
+- `/root/code` ainda existe e precisa ser removido ou absorvido depois da
+  validação final.
+- `/root/build` ainda é a localização física dos repos de produto.
+- A proposta foi aplicada de forma compatível; a simplificação final do host
+  ainda depende de uma segunda onda de limpeza.
+
+### Next Actions
+
+- Validar na VPS os consumers reais que ainda resolvem paths legados.
+- Substituir gradualmente o uso físico de `/root/build/*` por `/root/projects/*`.
+- Planejar a remoção de `/root/code` depois da validação funcional da nova
+  taxonomia.
+
+### Handoff Notes
+
+- Tratar `/root/memory` e `/root/projects` como a taxonomia canônica da VPS a
+  partir desta rodada.
+- Tratar `/root/code` apenas como staging temporário.
+- Não remover `build/`, `Sync/`, `provider-configs/`, `mcp-config/`,
+  `obsidian-vault/` ou `backup/` sem uma validação funcional explícita da nova
+  resolução de paths.
 
 ## Session Handoff - 2026-04-13 02:08 -0300
 

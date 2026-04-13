@@ -15,7 +15,7 @@ resolution_order:
   - /Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md
 canonical_roots:
   agents: /Users/philipegermano/code/jpglabs/docs/agents
-  skills: /Users/philipegermano/code/jpglabs/docs/skills
+  skills: /Users/philipegermano/code/.agents/skills
   memory: /Users/philipegermano/code/jpglabs/docs/memory
   daily: /Users/philipegermano/code/daily
   config: /Users/philipegermano/code/config
