@@ -3,6 +3,190 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Session Handoff - 2026-04-12 23:32 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-12 23:32:21 -0300`
+- Data da sessão: `2026-04-12`
+- Feature/session id: `ops/workspace-docker-mcp-baseline-revalidation-2026-04-12`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code` (workspace root; não é um repositório Git)
+- Branch ativa: `não aplicável`
+- Objetivo aprovado: inventariar o ambiente Docker MCP do host, alinhar a baseline relevante para desenvolvimento de software, corrigir drift de configuração e reparar skills com front matter inválido.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - revalidar o catálogo Docker MCP disponível no host e os clientes conectados
+  - confirmar quais lanes permanecem estáveis para engenharia de software
+  - alinhar `.mcp.json` ao baseline realmente seguro e interoperável
+  - reforçar `healthcheck.sh` para detectar drift do baseline e alias inválido
+  - corrigir os arquivos `SKILL.md` com YAML inválido
+  - atualizar a documentação canônica de setup MCP
+- O que ficou fora do escopo:
+  - provisionar credenciais ausentes de `github` ou `sonarqube`
+  - corrigir o defeito upstream de inicialização do `semgrep`
+  - validar end-to-end o token ativo do `figma`
+
+### Prototype And Evidence
+
+- Esta sessão não foi entrega funcional de feature; foi uma revalidação operacional e documental da baseline MCP do workspace.
+- Evidências principais:
+  - `/Users/philipegermano/code/.mcp.json`
+  - `/Users/philipegermano/code/scripts/healthcheck.sh`
+  - `/Users/philipegermano/code/jpglabs/docs/MCP_SETUP.md`
+  - `/Users/philipegermano/.codex/skills/ptbr-docs-standard/SKILL.md`
+  - `/Users/philipegermano/.agents/skills/system-design-preflight/SKILL.md`
+
+### Summary
+
+- O host continua com `21 enabled` MCP servers no catálogo Docker Desktop.
+- A baseline estável e efetivamente validada para desenvolvimento de software permaneceu em `git`, `filesystem`, `desktop-commander`, `playwright`, `fetch`, `context7`, `memory` e `sequentialthinking`.
+- O root `.mcp.json` foi corrigido para voltar a refletir apenas essa baseline compartilhada; os deltas indevidos `github` e `youtube-transcript` saíram da configuração padrão.
+- `healthcheck.sh` agora valida a presença de todos os servidores obrigatórios da baseline em `.mcp.json` e falha explicitamente se o alias inválido `youtube-transcript` reaparecer.
+- `sonarqube` continua configurado como lane opcional de qualidade: o `dry-run` lista `17 tools`, mas o host ainda não possui `sonarqube.token`.
+- `semgrep` continua fora da baseline porque o `dry-run` ainda falha em `initialize` com `Internal Server Error`.
+- `github` permanece fora da baseline compartilhada; o host-level healthcheck reportou `github | not authorized` e o `dry-run` também acusou ausência de `github.personal_access_token`.
+- `figma` segue como integração nativa do provider em `/Users/philipegermano/.codex/config.toml`, o que permanece sendo a melhor rota para prototipagem e design systems neste host.
+- Os dois `SKILL.md` com YAML inválido foram reparados pela aplicação de aspas no campo `description`.
+
+### Validation
+
+- Builds executados:
+  - nenhum build de produto foi necessário nesta sessão
+- Testes executados:
+  - `ruby -e "require 'yaml'; ... YAML.load_file(...)"` para os dois `SKILL.md`
+  - `python3 -m json.tool /Users/philipegermano/code/.mcp.json`
+  - `docker mcp server ls`
+  - `docker mcp client ls --global`
+  - `docker mcp server inspect semgrep`
+  - `docker mcp server inspect sonarqube`
+  - `docker mcp server inspect youtube_transcript`
+  - `docker mcp gateway run --dry-run` para a baseline estável
+  - `docker mcp gateway run --dry-run --servers semgrep`
+  - `docker mcp gateway run --dry-run --servers sonarqube --additional-config .../docker-mcp-quality.yaml`
+  - `COMPOSE_PROFILES= ... /bin/sh /Users/philipegermano/code/scripts/healthcheck.sh` fora do sandbox
+- Cobertura atingida na fatia entregue:
+  - não aplicável; a sessão foi de configuração/documentação/validação operacional
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - `sonarqube` não foi validado em execução útil porque `sonarqube.token` continua ausente
+  - `semgrep` segue bloqueado por falha de inicialização do servidor, não por erro de configuração local simples
+  - `figma` continua sem validação end-to-end porque a sessão não comprovou um `FIGMA_OAUTH_TOKEN` ativo no runtime corrente
+- Validação em macOS:
+  - `healthcheck.sh` executado fora do sandbox concluiu com sucesso para a baseline compartilhada
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `docker mcp server ls`
+  - Action: inventariar os servidores MCP disponíveis no host.
+  - Result: `21 enabled`, com `sonarqube`, `semgrep`, `sequentialthinking`, `figma` adjacente por runtime nativo e demais lanes mapeadas.
+- `docker mcp client ls --global`
+  - Action: confirmar os clientes globais conectados ao gateway Docker MCP.
+  - Result: `claude-code`, `claude-desktop`, `codex` e `gemini` seguem conectados ao mesmo `MCP_DOCKER`.
+- `/Users/philipegermano/code/config/mcp/bin/docker-mcp-gateway.sh mcp gateway run --dry-run --additional-catalog ... --servers git --servers filesystem --servers desktop-commander --servers playwright --servers fetch --servers context7 --servers memory --servers sequentialthinking --additional-config .../docker-mcp-config.yaml`
+  - Action: validar a baseline compartilhada realmente segura.
+  - Result: `83 tools listed`; baseline estável confirmada.
+- `/Users/philipegermano/code/config/mcp/bin/docker-mcp-gateway.sh mcp gateway run --dry-run --servers semgrep`
+  - Action: revalidar a lane de lint/análise estrutural.
+  - Result: falha persistente em `initialize` com `Internal Server Error`; lane segue fora da baseline.
+- `/Users/philipegermano/code/config/mcp/bin/docker-mcp-gateway.sh mcp gateway run --dry-run --servers sonarqube --additional-config /Users/philipegermano/code/config/mcp/docker-mcp-quality.yaml`
+  - Action: validar a lane opcional de qualidade/métricas.
+  - Result: `17 tools` listados, porém com warning de segredo ausente `sonarqube.token`.
+- `ruby -e "require 'yaml'; ... YAML.load_file(...)"` e `python3 -m json.tool /Users/philipegermano/code/.mcp.json`
+  - Action: validar a sintaxe dos arquivos corrigidos.
+  - Result: front matter YAML e JSON da baseline ficaram válidos.
+- `COMPOSE_PROFILES= ENABLE_SONARQUBE_MCP=0 ENABLE_SEMGREP_MCP=0 ENABLE_YOUTUBE_TRANSCRIPT_MCP=0 /bin/sh /Users/philipegermano/code/scripts/healthcheck.sh`
+  - Action: executar o healthcheck canônico do workspace.
+  - Result: no sandbox houve falso negativo (`Docker Desktop is not running`); fora do sandbox o healthcheck concluiu com sucesso e confirmou `github | not authorized` e `semgrep | authorized`.
+
+### Files Created
+
+- Nenhum arquivo novo nesta sessão
+
+### Files Modified
+
+- `/Users/philipegermano/.codex/skills/ptbr-docs-standard/SKILL.md`
+- `/Users/philipegermano/.agents/skills/system-design-preflight/SKILL.md`
+- `/Users/philipegermano/code/.mcp.json`
+- `/Users/philipegermano/code/config/mcp/README.md`
+- `/Users/philipegermano/code/scripts/healthcheck.sh`
+- `/Users/philipegermano/code/jpglabs/docs/MCP_SETUP.md`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano
+├── .agents
+│   └── skills
+│       └── system-design-preflight
+│           └── SKILL.md [modified]
+├── .codex
+│   └── skills
+│       └── ptbr-docs-standard
+│           └── SKILL.md [modified]
+└── code
+    ├── .mcp.json [modified]
+    ├── config
+    │   └── mcp
+    │       └── README.md [modified]
+    ├── jpglabs
+    │   └── docs
+    │       ├── MCP_SETUP.md [modified]
+    │       └── agents
+    │           └── AGENT_BRIDGE.md [modified]
+    └── scripts
+        └── healthcheck.sh [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `ops/workspace-docker-mcp-baseline-revalidation`
+- Commit: `docs(workspace): revalidate docker mcp baseline and fix skill metadata`
+- Review request: confirmar o agrupamento de commit porque `/Users/philipegermano/code` é um workspace root não versionado; os arquivos alterados pertencem a superfícies diferentes e podem exigir commits separados por ownership.
+- MCP status desta sessão:
+  - servidores disponíveis no catálogo Docker MCP: `21 enabled`
+  - servidores configurados no `.mcp.json`: `git`, `filesystem`, `desktop-commander`, `playwright`, `fetch`, `context7`, `memory`, `sequentialthinking`
+  - servidores realmente validados por `dry-run` no host: os mesmos `8` da baseline compartilhada
+  - lanes opcionais validadas parcialmente: `sonarqube` registra tools mas segue sem token; `semgrep` continua falhando no `initialize`; `github` segue fora da baseline e sem autorização/token efetivo; `figma` permanece fora do Docker baseline e no runtime nativo do provider
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — bootstrap relido para cumprir o contrato de fechamento e handoff
+- `/Users/philipegermano/code/jpglabs/docs/MCP_SETUP.md` — referência canônica revisada e corrigida com o estado real do host
+- `/Users/philipegermano/code/config/mcp/README.md` — contrato operacional local do baseline Docker MCP
+- `/Users/philipegermano/code/.mcp.json` — entrypoint compartilhado corrigido para a baseline estável
+- `/Users/philipegermano/.codex/config.toml` — conferido para validar a lane nativa do `figma` e a paridade do baseline `MCP_DOCKER`
+- `docker mcp server ls` — catálogo de servidores consultado
+- `docker mcp client ls --global` — clientes conectados consultados
+- `docker mcp server inspect semgrep|sonarqube|github|sequentialthinking|youtube_transcript` — superfícies e contratos dos servidores consultados
+- `docker mcp gateway run --dry-run ...` — baseline e lanes opcionais validadas
+- Glossary: nenhum termo novo entrou no glossário nesta sessão
+
+### Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+### Risks And Gaps
+
+- `semgrep` continua tecnicamente indisponível para baseline por defeito de inicialização no host atual.
+- `sonarqube` ainda não pode ser tratado como lane pronta para produção sem `sonarqube.token` e sem a stack local `quality` comprovadamente saudável.
+- `github` continua inconsistente no Docker MCP deste host; não deve ser reintroduzido no baseline enquanto o estado permanecer `not authorized` e sem PAT efetivo.
+- O `healthcheck.sh` ainda precisa de execução host-level fora do sandbox para evitar o falso negativo de Docker Desktop neste runtime.
+
+### Next Actions
+
+- Carregar `sonarqube.token` no keychain do Docker MCP e subir a profile `quality` para validar a lane de métricas/qualidade em execução útil, sem tocar no baseline estável já confirmado.
+
+### Handoff Notes
+
+- Não reintroduzir `github` nem `youtube_transcript` no `.mcp.json` padrão sem nova revalidação host-level e sem credenciais efetivas.
+- Preservar `figma` como lane nativa do provider; neste host ela não deve migrar para o catálogo Docker MCP.
+- Quando precisar validar Docker MCP de forma canônica, preferir `healthcheck.sh` fora do sandbox ou outro comando host-level equivalente.
+
 ## Session Handoff - 2026-04-06 21:48 -0300
 
 ### Session Metadata

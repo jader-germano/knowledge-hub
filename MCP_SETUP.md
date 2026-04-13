@@ -182,9 +182,11 @@ Optional or adjacent lanes:
   host still emitted `Secret 'sonarqube.token' not found`; keep SonarQube as an
   optional quality lane until the token is loaded and the local stack is
   healthy.
-- `github` OAuth is now authorized in Docker MCP, but it is still outside the
-  workspace `.mcp.json` baseline because GitHub connector coverage in this
-  runtime is already richer through the app/plugin lane.
+- Docker MCP healthcheck on `2026-04-12` reported `github | not authorized`,
+  and `dry-run` for the GitHub lane still warns that
+  `github.personal_access_token` is absent; keep GitHub outside the workspace
+  `.mcp.json` baseline because GitHub connector coverage in this runtime is
+  already richer through the app/plugin lane.
 - `docker mcp gateway run --dry-run ... --servers github` on `2026-04-12`
   listed `26 tools`, but the host still warned that
   `github.personal_access_token` is missing; keep GitHub outside the shared
@@ -368,13 +370,17 @@ Recommended order for software-engineering enablement on this host:
 ## Browser-Based OAuth And What Was Actually Validated
 
 - `docker mcp oauth ls` currently exposes:
-  - `github | authorized`
+  - `github | not authorized`
   - `semgrep | authorized`
-- `docker mcp oauth authorize github` is already complete for the current host.
+- GitHub is not currently authorized at the Docker MCP OAuth layer on this
+  host.
 - `docker mcp oauth authorize semgrep` is no longer the main blocker; the
   blocker is Semgrep failing to initialize cleanly after token refresh.
-- Runtime validation on `2026-04-03` showed:
-  - `github` OAuth is healthy at the Docker layer
+- Runtime validation on `2026-04-12` showed:
+  - `github` remains unavailable for shared-baseline use in Docker MCP because
+    the host has no effective GitHub authorization/token in that lane
+  - `semgrep` OAuth is present, but initialization still fails with
+    `Internal Server Error`
 - Conclusion:
   - OAuth authorization alone is not sufficient to treat a server as
     production-ready in the baseline
