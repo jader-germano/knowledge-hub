@@ -3,6 +3,204 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Session Handoff - 2026-04-13 15:25 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 15:25:20 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `fix/openclaude-ide-integration-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano` com artefatos locais em
+  `~/.antigravity`, `~/Library/Application Support/JetBrains` e
+  `/Users/philipegermano/code/openclaude`
+- Branch ativa: `não aplicável (configuração local + handoff do workspace)`
+- Objetivo aprovado: instalar a integração do `openclaude` com `Antigravity`,
+  `IntelliJ IDEA` e `WebStorm` usando diretórios reais, compatibilidade entre
+  hosts e launcher robusto para app GUI no macOS.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - instalar a extensão local `openclaude-vscode` no `Antigravity`
+  - instalar o plugin compatível de JetBrains em `IntelliJ IDEA` e
+    `WebStorm`
+  - fixar o launcher do `Antigravity` em caminho absoluto do binário
+    `openclaude`
+  - registrar o trade-off real de interoperabilidade entre `openclaude`,
+    hosts VS Code-like e hosts JetBrains
+- O que ficou fora do escopo:
+  - reiniciar apps já abertos do usuário para ativação imediata do plugin
+  - criar `.openclaude-profile.json` por workspace/projeto
+  - empacotar/publicar a extensão do `openclaude` em marketplace
+
+### Prototype And Evidence
+
+- Esta sessão foi integração local de IDE/editor e saneamento operacional, não
+  entrega funcional de produto.
+- Evidências principais:
+  - `/Users/philipegermano/.antigravity/extensions/devnull-bootloader.openclaude-vscode-0.1.1-universal`
+  - `/Users/philipegermano/Library/Application Support/Antigravity/User/settings.json`
+  - `/Users/philipegermano/Library/Application Support/JetBrains/IntelliJIdea2026.1/plugins/claude-code-jetbrains-plugin`
+  - `/Users/philipegermano/Library/Application Support/JetBrains/WebStorm2026.1/plugins/claude-code-jetbrains-plugin`
+  - `/Users/philipegermano/code/openclaude/src/utils/ide.ts`
+  - `/Users/philipegermano/code/openclaude/src/utils/jetbrains.ts`
+
+### Summary
+
+- O `Antigravity` passou a enxergar a extensão local
+  `devnull-bootloader.openclaude-vscode@0.1.1` a partir de
+  `~/.antigravity/extensions`.
+- O `settings.json` do `Antigravity` foi ajustado para usar
+  `/Users/philipegermano/.bun/bin/openclaude` como `openclaude.launchCommand`,
+  eliminando dependência implícita de `PATH` em app GUI no macOS.
+- `IntelliJ IDEA 2026.1` e `WebStorm 2026.1` receberam o plugin compatível
+  `claude-code-jetbrains-plugin`, exatamente no prefixo de diretório que o
+  runtime do `openclaude` usa para detecção.
+- Trade-off validado: não existe plugin JetBrains próprio do `openclaude`
+  nesta instalação; a interoperabilidade com os IDEs JetBrains depende do
+  plugin compatível de Claude Code.
+- Pendência operacional restante: `Antigravity` e `IntelliJ IDEA` estavam
+  abertos durante a instalação, então precisam de restart para ativação
+  efetiva. `WebStorm` já deve carregar o plugin no próximo launch.
+
+### Validation
+
+- Builds executados:
+  - nenhum build de produto foi necessário nesta sessão
+- Testes executados:
+  - nenhum teste automatizado do repositório; validação feita por descoberta
+    real de extensão/plugin nos hosts locais
+- Cobertura atingida na fatia entregue:
+  - validação funcional de instalação/detecção em `Antigravity` e presença
+    física do plugin compatível nas duas IDEs JetBrains
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - não houve smoke test interativo dentro do `Antigravity` ou do terminal
+    JetBrains porque reiniciar janelas do usuário sem pedido explícito é
+    intrusivo
+- Validação em macOS:
+  - `Antigravity --list-extensions --show-versions` retornou
+    `devnull-bootloader.openclaude-vscode@0.1.1`
+  - os diretórios `claude-code-jetbrains-plugin` existem em
+    `IntelliJIdea2026.1/plugins` e `WebStorm2026.1/plugins`
+  - `disabled_plugins.txt` não contém bloqueio do plugin compatível
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `'/Applications/Antigravity.app/Contents/Resources/app/bin/antigravity' --list-extensions --show-versions`
+  - Action: validar o catálogo real de extensões carregado pelo host.
+  - Result: a extensão `devnull-bootloader.openclaude-vscode@0.1.1` passou a
+    aparecer instalada.
+- `command -v openclaude`
+  - Action: localizar o binário efetivo para uso em app GUI.
+  - Result: binário real resolvido em `/Users/philipegermano/.bun/bin/openclaude`.
+- `unzip -oq /tmp/claude-code-jetbrains-plugin-0.1.14-beta.zip -d <plugins-dir>`
+  - Action: instalar o plugin compatível em `IntelliJ IDEA` e `WebStorm`.
+  - Result: ambos os hosts receberam `claude-code-jetbrains-plugin`.
+- `python3` com `shutil.copytree(...)` para `~/.antigravity/extensions/devnull-bootloader.openclaude-vscode-0.1.1-universal`
+  - Action: fazer sideload determinístico da extensão local do `openclaude`.
+  - Result: extensão copiada e descoberta pelo runtime do `Antigravity`.
+
+### Files Created
+
+- `/Users/philipegermano/.antigravity/extensions/devnull-bootloader.openclaude-vscode-0.1.1-universal`
+- `/Users/philipegermano/Library/Application Support/JetBrains/IntelliJIdea2026.1/plugins/claude-code-jetbrains-plugin`
+- `/Users/philipegermano/Library/Application Support/JetBrains/WebStorm2026.1/plugins/claude-code-jetbrains-plugin`
+
+### Files Modified
+
+- `/Users/philipegermano/Library/Application Support/Antigravity/User/settings.json`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano
+├── .antigravity
+│   ├── extensions
+│   │   └── devnull-bootloader.openclaude-vscode-0.1.1-universal [new]
+│   └── User
+│       └── settings.json [modified]
+├── Library/Application Support
+│   └── JetBrains
+│       ├── IntelliJIdea2026.1
+│       │   └── plugins
+│       │       └── claude-code-jetbrains-plugin [new]
+│       └── WebStorm2026.1
+│           └── plugins
+│               └── claude-code-jetbrains-plugin [new]
+└── code
+    └── jpglabs
+        └── docs
+            └── agents
+                └── AGENT_BRIDGE.md [modified]
+```
+
+### Versioning Proposal
+
+- Branch proposta: `chore/openclaude-ide-integration`
+- Commit message proposta:
+  `docs(agents): record openclaude ide integration on macos`
+- Review request: revisar separadamente o que é documentação versionada do
+  workspace e o que é estado operacional local fora de Git.
+- Distinção MCP desta sessão:
+  - servidores apenas disponíveis no catálogo: não houve mudança
+  - servidores configurados: não houve mudança
+  - servidores realmente validados: memória compartilhada atualizada com a
+    decisão de integração IDE do `openclaude`
+
+### Language Policy
+
+- Títulos estruturais mantidos em English por interoperabilidade.
+- Conteúdo narrativo mantido em `pt-BR`.
+- Paths, comandos, nomes de apps, plugins, extensão, IDEs e símbolos técnicos
+  preservados em English.
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — relido para cumprir o
+  contrato de fechamento e runtime real sem `symlink`.
+- `/Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md`
+  — usado como estrutura do handoff.
+- `/Users/philipegermano/code/openclaude/README.md` — confirmado que a
+  integração oficial embutida do projeto é via extensão VS Code.
+- `/Users/philipegermano/code/openclaude/vscode-extension/openclaude-vscode/README.md`
+  — confirmadas as chaves de configuração da extensão e o comportamento de
+  provider/launcher.
+- `/Users/philipegermano/code/openclaude/src/utils/ide.ts` e
+  `/Users/philipegermano/code/openclaude/src/utils/jetbrains.ts`
+  — confirmada a detecção do plugin JetBrains pelo prefixo
+  `claude-code-jetbrains-plugin`.
+- `JetBrains Marketplace API` para o plugin `27310` — confirmado o artefato
+  `claude-code-jetbrains-plugin-0.1.14-beta.zip` compatível com
+  `IDEA/WEBSTORM 2024.2+`.
+- `Antigravity CLI --help/--list-extensions` — confirmado host VS Code-like e
+  descoberta real da extensão instalada.
+- Glossário canônico: nenhum termo novo foi promovido a `GLOSSARY.md` nesta
+  sessão.
+
+### Glossário multilíngue
+
+| Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文 |
+|---|---|---|---|---|---|---|
+| Instalação lateral | Instalación lateral | Sideload | Installazione laterale | Chargement latéral | サイドロード | 侧载 |
+| Launcher absoluto | Lanzador absoluto | Absolute launcher | Launcher assoluto | Lanceur absolu | 絶対パス起動 | 绝对路径启动 |
+| Host de extensão | Host de extensiones | Extension host | Host estensioni | Hôte d’extension | 拡張ホスト | 扩展宿主 |
+| Plugin compatível | Plugin compatible | Compatible plugin | Plugin compatibile | Plugin compatible | 互換プラグイン | 兼容插件 |
+| Terminal integrado | Terminal integrado | Integrated terminal | Terminale integrato | Terminal intégré | 統合ターミナル | 集成终端 |
+
+#### Curiosidades linguísticas
+
+- `Sideload` pegou no software pelo mesmo motivo que pegou no mobile: é a
+  instalação que entra “pela lateral”, fora do fluxo padrão de loja.
+- `Launcher absoluto` parece exagero, mas em macOS é o jeito mais barato de
+  matar uma classe inteira de erro: app GUI sem o mesmo `PATH` do shell.
+- `Plugin compatível` aqui é um bom lembrete de arquitetura pragmática:
+  interoperar bem às vezes vale mais do que insistir num artefato “purista”
+  próprio.
+
 ## Session Handoff - 2026-04-13 08:37 -0300
 
 ### Session Metadata
