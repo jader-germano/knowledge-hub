@@ -8,10 +8,10 @@ Este documento consolida o roadmap geral do ciclo atual da JPG Labs.
 
 Foco imediato aprovado:
 
-- redesenhar UI/UX dos sistemas em torno do contrato Pi
+- redesenhar UI/UX das superfícies ativas do portfólio e da operação interna
 - separar com clareza as camadas de front-end e back-end do portfólio
 - subir o portfólio com as últimas atualizações sem misturar superfície pública,
-  operador interno e runtime do Pi
+  operador interno e superfícies auxiliares
 
 Superfícies de execução:
 
@@ -26,8 +26,8 @@ Ao fim deste ciclo, a JPG Labs deve ter:
 
 - um `portfolio-backend` assumido explicitamente como backend/BFF
 - uma trilha clara para o frontend visual do portfólio, separada do backend
-- clientes do ecossistema Pi com UI/UX redesenhada a partir de padrões atuais,
-  sem drift entre iPhone, macOS, web e operador interno
+- superfícies ativas do portfólio e da operação com UI/UX coerente entre web,
+  mobile e shell interno, sem drift de navegação e hierarquia
 - backlog e roadmap operando em `Jira + Confluence`, sem regressão para board
   de task no `Notion`
 
@@ -71,6 +71,9 @@ Entregáveis:
 - backend/BFF com contratos explícitos e sem ambiguidade de frontend primário
 - decisão formal sobre a nova lane do frontend visual
 - fronteiras claras de auth, sessão, upload, APIs e persistência
+- inventário operacional de migração para `GitLab` com status repo a repo,
+  alvo recomendado e bloqueios locais explícitos em
+  [`PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`](/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md)
 - plano de execução de banco com `schema` por aplicativo documentado em
   [`APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md`](/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md)
 - template fixo de contrato e checklist arquitetural prontos para a fase
@@ -89,27 +92,26 @@ Critério de saída:
 - o backend deixa de competir com o frontend visual
 - existe uma topologia clara de deploy e ownership por camada
 
-### Trilha C — Redesign UI/UX Do Ecossistema Pi (`P0`, paralela)
+### Trilha C — Redesign UI/UX Das Superfícies Ativas (`P0`, paralela)
 
 Objetivo:
 
-- alinhar os clientes em torno de padrões novos de UI/UX sem romper o contrato
-  central do Pi
+- alinhar as superfícies ativas do portfólio e da operação em torno de padrões
+  atuais de UI/UX, sem reabrir dependências legadas fora do escopo
 
 Sistemas-alvo:
 
-- `pi-local-app`
-- `piphone-ios`
-- `pibar-macos`
-- `knowledge-hub-app`
+- `jpglabs-portfolio`
 - `portfolio-mobile`
+- `knowledge-hub-app`
+- `jpglabs-dashboard`
 
 Entregáveis:
 
 - linguagem visual e estrutural coerente entre as superfícies
 - redução de drift entre web, desktop e mobile
-- separação mais nítida entre shell de operador, shell pessoal e portfólio
-  público
+- separação mais nítida entre shell de operador, superfícies autenticadas e
+  portfólio público
 
 Critério de saída:
 
@@ -138,33 +140,37 @@ Critério de saída:
 
 1. Fechar governança `Jira + Confluence + Notion só diário`.
 2. Rodar split arquitetural do portfólio.
-3. Em paralelo, desenhar a linguagem nova de UI/UX para os clientes Pi.
+3. Em paralelo, desenhar a linguagem nova de UI/UX para as superfícies ativas.
 4. Consolidar os roadmaps por sistema.
 5. Só então fechar o release do portfólio.
 
-## Roadmaps Por Sistema
+## Contextos E Roadmaps Por Sistema
 
-- [`pi-local-app/ROADMAP.md`](/Users/philipegermano/code/jpglabs/docs/projects/pi-local-app/ROADMAP.md)
 - [`portfolio-backend/ROADMAP.md`](/Users/philipegermano/code/jpglabs/docs/projects/portfolio-backend/ROADMAP.md)
 - [`portfolio-mobile/ROADMAP.md`](/Users/philipegermano/code/jpglabs/docs/projects/portfolio-mobile/ROADMAP.md)
 - [`knowledge-hub-app/ROADMAP.md`](/Users/philipegermano/code/jpglabs/docs/projects/knowledge-hub-app/ROADMAP.md)
-- [`piphone-ios/ROADMAP.md`](/Users/philipegermano/code/jpglabs/docs/projects/piphone-ios/ROADMAP.md)
-- [`pibar-macos/ROADMAP.md`](/Users/philipegermano/code/jpglabs/docs/projects/pibar-macos/ROADMAP.md)
+- `jpglabs-portfolio`
+  - ainda não há roadmap específico no hub; usar
+    [`PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`](/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md)
+    como referência canônica desta fase
 
 ## Fora Do Foco Imediato
 
 - `jpglabs-saas` continua como trilha comercial importante, mas não é a lane
   técnica prioritária deste ciclo
 - `imap-server` e `FrankMD` seguem como capacidades úteis, mas não devem
-  disputar prioridade com o split do portfólio nem com o redesign do ecossistema
-  Pi
+  disputar prioridade com o split do portfólio nem com a reorganização das
+  superfícies ativas
 
 ## Próximas Ações
 
-1. Formalizar em `Jira` os épicos do split front/back e do redesign Pi.
+1. Formalizar em `Jira` os épicos do split front/back e do redesign das
+   superfícies ativas.
 2. Espelhar em `Confluence` a decisão de fronteira entre backend/BFF, frontend
    público e superfícies de operador.
-3. Auditar o `portfolio-backend` para separar o que permanece como backend do
+3. Limpar ou isolar as worktrees dos repositórios do portfólio na ordem do
+   inventário local antes de trocar upstream ou abrir sincronização contínua
+   com `GitLab`, preservando as branches canônicas já provisionadas e
+   protegidas.
+4. Auditar o `portfolio-backend` para separar o que permanece como backend do
    que deve sair para a lane visual.
-4. Abrir a definição de UI/UX compartilhada para `PiPhone`, `PiBar` e
-   `pi-local-app`.

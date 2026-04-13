@@ -10,7 +10,8 @@ segundo backend nem um lugar para compensar indefinições do `portfolio-backend
 ## Leitura Atual
 
 - base ainda próxima do starter do Expo
-- já recebeu uma trilha inicial de OAuth puxada do contexto Pi
+- já recebeu uma trilha inicial de OAuth puxada de contexto legado do
+  portfólio
 - ainda falta clareza sobre o papel final do app no ecossistema
 
 ## Trilhas
@@ -25,19 +26,20 @@ segundo backend nem um lugar para compensar indefinições do `portfolio-backend
 
 ### Trilha 2 — Consumo De Contrato Canônico (`P1`)
 
-- consumir somente contratos do `portfolio-backend` e do `pi-local-app` quando
-  fizer sentido
+- consumir somente contratos do `portfolio-backend` e contratos explícitos
+  aprovados para o app
 - não recriar fluxo de auth, sessão ou dados localmente
 
 ### Trilha 3 — Redesign Mobile (`P1`)
 
 - aplicar a linguagem nova de UI/UX depois que o papel do app estiver fechado
-- alinhar navegação e estados com `PiPhone` quando houver sobreposição real
+- alinhar navegação e estados com o frontend público quando houver
+  sobreposição real
 
 ## Próximas Ações
 
 1. Fechar a missão do app antes de adicionar novas telas.
 2. Remover ou isolar restos do starter que não correspondem ao papel final.
 3. Mapear quais fluxos dependem do `portfolio-backend` e quais dependem do
-   contrato Pi.
+   contrato próprio do app.
 4. Só então iniciar o redesign visual.

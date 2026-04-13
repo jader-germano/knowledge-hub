@@ -12,7 +12,8 @@
 ## Sinal Atual
 
 - base ainda próxima do starter
-- já recebeu uma trilha de OAuth reaproveitando contexto do Pi
+- já recebeu uma trilha inicial de OAuth reaproveitada de contexto legado do
+  portfólio
 
 ## Git Recente
 

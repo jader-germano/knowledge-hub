@@ -2,7 +2,7 @@
 
 ## Nicho
 
-- superfície web/backend do portfólio e do ecossistema Pi
+- superfície web/backend do portfólio
 
 ## Stack
 

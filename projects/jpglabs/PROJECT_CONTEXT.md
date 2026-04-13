@@ -9,7 +9,8 @@
 ## Stack
 
 - documentação estratégica
-- portfólio de produtos em Java/Spring Boot, Node.js, Next.js, Expo e clientes Apple
+- portfólio de produtos em Java/Spring Boot, Node.js, Next.js, Expo e
+  superfícies web/mobile próprias
 - hub documental compartilhado em `jpglabs/docs/`
 
 ## Sinal Atual (01/04/2026)
@@ -29,9 +30,8 @@
 ## Ativos Relacionados
 
 - `jpglabs-saas` — produto SaaS ativo priorizado
+- `jpglabs-portfolio`
+- `jpglabs-dashboard`
 - `knowledge-hub-app`
-- `pi-local-app`
 - `portfolio-backend`
 - `portfolio-mobile`
-- `pibar-macos`
-- `piphone-ios`

@@ -3,6 +3,343 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Session Handoff - 2026-04-13 01:35 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 01:35:20 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `ops/portfolio-gitlab-provision-protect-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `feature/unified-memory-center`
+- Objetivo aprovado: prosseguir a migração local do portfólio, provisionar os repositórios-alvo no `GitLab`, alinhar branches canônicos protegidos e fechar o plano documental sem reabrir código de produto.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - criar os repositórios-alvo do portfólio no `GitLab`
+  - adicionar o `remote` `gitlab` localmente aos repositórios da Onda 0
+  - publicar os branches canônicos iniciais
+  - alinhar default branch e proteção das branches canônicas
+  - retirar naming/escopo `Pi`/`Pie` das decisões ativas do plano do portfólio
+- O que ficou fora do escopo:
+  - limpar worktrees sujas
+  - trocar upstream local
+  - alterar código de produto
+
+### Prototype And Evidence
+
+- Esta sessão foi execução operacional de migração e endurecimento de governança no `GitLab`.
+- Evidências principais:
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+  - `gitlab.com/jader-germano/portfolio-backend`
+  - `gitlab.com/jader-germano/jpglabs-portfolio`
+  - `gitlab.com/jader-germano/portfolio-mobile`
+
+### Summary
+
+- Os repositórios `portfolio-backend`, `jpglabs-portfolio` e `portfolio-mobile` foram provisionados no `GitLab` do namespace `jader-germano`.
+- O `remote` `gitlab` foi configurado localmente nesses três repositórios e os branches canônicos foram seedados.
+- O estado final da governança de branch ficou assim:
+  - `portfolio-backend`: `main` = default/protected; `develop` = protected
+  - `jpglabs-portfolio`: `main` = default/protected
+  - `portfolio-mobile`: `main` = default/protected
+- O plano ativo do portfólio deixou de carregar `PiPhone`, `PiBar`, `pi-local-app`, `Pie` e `Pi family` como naming ou escopo canônico desta trilha.
+- A Onda 0 deixou de estar bloqueada por provisionamento; o risco remanescente ficou concentrado em worktrees sujas, correção de naming legado e cutover de upstream.
+
+### Validation
+
+- Builds executados:
+  - nenhum
+- Testes executados:
+  - publicação de branch com `git push`
+  - leitura de branches remotas com `glab api`
+  - validação textual com `rg`
+  - revisão dirigida com `sed`
+- Cobertura atingida na fatia entregue:
+  - não aplicável; sessão operacional/documental
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - o upstream local ainda não foi trocado porque a limpeza/isolation das worktrees reais continua pendente
+- Validação em macOS:
+  - confirmado via `glab api` que todas as branches canônicas previstas na Onda 0 estão protegidas e que o backend ficou com `main` como default
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `glab repo create portfolio-backend --private -d "JPGLabs portfolio backend/BFF lane"`
+  - Action: provisionar o repositório backend no `GitLab`.
+  - Result: repositório criado com sucesso.
+- `glab repo create jpglabs-portfolio --private -d "JPGLabs portfolio public frontend lane"`
+  - Action: provisionar o repositório frontend público no `GitLab`.
+  - Result: repositório criado com sucesso.
+- `glab repo create portfolio-mobile --private -d "JPGLabs portfolio mobile client"`
+  - Action: provisionar o repositório mobile no `GitLab`.
+  - Result: repositório criado com sucesso.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend remote add gitlab git@gitlab.com:jader-germano/portfolio-backend.git`
+  - Action: adicionar `remote` `gitlab` ao backend local.
+  - Result: `remote` configurado.
+- `git -C /Users/philipegermano/code/jpglabs/jpglabs-portfolio remote add gitlab git@gitlab.com:jader-germano/jpglabs-portfolio.git`
+  - Action: adicionar `remote` `gitlab` ao frontend local.
+  - Result: `remote` configurado.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-mobile remote add gitlab git@gitlab.com:jader-germano/portfolio-mobile.git`
+  - Action: adicionar `remote` `gitlab` ao mobile local.
+  - Result: `remote` configurado.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend push gitlab develop:develop`
+  - Action: seedar o branch canônico de trabalho existente do backend.
+  - Result: `develop` publicado no `GitLab`.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend push gitlab refs/remotes/origin/main:refs/heads/main`
+  - Action: publicar o branch `main` do backend no `GitLab`.
+  - Result: `main` publicado com sucesso.
+- `git -C /Users/philipegermano/code/jpglabs/jpglabs-portfolio push gitlab main:main`
+  - Action: seedar o branch canônico do frontend.
+  - Result: `main` publicado no `GitLab`.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-mobile push gitlab main:main`
+  - Action: seedar o branch canônico do mobile.
+  - Result: `main` publicado no `GitLab`.
+- `glab api projects/81246567 -X PUT -F default_branch=main`
+  - Action: corrigir o default branch do `portfolio-backend`.
+  - Result: `main` passou a ser o default branch do backend no `GitLab`.
+- `glab api projects/81246567/protected_branches -X POST -f name=main -f push_access_level=40 -f merge_access_level=40 -f unprotect_access_level=40`
+  - Action: proteger explicitamente o `main` do backend.
+  - Result: `main` ficou protegido.
+- `glab api projects/81246567/repository/branches`
+  - Action: validar o estado final de branches do backend.
+  - Result: confirmado `main` = default/protected e `develop` = protected.
+- `glab api projects/jader-germano%2Fjpglabs-portfolio/repository/branches`
+  - Action: validar o estado final de branches do frontend.
+  - Result: confirmado `main` = default/protected.
+- `glab api projects/jader-germano%2Fportfolio-mobile/repository/branches`
+  - Action: validar o estado final de branches do mobile.
+  - Result: confirmado `main` = default/protected.
+- `date '+%Y-%m-%d %H:%M:%S %z'`
+  - Action: fixar o timestamp exato do fechamento.
+  - Result: `2026-04-13 01:35:20 -0300`.
+
+### Files Created
+
+- nenhum arquivo local novo nesta subetapa; o foco foi provisionamento remoto e consolidação documental
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PROJECT_CONTEXT.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/portfolio-backend/PROJECT_CONTEXT.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/portfolio-mobile/PROJECT_CONTEXT.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/portfolio-mobile/ROADMAP.md`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+- `/Users/philipegermano/code/daily/2026-04-13.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code
+├── daily
+│   └── 2026-04-13.md [modified]
+└── jpglabs
+    └── docs
+        ├── agents
+        │   └── AGENT_BRIDGE.md [modified]
+        └── projects
+            ├── jpglabs
+            │   ├── APPLICATION_STRUCTURE_MIGRATION_PLAN.md [modified]
+            │   ├── PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md [modified]
+            │   ├── PROJECT_CONTEXT.md [modified]
+            │   └── ROADMAP.md [modified]
+            ├── portfolio-backend
+            │   └── PROJECT_CONTEXT.md [modified]
+            └── portfolio-mobile
+                ├── PROJECT_CONTEXT.md [modified]
+                └── ROADMAP.md [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `docs/portfolio-gitlab-provision-protect`
+- Commit: `docs(gitlab): record portfolio provisioning and protected branches`
+- Review request: validar a consolidação final da Onda 0 e o wording sobre cutover pendente de upstream.
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — bootstrap relido para manter preflight, validação e fechamento no padrão do workspace
+- `/Users/philipegermano/code/jpglabs/docs/RULES.md` — relido para manter o `docs` como superfície canônica e não reabrir produto fora da hora
+- `/Users/philipegermano/code/jpglabs/docs/OWNERSHIP.md` — usado para separar governança documental do código-fonte real
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md` — inventário operacional final da Onda 0
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md` — plano estrutural consolidado
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md` — roadmap com próximas ações já ajustadas para upstream pendente
+- Nenhum novo termo precisou entrar em `GLOSSARY.md` nesta rodada.
+
+### Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+### Risks And Gaps
+
+- as worktrees reais continuam sujas, então a troca de upstream ainda seria arriscada
+- `portfolio-mobile` preserva typo legado no `origin`, e isso precisa ser corrigido no cutover final
+- `portfolio-v2` e `jpglabs-dashboard` continuam fora da Onda 0 por decisão deliberada, não por esquecimento
+
+### Next Actions
+
+- limpar ou isolar as worktrees de `portfolio-backend`, `jpglabs-portfolio` e `portfolio-mobile`, nessa ordem, para concluir a troca de upstream e iniciar sincronização contínua com `GitLab`
+
+### Handoff Notes
+
+- tratar provisionamento e proteção das branches canônicas como concluídos
+- não reintroduzir `Pi`/`Pie family` na governança ativa do portfólio
+- concentrar a próxima rodada em hygiene Git e cutover de upstream, não em feature work
+
+## Session Handoff - 2026-04-13 01:19 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 01:19:31 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `docs/portfolio-gitlab-migration-inventory-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `feature/unified-memory-center`
+- Objetivo aprovado: retomar a trilha de migração estrutural para `GitLab` e descer o plano para execução local segura, sem tocar código de produto.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - localizar a topologia Git real dos repositórios do portfólio
+  - registrar estado local, remotes atuais e bloqueios reais
+  - transformar a Onda 0 em inventário executável no hub canônico
+  - ancorar o inventário no plano estrutural e no roadmap
+- O que ficou fora do escopo:
+  - alterar código de produto
+  - cortar `remote` em repositórios com worktree suja
+  - criar ou publicar repositórios no `GitLab`
+
+### Prototype And Evidence
+
+- Esta sessão não foi entrega funcional de feature; foi consolidação operacional da migração.
+- Evidências principais:
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+
+### Summary
+
+- A migração estrutural agora tem um inventário operacional canônico, com ordem de execução, alvo recomendado de `GitLab` e bloqueios reais por repositório.
+- Foi confirmado localmente que `jpglabs-portfolio`, `portfolio-backend`, `portfolio-mobile`, `portfolio-v2` e `jpglabs-dashboard` estão com worktree suja.
+- A decisão segura ficou explícita: não cortar `remote` enquanto a worktree real estiver suja.
+- `portfolio-backend` foi posicionado como primeiro repositório a limpar e migrar; `portfolio-v2` ficou congelado como referência e `jpglabs-dashboard` saiu do caminho crítico da Onda 0.
+- A ação de abrir a definição compartilhada de UI/UX para `PiPhone`, `PiBar` e `pi-local-app` foi removida do `ROADMAP.md` por solicitação do usuário.
+
+### Validation
+
+- Builds executados:
+  - nenhum
+- Testes executados:
+  - inspeção de remotes e branches com `git`
+  - validação textual com `rg`
+  - revisão dirigida dos documentos com `sed`
+- Cobertura atingida na fatia entregue:
+  - não aplicável; sessão documental e operacional
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - a migração local de `remote` continua bloqueada até limpeza ou isolamento das worktrees reais
+- Validação em macOS:
+  - confirmado que o inventário novo ficou referenciado no plano estrutural e no roadmap
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `find /Users/philipegermano/code -maxdepth 3 -name .git -type d | sort`
+  - Action: localizar a topologia Git real do workspace.
+  - Result: confirmado que o repositório canônico da trilha é `jpglabs/docs` e que os repos reais do portfólio vivem em `/Users/philipegermano/code/jpglabs/*`.
+- `git -C /Users/philipegermano/code/jpglabs/docs status --short`
+  - Action: executar o preflight do repositório documental.
+  - Result: worktree do `docs` já estava suja com a rodada anterior em andamento.
+- `git -C /Users/philipegermano/code/jpglabs/docs rev-parse --abbrev-ref HEAD && git -C /Users/philipegermano/code/jpglabs/docs remote -v`
+  - Action: validar branch e remotes do repositório canônico.
+  - Result: branch `feature/unified-memory-center`; `origin` em GitHub e `gitlab` em GitLab.
+- `for repo in ...; git -C "$repo" rev-parse --abbrev-ref HEAD; git -C "$repo" remote -v; git -C "$repo" status --short`
+  - Action: inventariar branches, remotes e estado local dos repositórios do portfólio.
+  - Result: todos os repositórios candidatos da Onda 0 estão com worktree suja; `portfolio-mobile` preserva typo legado no `origin`; `jpglabs-dashboard` está sem `remote`.
+- `sed -n '1,260p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+  - Action: revisar o plano canônico antes de ancorar a execução local.
+  - Result: confirmada a ausência de um inventário operacional repo a repo.
+- `sed -n '1,240p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+  - Action: revisar o roadmap do contexto `jpglabs`.
+  - Result: confirmado que o roadmap ainda não refletia o bloqueio por worktree suja nem a ordem prática da migração.
+- `rg -n "PORTFOLIO_GITLAB_MIGRATION_INVENTORY|worktree real estiver suja|portfolio-v2|jpglabs-dashboard" /Users/philipegermano/code/jpglabs/docs/projects/jpglabs --glob '*.md'`
+  - Action: validar a ancoragem do inventário novo na superfície canônica.
+  - Result: confirmados os links no plano e no roadmap, além do bloqueio explícito para worktree suja.
+- `sed -n '166,180p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+  - Action: validar a remoção da ação de UI/UX compartilhada do bloco `Próximas Ações`.
+  - Result: confirmado que o roadmap ficou com quatro ações e sem a linha removida.
+- `date '+%Y-%m-%d %H:%M:%S %z'`
+  - Action: fixar o timestamp exato do fechamento.
+  - Result: `2026-04-13 01:19:31 -0300`.
+
+### Files Created
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code/jpglabs/docs
+├── agents
+│   └── AGENT_BRIDGE.md [modified]
+└── projects
+    └── jpglabs
+        ├── APPLICATION_STRUCTURE_MIGRATION_PLAN.md [modified]
+        ├── PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md [new]
+        └── ROADMAP.md [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `docs/portfolio-gitlab-migration-inventory`
+- Commit: `docs(gitlab): add portfolio migration inventory and blockers`
+- Review request: confirmar a classificação dos repositórios e a ordem proposta antes de qualquer alteração de `remote`.
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — bootstrap relido para respeitar o fluxo de consulta, preflight e fechamento
+- `/Users/philipegermano/code/jpglabs/docs/RULES.md` — regras operacionais relidas para manter o hub como fonte canônica e declarar o bloqueio de worktree suja
+- `/Users/philipegermano/code/jpglabs/docs/OWNERSHIP.md` — ownership relido para separar `docs` do código-fonte real
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PROJECT_CONTEXT.md` — contexto estratégico relido para manter a migração dentro da trilha JPGLabs
+- `/Users/philipegermano/code/jpglabs/docs/projects/portfolio-backend/PROJECT_CONTEXT.md` — usado para confirmar o papel do backend/BFF
+- `/Users/philipegermano/code/jpglabs/docs/projects/portfolio-mobile/PROJECT_CONTEXT.md` — usado para confirmar o papel do cliente mobile
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs-dashboard/PROJECT_CONTEXT.md` — usado para tirar o dashboard do caminho crítico da Onda 0
+- Nenhum novo termo precisou entrar em `GLOSSARY.md` nesta rodada.
+
+### Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+### Risks And Gaps
+
+- a migração concreta dos remotes continua bloqueada pelas worktrees sujas dos repositórios reais
+- o namespace alvo em `GitLab` foi inferido a partir do estado atual do workspace e ainda depende de confirmação caso haja divergência organizacional
+- `portfolio-mobile` mantém typo legado no `origin`, o que exige correção cuidadosa durante o corte
+
+### Next Actions
+
+- limpar ou isolar a worktree de `portfolio-backend` e, com isso, abrir o primeiro corte real de `remote` da Onda 0
+
+### Handoff Notes
+
+- não reabrir código de produto nesta trilha antes de fechar a migração estrutural
+- preservar `portfolio-v2` como referência apenas e `jpglabs-dashboard` fora do caminho crítico do release do portfólio
+
 ## Session Handoff - 2026-04-13 00:44 -0300
 
 ### Session Metadata
