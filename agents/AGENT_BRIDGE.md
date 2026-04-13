@@ -122,7 +122,6 @@ Fechamento compartilhado mais recente entre agentes para o workspace
 - `/Users/philipegermano/code/jpglabs/docs/manifests/docs.index.yaml`
 - `/Users/philipegermano/code/jpglabs/docs/manifests/workspace.index.yaml`
 - `/Users/philipegermano/code/jpglabs/docs/projects/apple-study-checklist/PROJECT_CONTEXT.md`
-- `/Users/philipegermano/code/jpglabs/docs/projects/knowledge-hub-app/PROJECT_CONTEXT.md`
 - `/Users/philipegermano/code/jpglabs/docs/projects/playground-2/PROJECT_CONTEXT.md`
 - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
 
@@ -145,8 +144,6 @@ jpglabs/docs
     │   └── PROJECT_CONTEXT.md [modified]
     ├── jpglabs
     │   └── PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md [modified]
-    ├── knowledge-hub-app
-    │   └── PROJECT_CONTEXT.md [modified]
     └── playground-2
         └── PROJECT_CONTEXT.md [modified]
 ```
@@ -160,10 +157,25 @@ jpglabs/docs
 - Review request: revisar o recorte de taxonomia antes de qualquer nova rodada
   de materialização de paths planejados
 
+### Language Policy
+
+- Os títulos estruturais foram mantidos em English por compatibilidade com o
+  template canônico, automações de sync e handoff entre providers.
+- O conteúdo narrativo desta sessão permanece em `pt-BR`.
+- Símbolos técnicos ficaram em English onde isso preserva contrato e precisão:
+  `origin`, `worktree`, `slug`, `planned_contexts`, `archived_contexts`,
+  nomes de branch, paths e comandos.
+- O `Glossário multilíngue` abaixo foi normalizado no formato
+  `PT-BR | ES | EN | IT | FR | 日本語 | 中文`, com `日本語` trazendo apoio de
+  leitura quando útil.
+
 ### References And Glossary
 
 - `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — revalidado como
   contrato da taxonomia raiz e do fechamento de sessão
+- `/Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md` —
+  usado como base para padronizar a política de idioma e o formato expandido
+  do glossário multilíngue
 - `/Users/philipegermano/code/jpglabs/docs/README.md` — consultado para alinhar
   a taxonomia canônica do hub
 - `/Users/philipegermano/code/jpglabs/docs/WORKSPACE_INDEX.md` — reconciliado
@@ -173,14 +185,38 @@ jpglabs/docs
   `archived_contexts`
 - `GitHub origin` dos repositórios auxiliares — validado por `git push` com
   sucesso nas duas branches publicadas
-- Glossário: não houve termo novo além da normalização explícita entre
-  `ativo`, `planejado` e `arquivado`
+- Glossário canônico: não houve novo verbete registrado em `GLOSSARY.md`; os
+  termos abaixo ficaram como apoio multilíngue contextual desta sessão
 
 ### Glossário multilíngue
 
-- `origin canonicalized` → `origin canonicalizado`
-- `planned context` → `contexto planejado`
-- `archived context` → `contexto arquivado`
+| Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文 |
+|---|---|---|---|---|---|---|
+| Árvore de trabalho | Árbol de trabajo | Worktree | Albero di lavoro | Arbre de travail | ワークツリー (waku tsuri) | 工作区树 |
+| Ramo de rastreio | Rama de seguimiento | Upstream branch | Ramo di tracciamento | Branche de suivi | アップストリームブランチ (appusutorimu buranchi) | 上游分支 |
+| Slug | Slug | Slug | Slug | Slug | スラッグ (suraggu) | 短标识 |
+| Taxonomia | Taxonomía | Taxonomy | Tassonomia | Taxonomie | 分類体系 / ぶんるいたいけい (bunrui taikei) | 分类体系 |
+| Canonicalização | Canonicalización | Canonicalization | Canonicalizzazione | Canonicalisation | 正規化 / せいきか (seikika) | 规范化 |
+| Pré-checagem | Verificación previa | Pre-flight check | Controllo preliminare | Vérification préalable | 事前確認 / じぜんかくにん (jizen kakunin) | 预检 |
+| Análise estática (`lint`) | Análisis estático (`lint`) | Static analysis (`lint`) | Analisi statica (`lint`) | Analyse statique (`lint`) | 静的解析 / せいてきかいせき (seiteki kaiseki) | 静态分析 |
+| Arquivamento | Archivado | Archiving | Archiviazione | Archivage | アーカイブ化 (akaibu ka) | 归档 |
+
+#### Curiosidades linguísticas
+
+- `Slug` veio da tipografia de jornal: era a pequena etiqueta metálica usada
+  para identificar uma linha ou peça antes da paginação; na web, virou o
+  identificador curto da URL.
+- `Taxonomia` junta os gregos `taxis` (arranjo) e `nomos` (regra). Para
+  engenharia, a ideia continua boa: classificar não é só agrupar, é impor uma
+  regra de organização.
+- `Lint` ficou famoso no Unix em 1978; o nome remete ao “fiapo” de tecido que
+  você tira da roupa antes de sair. A analogia é boa porque o objetivo é achar
+  pequenos defeitos antes da entrega.
+- `Canonicalização` e `normalização` são parentes próximos, mas não idênticos:
+  canonicalizar busca uma forma de referência única; normalizar costuma
+  regularizar dados segundo um conjunto maior de regras.
+- `Upstream` e `downstream` usam metáfora de fluxo de rio. Em Git e integração,
+  isso ajuda a visualizar de onde a mudança vem e para onde ela desce.
 
 ## Session Handoff - 2026-04-13 02:08 -0300
 

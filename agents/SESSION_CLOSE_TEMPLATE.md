@@ -15,6 +15,8 @@ Obrigatoriedade adicional para qualquer resumo final de sessão:
 - sempre incluir `Commands Executed`, mesmo quando os comandos forem poucos
 - sempre incluir `Change Tree`, mesmo quando a árvore precisar ser curta ou
   truncada
+- sempre incluir `Language Policy`, mesmo quando a política aplicada for a
+  padrão do workspace
 - sempre incluir `References And Glossary`, mesmo quando não houver termo novo
   para registrar
 - quando a sessão introduzir, traduzir, normalizar ou corrigir terminologia em
@@ -137,6 +139,19 @@ Política complementar de autoria:
   pesquisa, arquitetura, Figma handoff, implementação, testes, revisão ou
   observabilidade
 
+## Language Policy
+
+Obrigatório em todo fechamento de sessão.
+
+- manter os títulos estruturais do template em English por interoperabilidade
+  entre providers, automações e artefatos derivados
+- preencher o conteúdo narrativo da sessão em `pt-BR` por default
+- preservar em English nomes de arquivos, paths, comandos, branches, commits,
+  APIs, MCPs, símbolos de código e contratos técnicos
+- usar o `Glossário multilíngue` para contraste semântico, tradução de termos
+  menos óbvios e decisão de nomenclatura; não repetir ali o que já foi
+  explicado em `Summary`
+
 ## References And Glossary
 
 Obrigatório em todo fechamento de sessão.
@@ -180,11 +195,14 @@ Quando não se aplicar, declarar explicitamente:
 
 Formato mínimo quando aplicável:
 
-- tabela com colunas `Termo (pt-BR) | English | Français | Italiano | 日本語 (Nihongo)`
+- preferir entre `5` e `10` termos realmente relevantes para a sessão
+- tabela com colunas padronizadas
+  `Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文`
 - listar apenas os termos realmente introduzidos, corrigidos, validados ou
   harmonizados na sessão
-- transliteração, nota curta ou grafia de apoio podem entrar na própria célula
-  quando isso ajudar a leitura
+- em `日本語`, preferir grafia principal + apoio em kana ou `romaji` quando isso
+  ajudar a leitura
+- em `中文`, preferir `简体中文`; `pinyin` entra apenas quando houver ambiguidade
 - após a tabela, preferir uma seção `Curiosidades linguísticas` curta, leve e
   útil, especialmente quando houver:
   - etimologia prática
@@ -198,10 +216,10 @@ Exemplo de tom aceitável:
 ```md
 ## Glossário multilíngue
 
-| Termo (pt-BR) | English | Français | Italiano | 日本語 (Nihongo) |
-|---|---|---|---|---|
-| Desacoplamento | Decoupling | Découplage | Disaccoppiamento | 疎結合 (soketsugo) |
-| Esquema de banco | Database schema | Schéma de base de données | Schema del database | データベーススキーマ |
+| Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文 |
+|---|---|---|---|---|---|---|
+| Desacoplamento | Desacoplamiento | Decoupling | Disaccoppiamento | Découplage | 疎結合 / そけつごう (soketsugo) | 解耦 |
+| Esquema de banco | Esquema de base de datos | Database schema | Schema del database | Schéma de base de données | データベーススキーマ | 数据库模式 |
 
 ### Curiosidades linguísticas
 

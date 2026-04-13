@@ -12,6 +12,12 @@ projects: []
 
 <!-- Uma seção por sessão Claude/Codex/Gemini -->
 
+**Política de idioma do template**
+
+- títulos de estrutura podem coexistir em inglês ou português
+- conteúdo preenchido da sessão deve ficar em `pt-BR`
+- termos técnicos, paths, branches, comandos e símbolos continuam em English
+
 ### Sessão — {{time:HH:mm}}
 
 **Agente:** Claude Code  
@@ -48,19 +54,21 @@ Quando se aplicar:
 - manter o tom leve, direto e memorável
 - usar a seção para registrar nuance real de linguagem, não para virar aula
 - listar só os termos que realmente importaram na sessão
+- preferir entre `5` e `10` termos
+- usar as colunas `Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文`
 
-| Termo (pt-BR) | English | Français | Italiano | 日本語 (Nihongo) |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
+| Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文 |
+|---|---|---|---|---|---|---|
+| | | | | | | |
+| | | | | | | |
+| | | | | | | |
 
 ### Curiosidades linguísticas
 
 - <!-- usar notas curtas e soltas -->
 - <!-- pode registrar etimologia, transliteracao, falso cognato ou contraste semantico -->
-- <!-- nao precisa cobrir todos os idiomas; so o que ajudou de verdade -->
-- <!-- exemplo de frase SOV em japonês -->
+- <!-- em japones, usar kanji/kana e romaji quando fizer diferenca -->
+- <!-- em chines, preferir chines simplificado -->
 
 ---
 

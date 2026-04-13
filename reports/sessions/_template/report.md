@@ -60,6 +60,13 @@ feature-root
 - Commit:
 - Review request:
 
+## Language Policy
+
+- títulos estruturais podem permanecer em English por interoperabilidade
+- conteúdo narrativo preenchido em `pt-BR`
+- símbolos técnicos, código, paths, branches, commits e comandos permanecem em
+  English
+
 ## References And Glossary
 
 - Links estudados
@@ -75,16 +82,19 @@ Tom desejado:
 
 - leve, direto e memorável
 - útil para preservar nuance, não para soar acadêmico
+- preferir entre `5` e `10` termos da sessão
+- usar as colunas `Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文`
 
-| Termo (pt-BR) | English | Français | Italiano | 日本語 (Nihongo) |
-|---|---|---|---|---|
-| | | | | |
+| Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文 |
+|---|---|---|---|---|---|---|
+| | | | | | | |
 
 ### Curiosidades linguísticas
 
 - Registrar apenas notas curtas, úteis e fáceis de lembrar
 - Pode usar etimologia, transliteração, falso cognato ou analogia técnica
-- Não precisa cobrir todos os idiomas; cobrir só o que realmente agregou
+- Em `日本語`, incluir kana ou `romaji` quando ajudar
+- Em `中文`, preferir `简体中文`
 
 ## Risks And Gaps
 
