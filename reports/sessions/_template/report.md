@@ -84,11 +84,12 @@ Tom desejado:
 - útil para preservar nuance, não para soar acadêmico
 - preferir entre `5` e `10` termos da sessão
 - usar as colunas `Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文`
+- usar as colunas seguintes com uma curiosidade sobre a palavra em cada lingua
 
 | Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文 |
-|---------------|----|----|----|----|--------|------|
-|               |    |    |    |    |        |      |
-|               |    |    |    |    |        |      |
+|---|---|---|---|---|---|---|
+| | | | | | | |
+| | | | | | | |
 
 ### Curiosidades linguísticas
 
@@ -96,6 +97,7 @@ Tom desejado:
 - Pode usar etimologia, transliteração, falso cognato ou analogia técnica + curiosidades
 - Em `日本語`, incluir kana ou `romaji` quando ajudar e explicar o sobre o significado(simbolo+taxonomia), origem e uso com 1 exemplo de uso + tradução
 - Em `中文`, preferir `简体中文` e divagar sobre o significado(simbolo+taxonomia), origem e uso com 1 exemplo de uso + tradução
+-
 
 ## Risks And Gaps
 
