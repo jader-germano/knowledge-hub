@@ -66,6 +66,11 @@ Optional or adjacent lanes:
   the current Docker MCP server advertises at least one tool with empty object
   schema, which is rejected by the current Codex/OpenAI runtime during tool
   registration
+- `github`: PR-oriented review, issue triage, and remote repository automation
+  once `github.personal_access_token` is loaded in the Docker MCP keychain; it
+  stays outside the shared baseline because Codex already has a richer
+  provider-native GitHub lane and the Docker server becomes noisy without the
+  token
 - `semgrep`: structural/code-quality/security scanning once the Docker MCP
   server initializes cleanly on this host
 - `sonarqube`: quality gates, metrics, issue tracking, and report-oriented review, enabled through the optional local `quality` profile plus `docker-mcp-quality.yaml`
@@ -102,6 +107,9 @@ Optional or adjacent lanes:
 - Host-level revalidation on `2026-04-05` first confirmed `22 enabled` MCP
   servers with Docker Desktop healthy on the host; after disabling the broken
   `docker` server, the active global surface moved to `21 enabled`.
+- Host-level revalidation on `2026-04-12` reconfirmed `21 enabled` MCP
+  servers, with `docker mcp client ls --global` still showing `claude-code`,
+  `claude-desktop`, `codex`, and `gemini` connected to the same Docker gateway.
 - Runtime revalidation on `2026-04-05` identified a new Codex-specific break:
   the global Docker Desktop catalog still exposed a tool named `docker` with
   `inputSchema: {"type":"object"}` and no `properties`, which the current
@@ -120,6 +128,11 @@ Optional or adjacent lanes:
 - `docker mcp gateway run --dry-run` validated the functional baseline for
   `git`, `filesystem`, `desktop-commander`, `playwright`, `fetch`,
   `context7`, `memory`, and `sequentialthinking`.
+- The root `.mcp.json` was corrected on `2026-04-12` to restore parity with
+  `/Users/philipegermano/.codex/config.toml`: the shared baseline remains only
+  `git`, `filesystem`, `desktop-commander`, `playwright`, `fetch`,
+  `context7`, `memory`, and `sequentialthinking`, while `github` and
+  `youtube_transcript` stay opt-in lanes.
 - On `2026-04-05`, the `docker` server was removed from the shared Codex
   baseline because the current runtime rejects at least one tool advertised by
   that server with `Invalid schema ... object schema missing properties`.
@@ -164,13 +177,26 @@ Optional or adjacent lanes:
   `sonarqube.token`; the local support stack is now provisioned in
   `docker/docker-compose.yml`, and the recommended MCP URL is
   `http://host.docker.internal:9000`.
+- `/Users/philipegermano/code/config/mcp/bin/docker-mcp-gateway.sh mcp gateway run --dry-run --servers sonarqube`
+  with `docker-mcp-quality.yaml` on `2026-04-12` listed `17 tools`, but the
+  host still emitted `Secret 'sonarqube.token' not found`; keep SonarQube as an
+  optional quality lane until the token is loaded and the local stack is
+  healthy.
 - `github` OAuth is now authorized in Docker MCP, but it is still outside the
   workspace `.mcp.json` baseline because GitHub connector coverage in this
   runtime is already richer through the app/plugin lane.
+- `docker mcp gateway run --dry-run ... --servers github` on `2026-04-12`
+  listed `26 tools`, but the host still warned that
+  `github.personal_access_token` is missing; keep GitHub outside the shared
+  baseline until that secret exists in the Docker MCP keychain.
 - `semgrep` is authorized in Docker MCP on this host, but it remains outside
   the functional baseline because `dry-run` still fails during initialize with
   `Internal Server Error` after an OAuth token refresh, so no Semgrep tool can
   be treated as runtime-stable yet.
+- `/Users/philipegermano/code/config/mcp/bin/docker-mcp-gateway.sh mcp gateway run --dry-run --servers semgrep`
+  on `2026-04-12` still failed with
+  `Can't start semgrep: failed to connect: calling "initialize": rejected by transport: sending "initialize": Internal Server Error`;
+  Semgrep remains non-baseline on this host.
 - `/Users/philipegermano/code/config/mcp/bin/docker-mcp-gateway.sh mcp gateway run --dry-run ... --servers semgrep`
   on `2026-04-05` listed the baseline tools successfully, but `semgrep`
   itself failed with `Can't start semgrep: failed to connect: calling
@@ -185,6 +211,8 @@ Optional or adjacent lanes:
   `docker mcp gateway run --dry-run --servers youtube_transcript` validated
   successfully on `2026-04-05`; it remains opt-in via `ENABLE_YOUTUBE_TRANSCRIPT_MCP=1`
   and the helper entrypoints `make video-info` / `make video-transcript`.
+- `docker mcp server inspect youtube_transcript` on `2026-04-12` reconfirmed
+  that the canonical server name uses underscore, not hyphen.
 - The `youtube_transcript` lane is appropriate for tutorial reverse engineering
   and technical research, but it should not be treated as mission-critical:
   real executions can still receive `429` or anti-bot challenges from YouTube.
