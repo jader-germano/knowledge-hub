@@ -25,6 +25,7 @@ provider_bootstrap_paths:
   codex: /Users/philipegermano/code/jpglabs/docs/.codex
   claude: /Users/philipegermano/code/jpglabs/docs/.claude_code
   gemini: /Users/philipegermano/code/jpglabs/docs/.gemini
+  openclaude: /Users/philipegermano/code/OPENCLAUDE.md
 repositories:
   - id: docs
     path: /Users/philipegermano/code/jpglabs/docs

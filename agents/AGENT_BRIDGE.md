@@ -10144,3 +10144,64 @@ code
 - A página do Notion foi criada como nova subpágina de `📔 Diário de Bordo`, porque o parent não tinha entrada de fechamento técnico para `2026-04-12`.
 - O sync local já deixou `daily`, `AGENT_BRIDGE` e o sidecar JSON coerentes; o único delta pendente ficou na projeção do grafo, bloqueada por `Docker Desktop` desligado.
 <!-- session-bridge:docs-daily-technical-closure-2026-04-12-session:end -->
+
+<!-- session-bridge:ops-local-memory-projects-compat-cutover-2026-04-13:start -->
+## Session Handoff - 2026-04-13 11:07 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 11:07:50 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `ops/local-memory-projects-compat-cutover-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano` (workspace root; não é repositório Git)
+- Objetivo aprovado: materializar no Mac a taxonomia local `memory/ +
+  projects/` em modo compatível, sem mover repositórios nem remover
+  `/Users/philipegermano/code`.
+
+### Summary
+
+- `/Users/philipegermano/memory` foi criado como superfície compatível de
+  contexto, com `agents`, `archive`, `bootstrap`, `daily`, `mcp`,
+  `providers`, `scripts` e `skills`.
+- `/Users/philipegermano/memory/bootstrap` passou a expor `README.md`,
+  `WORKSPACE_BOOTSTRAP.md` e `manifests` por symlink.
+- `/Users/philipegermano/memory/providers` passou a expor `AGENTS.md`,
+  `CODEX.md`, `CLAUDE.md` e `GEMINI.md` por symlink.
+- `/Users/philipegermano/projects` foi criado com symlinks para `FrankMD`,
+  `openclaude`, `imap-server`, `jpglabs-dashboard`, `jpglabs-portfolio`,
+  `portfolio-backend`, `portfolio-mobile` e `portfolio-v2`.
+- Os shims de root local foram materializados para `AGENTS.md`, `CODEX.md`,
+  `CLAUDE.md`, `GEMINI.md`, `WORKSPACE_BOOTSTRAP.md` e `.mcp.json`.
+- `/Users/philipegermano/code` permanece como base física e lookup canônico
+  do workspace nesta rodada; a mudança aplicada foi apenas de compatibilidade e
+  ergonomia operacional.
+
+### Validation
+
+- Validado com `ls -la`:
+  - `/Users/philipegermano/memory`
+  - `/Users/philipegermano/memory/bootstrap`
+  - `/Users/philipegermano/memory/providers`
+  - `/Users/philipegermano/projects`
+  - shims de root em `/Users/philipegermano`
+- Nenhum repositório foi movido.
+- Nenhum arquivo de produto foi alterado.
+- Nenhum `git remote`, branch ou upstream foi tocado.
+
+### Risks And Gaps
+
+- Este cutover local ainda é `compatibility-first`; a canonicidade documental
+  continua em `/Users/philipegermano/code`.
+- Ainda não houve arquivamento, compactação ou remoção de
+  `/Users/philipegermano/code`.
+- Repositórios não indexados no hub não foram expostos em
+  `/Users/philipegermano/projects` nesta rodada.
+
+### Handoff Notes
+
+- Tratar `/Users/philipegermano/memory` e `/Users/philipegermano/projects` como
+  aliases locais prontos para uso.
+- Tratar `/Users/philipegermano/code` como base física ainda vigente até uma
+  validação final explícita autorizar o desmonte do staging.
+<!-- session-bridge:ops-local-memory-projects-compat-cutover-2026-04-13:end -->
