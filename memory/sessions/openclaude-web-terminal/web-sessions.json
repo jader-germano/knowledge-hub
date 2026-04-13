@@ -2,6 +2,20 @@
   "version": 1,
   "sessions": [
     {
+      "webSessionId": "0d2b1e2f-6f13-4e2e-bb6c-25905aa9cfff",
+      "title": "ollama session · 2026-04-13 02:44",
+      "cwd": "/Users/philipegermano/code/openclaude",
+      "provider": "ollama",
+      "accessMode": "strict",
+      "thinkingMode": "adaptive",
+      "effort": "medium",
+      "status": "error",
+      "createdAt": "2026-04-13T05:44:32.354Z",
+      "lastActiveAt": "2026-04-13T05:44:32.886Z",
+      "model": "qwen2.5-coder:7b",
+      "lastError": "OPENAI_API_KEY is required when CLAUDE_CODE_USE_OPENAI=1 and OPENAI_BASE_URL is not local."
+    },
+    {
       "webSessionId": "23b51309-4798-4d9e-bf1a-9e6c8907f1ea",
       "title": "openai session · 2026-04-07 00:16",
       "cwd": "/Users/philipegermano/code/openclaude",

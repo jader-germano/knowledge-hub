@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-04-07T03:16:45.516Z",
+  "generatedAt": "2026-04-13T05:44:32.887Z",
   "source": {
     "system": "openclaude-web-terminal",
     "memoryMdPath": "/Users/philipegermano/code/jpglabs/docs/memory/sessions/openclaude-web-terminal/memory.md",
@@ -12,9 +12,33 @@
         "entityType": "service",
         "name": "openclaude-web-terminal",
         "observations": [
-          "Generated at 2026-04-07T03:16:45.516Z",
+          "Generated at 2026-04-13T05:44:32.887Z",
           "Session registry path: /Users/philipegermano/code/jpglabs/docs/memory/sessions/openclaude-web-terminal/web-sessions.json",
           "Markdown ledger path: /Users/philipegermano/code/jpglabs/docs/memory/sessions/openclaude-web-terminal/memory.md"
+        ]
+      },
+      {
+        "entityType": "session",
+        "name": "openclaude-web-session:0d2b1e2f-6f13-4e2e-bb6c-25905aa9cfff",
+        "observations": [
+          "Web session id: 0d2b1e2f-6f13-4e2e-bb6c-25905aa9cfff",
+          "Transcript session id: pending",
+          "Status: error",
+          "CWD: /Users/philipegermano/code/openclaude",
+          "Title: ollama session · 2026-04-13 02:44",
+          "Model: qwen2.5-coder:7b",
+          "Access mode: strict",
+          "Thinking mode: adaptive",
+          "Effort: medium",
+          "Created at: 2026-04-13T05:44:32.354Z",
+          "Last active at: 2026-04-13T05:44:32.886Z"
+        ]
+      },
+      {
+        "entityType": "provider",
+        "name": "openclaude-provider:ollama",
+        "observations": [
+          "Provider profile: ollama"
         ]
       },
       {
@@ -250,13 +274,6 @@
           "Effort: medium",
           "Created at: 2026-04-06T19:38:22.582Z",
           "Last active at: 2026-04-06T19:39:22.469Z"
-        ]
-      },
-      {
-        "entityType": "provider",
-        "name": "openclaude-provider:ollama",
-        "observations": [
-          "Provider profile: ollama"
         ]
       },
       {
@@ -1167,6 +1184,16 @@
   },
   "create_relations": {
     "relations": [
+      {
+        "from": "openclaude-web-terminal",
+        "relationType": "tracks",
+        "to": "openclaude-web-session:0d2b1e2f-6f13-4e2e-bb6c-25905aa9cfff"
+      },
+      {
+        "from": "openclaude-web-session:0d2b1e2f-6f13-4e2e-bb6c-25905aa9cfff",
+        "relationType": "uses_provider",
+        "to": "openclaude-provider:ollama"
+      },
       {
         "from": "openclaude-web-terminal",
         "relationType": "tracks",

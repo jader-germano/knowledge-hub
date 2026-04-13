@@ -1986,3 +1986,30 @@ Waiting for the debugger to disconnect...
 - title: openai session · 2026-04-07 00:16
 - detail: Error: When using --print, --output-format=stream-json requires --verbose
 
+## 2026-04-13T05:44:32.417Z · created
+
+- web_session_id: `0d2b1e2f-6f13-4e2e-bb6c-25905aa9cfff`
+- transcript_session_id: `pending`
+- provider: `ollama`
+- model: `qwen2.5-coder:7b`
+- access_mode: `strict`
+- thinking_mode: `adaptive`
+- effort: `medium`
+- status: `starting`
+- cwd: `/Users/philipegermano/code/openclaude`
+- title: ollama session · 2026-04-13 02:44
+
+## 2026-04-13T05:44:32.887Z · error
+
+- web_session_id: `0d2b1e2f-6f13-4e2e-bb6c-25905aa9cfff`
+- transcript_session_id: `pending`
+- provider: `ollama`
+- model: `qwen2.5-coder:7b`
+- access_mode: `strict`
+- thinking_mode: `adaptive`
+- effort: `medium`
+- status: `error`
+- cwd: `/Users/philipegermano/code/openclaude`
+- title: ollama session · 2026-04-13 02:44
+- detail: OPENAI_API_KEY is required when CLAUDE_CODE_USE_OPENAI=1 and OPENAI_BASE_URL is not local.
+
