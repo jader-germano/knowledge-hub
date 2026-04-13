@@ -93,20 +93,21 @@ Mario Zechner's skills are compatible with Pi, Claude Code, Codex, Amp, and Droi
 git clone https://github.com/badlogic/pi-skills ~/pi-skills
 ```
 
-**Symlink per agent:**
+**Legacy model (kept only for provider-only `pi-skills` compatibility):**
 ```bash
-# Claude Code (one level deep required)
-ln -s ~/pi-skills/brave-search ~/.claude/skills/brave-search
-ln -s ~/pi-skills/transcribe ~/.claude/skills/transcribe
-ln -s ~/pi-skills/youtube-transcript ~/.claude/skills/youtube-transcript
-ln -s ~/pi-skills/browser-tools ~/.claude/skills/browser-tools
-ln -s ~/pi-skills/vscode ~/.claude/skills/vscode
+# Provider-only skills may still be mirrored from `~/pi-skills/` when needed.
+# Do not use symlink as the canonical path for the Claude runtime bootstrap.
+```
 
-# Codex (recursive)
-ln -s ~/pi-skills ~/.codex/skills/pi-skills
+**Current workspace model:**
+```bash
+# Shared workspace skills -> Claude runtime without replacing unmanaged skills
+python3 /Users/philipegermano/code/.agents/scripts/sync_shared_skills.py \
+  --target-root /Users/philipegermano/.claude/skills \
+  --preserve-unmanaged
 
-# Pi (already supported)
-# ~/.pi/agent/skills/
+# Shared workspace skills -> workspace bootstrap wrappers
+python3 /Users/philipegermano/code/.agents/scripts/sync_shared_skills.py
 ```
 
 ## Skills Available from pi-skills

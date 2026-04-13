@@ -10308,3 +10308,67 @@ code
 - Ao revisar o dashboard ou o worker de taxonomia futuramente, preservar a
   distinção entre `OpenClaude` como provider host e `openclaude/` como repo.
 <!-- session-bridge:ops-openclaude-consumer-alignment-2026-04-13:end -->
+<!-- session-bridge:fix-openclaude-version-and-origin-diff-2026-04-13:start -->
+## Session Handoff - 2026-04-13 15:01 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 15:01:47 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `fix/openclaude-version-and-origin-diff-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code/openclaude`
+- Branch ativa: `main`
+- Objetivo aprovado: subir a versão local do `openclaude` e consolidar um
+  resumo técnico do delta contra `origin/main` do fork.
+
+### Summary
+
+- `package.json` foi atualizado de `1.0.10` para `1.0.11`.
+- O build do CLI local foi revalidado com sucesso e o binário passou a
+  responder `1.0.11 (Open Claude)`.
+- A comparação contra `origin/main` confirmou dois fatos distintos:
+  - `HEAD` local já está à frente do fork por `1` commit versionado
+    (`feat(slack): add Slack integration module and session sync skill`);
+  - a worktree local acumula um delta muito maior e ainda não consolidado,
+    com forte concentração em `src/utils`, `src/services`, `src/tools`,
+    `src/components` e `src/commands`.
+- O recorte dos fixes recentes de provider/modelo/logout concentra
+  `18` arquivos rastreados, com `783` inserções e `2601` deleções
+  versus `origin/main`.
+- Foi identificado gap documental do projeto:
+  `jpglabs/docs/projects/openclaude/GIT_HISTORY.md` e
+  `jpglabs/docs/projects/openclaude/llms/CODEX.md` não existem hoje.
+
+### Validation
+
+- `bun test src/utils/providerProfiles.test.ts src/utils/model/model.test.ts`
+  passou com `14` testes verdes.
+- `bun test src/components/ProviderManager.test.tsx` passou com `3` testes
+  verdes.
+- `bun run build` concluiu com `✓ Built openclaude v1.0.11 → dist/cli.mjs`.
+- `openclaude --version` confirmou `1.0.11 (Open Claude)`.
+- `git fetch origin` executado fora do sandbox concluiu sem erro.
+
+### Risks And Gaps
+
+- A worktree do `openclaude` segue amplamente suja; o diff contra
+  `origin/main` mistura alterações consolidadas, alterações locais não
+  commitadas e arquivos novos ainda não rastreados.
+- O resumo contra o fork é confiável para direção técnica e escopo, mas não
+  deve ser tratado como proposta de PR única sem primeiro isolar a fatia
+  desejada em staging.
+- O projeto segue sem `GIT_HISTORY.md` e sem bootstrap fino `llms/CODEX.md`,
+  o que enfraquece rastreabilidade histórica e handoff específico do provider.
+
+### Handoff Notes
+
+- Tratar `1.0.11` como nova versão local construída do CLI.
+- Se a intenção for publicar esse delta, o próximo passo correto é separar a
+  fatia de provider/modelo/logout da massa de mudanças não relacionadas antes
+  de abrir branch ou PR.
+- Ao discutir “diff versus origin”, distinguir sempre:
+  - `HEAD` local versus `origin/main`
+  - worktree local versus `origin/main`
+  - arquivos não rastreados, que não aparecem no `git diff`
+<!-- session-bridge:fix-openclaude-version-and-origin-diff-2026-04-13:end -->

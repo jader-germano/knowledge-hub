@@ -118,7 +118,7 @@
 |------|---------|
 | `~/.claude/extensions/memory-sync.sh` | Loads canonical memory at session start |
 | `~/.claude/extensions/session-logger.sh` | Logs session to memory center |
-| `~/.claude/skills/` | Symlinked from `~/pi-skills/` — Mario's pi-skills |
+| `~/.claude/skills/` | Runtime local real do Claude. Pode coexistir com skills legadas e wrappers compartilhados do workspace sincronizados sem `symlink` via `sync_shared_skills.py --target-root ~/.claude/skills --preserve-unmanaged`. |
 
 ## Codex Extensions
 | File | Purpose |
