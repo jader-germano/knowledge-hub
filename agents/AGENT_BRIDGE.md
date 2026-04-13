@@ -10205,3 +10205,106 @@ code
 - Tratar `/Users/philipegermano/code` como base física ainda vigente até uma
   validação final explícita autorizar o desmonte do staging.
 <!-- session-bridge:ops-local-memory-projects-compat-cutover-2026-04-13:end -->
+
+<!-- session-bridge:ops-openclaude-provider-surface-2026-04-13:start -->
+## Session Handoff - 2026-04-13 11:19 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 11:19:06 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `ops/openclaude-provider-surface-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano` (workspace root; não é repositório Git)
+- Objetivo aprovado: promover `openclaude` também a surface de provider no
+  layout local `memory/ + projects/`, sem removê-lo de `projects/`.
+
+### Summary
+
+- `openclaude` permaneceu exposto em `/Users/philipegermano/projects/openclaude`
+  como alias de projeto.
+- `OPENCLAUDE.md` foi criado em `/Users/philipegermano/code` como shim fino de
+  provider host multi-provider, ancorado no repo real `openclaude/`.
+- `/Users/philipegermano/memory/providers/OPENCLAUDE.md` e
+  `/Users/philipegermano/OPENCLAUDE.md` foram materializados por symlink.
+- `WORKSPACE_BOOTSTRAP.md`, `README.md` e
+  `jpglabs/docs/manifests/workspace.index.yaml` passaram a reconhecer
+  `OPENCLAUDE.md` como surface oficial de provider.
+
+### Validation
+
+- Validado com `ls -l`:
+  - `/Users/philipegermano/OPENCLAUDE.md`
+  - `/Users/philipegermano/memory/providers/OPENCLAUDE.md`
+- Validado com `sed -n`:
+  - `/Users/philipegermano/code/OPENCLAUDE.md`
+  - `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md`
+  - `/Users/philipegermano/code/README.md`
+  - `/Users/philipegermano/code/jpglabs/docs/manifests/workspace.index.yaml`
+- `openclaude` não foi removido nem movido de `/Users/philipegermano/projects`.
+
+### Risks And Gaps
+
+- O provider `OpenClaude` agora tem shim canônico, mas ainda não ganhou
+  diretório de runtime dedicado na raiz, porque o produto opera hoje ancorado
+  no repo `openclaude/` e em `.openclaude-profile.json`.
+- A mudança formaliza discovery e bootstrap; ela não altera credenciais,
+  profiles nem comportamento do runtime.
+
+### Handoff Notes
+
+- Tratar `OPENCLAUDE.md` como entrypoint fino do provider host OpenClaude.
+- Tratar `openclaude/` como runtime real e superfície operacional do produto.
+<!-- session-bridge:ops-openclaude-provider-surface-2026-04-13:end -->
+
+<!-- session-bridge:ops-openclaude-consumer-alignment-2026-04-13:start -->
+## Session Handoff - 2026-04-13 11:24 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 11:24:42 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `ops/openclaude-consumer-alignment-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano` (workspace root; fatia distribuída entre
+  `docs`, `jpglabs-dashboard` e `config/openclaude-home-lab`)
+- Objetivo aprovado: alinhar consumers operacionais para reconhecer
+  `OPENCLAUDE.md` depois da promoção do OpenClaude a provider surface.
+
+### Summary
+
+- `jpglabs/docs/manifests/docs.index.yaml` passou a indexar `OPENCLAUDE.md`
+  como `provider-bootstrap`.
+- `jpglabs/docs/manifests/skills.index.yaml` passou a expor
+  `provider_bootstrap_paths.openclaude`.
+- `config/openclaude-home-lab/hostinger/taxonomy-analyst/taxonomy_worker.py`
+  passou a observar `OPENCLAUDE.md` no crawl determinístico.
+- `jpglabs-dashboard/src/data/providers.ts` passou a renderizar `OpenClaude`
+  como provider ativo e a exibir `OPENCLAUDE.md` como sync surface de leitura.
+
+### Validation
+
+- YAML validado com `ruby`:
+  - `docs.index.yaml`
+  - `skills.index.yaml`
+- Sintaxe do worker validada com `python3 -m py_compile`.
+- Suíte padrão do `jpglabs-dashboard` executada com sucesso via `npm test`
+  (`6` testes verdes, `0` falhas).
+- `rg` confirmou a presença de `OPENCLAUDE.md` em todos os consumers tocados.
+
+### Risks And Gaps
+
+- `jpglabs-dashboard` segue com worktree amplamente suja e sem upstream
+  configurado; o delta desta sessão foi mantido restrito a `src/data/providers.ts`.
+- O diff do dashboard contém mudanças preexistentes fora desta fatia; elas não
+  foram revertidas nem reclassificadas como trabalho desta sessão.
+- O alinhamento feito aqui cobre discovery e visibilidade operacional; não muda
+  runtime, credenciais ou perfis do OpenClaude.
+
+### Handoff Notes
+
+- Considerar `OPENCLAUDE.md` agora parte do conjunto mínimo de shims de
+  provider que qualquer consumer novo do workspace deve enxergar.
+- Ao revisar o dashboard ou o worker de taxonomia futuramente, preservar a
+  distinção entre `OpenClaude` como provider host e `openclaude/` como repo.
+<!-- session-bridge:ops-openclaude-consumer-alignment-2026-04-13:end -->

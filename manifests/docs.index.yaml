@@ -1,4 +1,4 @@
-generated_on: 2026-04-01
+generated_on: 2026-04-13
 docs:
   - path: README.md
     class: workspace-entrypoint
@@ -103,6 +103,8 @@ docs:
   - path: CLAUDE.md
     class: provider-bootstrap
   - path: GEMINI.md
+    class: provider-bootstrap
+  - path: OPENCLAUDE.md
     class: provider-bootstrap
   - path: .codex/README.md
     class: provider-runtime-bootstrap
