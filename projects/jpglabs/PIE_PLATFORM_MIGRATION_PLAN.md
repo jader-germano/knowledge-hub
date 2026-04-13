@@ -62,10 +62,31 @@ Documento complementar obrigatório para a trilha de persistência:
       iniciar novas alterações
     - declarar bloqueio explicitamente quando a worktree estiver suja ou sem
       upstream, em vez de editar em cima de base possivelmente desatualizada
+16. Até o fechamento da migração estrutural para `GitLab`, a trilha de
+    portfólio fica restrita a:
+    - migração de repositórios, remotes, namespace e estrutura
+    - saneamento documental, governança e contratos de operação
+    - zero alteração de código de produto nas superfícies de portfólio
+17. Depois do fechamento da migração estrutural, a próxima ação obrigatória é
+    definir templates fixos de contrato para criação de novos projetos e a
+    arquitetura mínima obrigatória antes de qualquer implementação planejada.
+18. Scripts não planejados, automações curtas e MVPs curtos não entram na lane
+    planejada de `GitLab`; eles devem seguir por uma lane separada em `GitHub`.
+19. A trilha de validação que usará código do `TSE` deve ser tratada como
+    séria desde a origem: governança, auditabilidade, segurança e rigor de
+    contrato acima de velocidade de iteração.
 
 ## Escopo Imediato
 
-### Onda 1 — obrigatória agora
+### Onda 0 — freeze estrutural obrigatório agora
+
+- migrar a estrutura do portfólio para `GitLab`
+- alinhar naming, remotes, ownership e topologia de repositórios
+- fechar o contrato da nova estrutura antes de qualquer alteração de código
+- manter as superfícies de portfólio em modo `no-code-change` até concluir essa
+  migração estrutural
+
+### Onda 1 — somente após a migração estrutural
 
 - extrair o backend hoje embutido em `portfolio-backend`
 - remover o papel de frontend primário do `portfolio-backend`

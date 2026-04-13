@@ -3,6 +3,256 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Session Handoff - 2026-04-13 00:03 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 00:03:02 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `ops/portfolio-gitlab-freeze-governance-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code` (workspace root; não é um repositório Git)
+- Branch ativa: `não aplicável`
+- Objetivo aprovado: registrar a decisão de congelar mudanças de código no portfólio até concluir a migração estrutural para GitLab e posicionar os próximos passos de governança pós-migração.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - atualizar o plano canônico do PIE com freeze de código durante a migração estrutural
+  - registrar a decisão de lane `GitLab` para trabalho planejado e lane `GitHub` para scripts/MVPs curtos não planejados
+  - deixar explícita a próxima ação pós-migração: contratos fixos de criação de projeto + arquitetura mínima obrigatória
+- O que ficou fora do escopo:
+  - alterar código de produto
+  - executar a migração de repositórios nesta sessão
+  - definir ainda os templates detalhados de contrato
+
+### Prototype And Evidence
+
+- Esta sessão não foi entrega funcional de feature; foi consolidação de governança e sequencing da migração.
+- Evidências principais:
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PIE_PLATFORM_MIGRATION_PLAN.md`
+
+### Summary
+
+- A trilha do portfólio foi explicitamente congelada para mudanças de código até o fechamento da migração estrutural para `GitLab`.
+- Durante esse período, o escopo permitido fica restrito a estrutura, remotes, namespace, naming, ownership e governança documental.
+- A próxima ação obrigatória depois da migração estrutural ficou definida: criar templates fixos de contrato para novos projetos e exigir arquitetura mínima antes de implementação planejada.
+- Scripts não planejados e MVPs curtos ficaram explicitamente fora da lane planejada de `GitLab`; eles passam a ter lane separada em `GitHub`.
+- O uso futuro de código do `TSE` foi registrado como trilha de alta seriedade, exigindo rigor de contrato, auditabilidade e segurança desde a origem.
+
+### Validation
+
+- Builds executados:
+  - nenhum
+- Testes executados:
+  - nenhum
+- Cobertura atingida na fatia entregue:
+  - não aplicável; sessão documental/governança
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - os templates fixos de contrato ainda não foram definidos; apenas o sequencing e o gate de entrada foram registrados
+- Validação em macOS:
+  - atualização documental aplicada no plano canônico do PIE
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `sed -n '1,260p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PIE_PLATFORM_MIGRATION_PLAN.md`
+  - Action: revisar o plano canônico atual antes de registrar a decisão nova.
+  - Result: confirmado que o plano ainda apontava para refatoração/código antes do freeze estrutural pedido.
+- `rg -n "GitLab|GitHub|template|contrato|arquitetura|MVP|lane|portfolio|portfólio" /Users/philipegermano/code/jpglabs/docs ...`
+  - Action: localizar superfícies correlatas de governança e lanes.
+  - Result: confirmado que a decisão nova precisava entrar no plano do PIE e no handoff diário.
+
+### Files Created
+
+- `/Users/philipegermano/code/daily/2026-04-13.md`
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PIE_PLATFORM_MIGRATION_PLAN.md`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code
+├── daily
+│   └── 2026-04-13.md [new]
+└── jpglabs
+    └── docs
+        ├── agents
+        │   └── AGENT_BRIDGE.md [modified]
+        └── projects
+            └── jpglabs
+                └── PIE_PLATFORM_MIGRATION_PLAN.md [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `docs/portfolio-gitlab-freeze-governance`
+- Commit: `docs(pie): freeze portfolio code changes until gitlab migration closes`
+- Review request: confirmar se este ajuste deve entrar sozinho no repo `jpglabs/docs` ou junto com a próxima rodada documental da migração.
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — contrato de fechamento e priorização relido
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PIE_PLATFORM_MIGRATION_PLAN.md` — plano canônico atualizado com o novo sequencing
+- Glossary: nenhum termo novo entrou no glossário nesta sessão
+
+### Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+### Risks And Gaps
+
+- O freeze reduz risco de drift, mas adia qualquer correção de código de portfólio até o fechamento da migração estrutural.
+- Os templates fixos e o contrato arquitetural ainda precisam ser escritos em detalhe na próxima fase.
+
+### Next Actions
+
+- Concluir a migração estrutural do portfólio para `GitLab`; imediatamente depois, abrir a trilha de templates fixos de contrato e arquitetura mínima obrigatória para projetos planejados, deixando scripts/MVPs curtos em lane separada no `GitHub`.
+
+### Handoff Notes
+
+- Não iniciar refatoração nem alteração de código nas superfícies de portfólio até concluir a migração estrutural.
+- Tratar a futura trilha com código do `TSE` como lane de alta criticidade e rigor operacional.
+
+## Session Handoff - 2026-04-12 23:47 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-12 23:47:20 -0300`
+- Data da sessão: `2026-04-12`
+- Feature/session id: `ops/remove-kiro-keep-opencode-2026-04-12`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code` (workspace root; não é um repositório Git)
+- Branch ativa: `não aplicável`
+- Objetivo aprovado: remover `kiro` da superfície de providers e preservar `opencode` como provider ocasional no host.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - localizar referências operacionais ativas a `kiro` e `opencode`
+  - remover `kiro` do host
+  - restaurar `opencode` como cliente global ocasional
+  - confirmar o estado final dos clientes globais do Docker MCP
+- O que ficou fora do escopo:
+  - reescrever logs históricos ou handoffs antigos que apenas mencionam esses providers
+  - alterar o catálogo suportado upstream do Docker MCP CLI
+
+### Prototype And Evidence
+
+- Esta sessão não foi entrega funcional de feature; foi saneamento operacional da superfície de providers locais.
+- Evidências principais:
+  - listagem do diretório `/Users/philipegermano`
+  - `docker mcp client ls --global`
+  - remoção de `~/.kiro`
+  - restauração de `~/.config/opencode/opencode.json`
+
+### Summary
+
+- Não havia referência ativa a `kiro` nem `opencode` no bootstrap canônico do workspace, no `config.toml` do Codex ou no baseline MCP compartilhado.
+- `kiro` foi removido do host.
+- `opencode` permaneceu instalado via `~/.bun/bin/opencode`; a configuração local foi recriada em `~/.config/opencode/opencode.json` e o cliente global do Docker MCP foi reconectado.
+- A superfície global do Docker MCP ficou em `claude-code`, `claude-desktop`, `codex`, `gemini` e `opencode`.
+- `kiro` foi tratado como correção do typo `qiro` informado pelo usuário.
+
+### Validation
+
+- Builds executados:
+  - nenhum
+- Testes executados:
+  - `docker mcp client ls --global`
+  - verificação de existência de `~/.kiro`, `~/.opencode` e `~/.config/opencode`
+  - busca por referências ativas em configs canônicas do workspace
+- Cobertura atingida na fatia entregue:
+  - não aplicável; sessão de saneamento/configuração local
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - o Docker MCP CLI continua suportando `kiro` e `opencode` como clientes possíveis upstream; isso não é configurável localmente
+- Validação em macOS:
+  - `docker mcp client ls --global` passou a listar `opencode` novamente como cliente conectado e deixou `kiro` fora da configuração global ativa
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `rg -n "\\b(opencode|kiro|qiro)\\b" ...`
+  - Action: localizar referências ativas a esses providers no host e no workspace.
+  - Result: nenhuma referência ativa encontrada nas configurações canônicas; apenas histórico/logs e os diretórios locais.
+- `docker mcp client disconnect kiro --global`
+  - Action: garantir que `kiro` não permanecesse conectado ao Docker MCP global.
+  - Result: `kiro` saiu da configuração global ativa.
+- `rm -rf /Users/philipegermano/.kiro /Users/philipegermano/.opencode /Users/philipegermano/.config/opencode`
+  - Action: remover os diretórios locais e limpar a superfície antes da correção final do requisito.
+  - Result: os diretórios foram removidos; depois o requisito foi corrigido pelo usuário para preservar `opencode`.
+- `command -v opencode`, `opencode --help` e `docker mcp client connect opencode --global`
+  - Action: confirmar que `opencode` ainda estava instalado via Bun e restaurar sua integração global.
+  - Result: `opencode` permaneceu disponível em `~/.bun/bin/opencode`, o `opencode.json` foi recriado e o cliente global voltou a ficar conectado.
+- `docker mcp client ls --global` e `ls -la /Users/philipegermano`
+  - Action: validar a superfície final do host.
+  - Result: `kiro` saiu da configuração global ativa e da árvore local; `opencode` voltou à configuração global ativa com `~/.config/opencode/` recriado.
+
+### Files Created
+
+- Nenhum arquivo novo nesta sessão
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano
+├── .config
+│   └── opencode
+│       └── opencode.json [restored]
+├── .kiro [removed]
+├── .opencode [removed]
+└── code
+    └── jpglabs
+        └── docs
+            └── agents
+                └── AGENT_BRIDGE.md [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `ops/remove-kiro-keep-opencode`
+- Commit: `docs(workspace): record provider cleanup and opencode restore`
+- Review request: não há repositório Git único no root; se quiser versionar o handoff, confirme primeiro se a atualização documental deve entrar no repo `jpglabs/docs`.
+- MCP status desta sessão:
+  - clientes globais ativos: `claude-code`, `claude-desktop`, `codex`, `gemini`, `opencode`
+  - provider removido localmente: `kiro`
+  - provider preservado/restaurado: `opencode`
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — contrato de fechamento reaplicado
+- `docker mcp client ls --global` — estado global dos clientes consultado e validado
+- `/Users/philipegermano/.codex/config.toml` — conferido para confirmar ausência de referência ativa a `kiro`/`opencode`
+- `~/.bun/bin/opencode` — validado como binário ainda instalado
+- Glossary: nenhum termo novo entrou no glossário nesta sessão
+
+### Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+### Risks And Gaps
+
+- O Docker MCP CLI continuará mostrando `kiro` e `opencode` como clientes suportados pelo produto quando se consulta `--help`; isso não significa uso ativo no host.
+- `~/.opencode` permaneceu removido; o estado restaurado usa o binário Bun e `~/.config/opencode/opencode.json`, que é suficiente para o uso ocasional validado nesta sessão.
+
+### Next Actions
+
+- Seguir com `claude-code`, `claude-desktop`, `codex`, `gemini` e `opencode` como providers locais ativos, mantendo `kiro` fora do host.
+
+### Handoff Notes
+
+- Se algum app de terceiros reinstalar `~/.kiro`, tratar como recriação local indevida e remover novamente.
+- `opencode` deve ser preservado; o bootstrap canônico do workspace não depende dele, mas o usuário mantém uso ocasional.
+
 ## Session Handoff - 2026-04-12 23:32 -0300
 
 ### Session Metadata
