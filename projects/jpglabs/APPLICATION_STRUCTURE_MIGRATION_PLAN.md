@@ -13,6 +13,11 @@ Documento complementar obrigatório para a trilha de dados e persistência:
   estrutural para `GitLab`
 - repositórios-alvo da Onda 0 já foram provisionados no `GitLab`, receberam o
   `remote` local e estão com branches canônicos protegidos
+- o upstream local das branches canônicas da Onda 0 já aponta para `gitlab/*`
+- o isolamento mínimo de worktree da Onda 0 já foi executado sem abrir MR:
+  `portfolio-backend` ficou preservado em branch local,
+  `jpglabs-portfolio` voltou a ficar limpo em `main` e `portfolio-mobile`
+  ficou preservado em branch auxiliar publicada
 - o naming legado foi removido das decisões ativas desta trilha
 - a arquitetura alvo deixa de assumir backend único e passa a operar por
   contexto de aplicação
@@ -92,12 +97,15 @@ Documento complementar obrigatório para a trilha de dados e persistência:
 - migrar repositórios, remotes, namespace e ownership
 - concluir provisionamento dos repositórios-alvo no `GitLab`
 - alinhar branches canônicos default/protected por repositório
+- concluir o cutover metadata-only de upstream para `gitlab/*`
 - fechar a estrutura-alvo dos projetos planejados
 - consolidar documentação canônica e naming neutro
-- consolidar inventário local repo a repo antes de qualquer troca de upstream
-- bloquear troca de upstream e sincronização contínua enquanto a worktree real
-  estiver suja
-- manter todas as superfícies de portfólio em modo `no-code-change`
+- consolidar inventário local repo a repo antes do primeiro ciclo de sync
+- isolar diffs úteis em branches auxiliares quando a worktree canônica não
+  puder seguir limpa
+- bloquear `pull --ff-only` e sincronização contínua enquanto existir branch
+  auxiliar estacionada sem decisão de merge
+- manter branches canônicas de portfólio em modo `no-code-change`
 
 ### Onda 1 — contrato de criação de projetos planejados
 
@@ -255,8 +263,8 @@ knowledge-hub/
 - normalizar naming e ownership
 - consolidar os documentos canônicos desta trilha
 - usar o inventário operacional da Onda 0 como ordem oficial de execução local
-- consolidar remotes `gitlab` e branches canônicos protegidos sem trocar
-  upstream antes da limpeza das worktrees
+- consolidar remotes `gitlab`, branches canônicos protegidos e upstream local
+  apontando para `GitLab`, sem abrir sync antes da limpeza das worktrees
 - manter pronto o template fixo de contrato pós-migração
 
 ### Sprint 1 — template e arquitetura obrigatória

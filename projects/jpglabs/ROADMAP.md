@@ -168,9 +168,9 @@ Critério de saída:
    superfícies ativas.
 2. Espelhar em `Confluence` a decisão de fronteira entre backend/BFF, frontend
    público e superfícies de operador.
-3. Limpar ou isolar as worktrees dos repositórios do portfólio na ordem do
-   inventário local antes de trocar upstream ou abrir sincronização contínua
-   com `GitLab`, preservando as branches canônicas já provisionadas e
-   protegidas.
+3. Consolidar o isolamento operacional da Onda 0, mantendo
+   `portfolio-backend` em `wip/resume-parse-contract`, `jpglabs-portfolio`
+   limpo em `main` e `portfolio-mobile` em
+   `chore/node-pin-and-async-storage`, sem abrir MR nesta rodada.
 4. Auditar o `portfolio-backend` para separar o que permanece como backend do
    que deve sair para a lane visual.

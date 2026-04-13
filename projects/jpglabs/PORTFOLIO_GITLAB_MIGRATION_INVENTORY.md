@@ -9,15 +9,16 @@ portfólio para `GitLab` em execução local controlada.
 
 - inventariar o estado local real dos repositórios do portfólio
 - registrar alvo recomendado de `GitLab` por repositório
-- explicitar bloqueios antes de qualquer troca de upstream
+- explicitar bloqueios antes do primeiro ciclo de sincronização contínua no
+  `GitLab`
 - definir ordem de execução com menor risco arquitetural e operacional
 
 ## Premissas Explícitas
 
 1. o repositório documental canônico desta trilha é
    `/Users/philipegermano/code/jpglabs/docs`
-2. nenhuma worktree suja deve sofrer troca de upstream, `pull` cego ou
-   sincronização contínua de migração
+2. nenhuma worktree suja deve sofrer `pull` cego, rebase automático ou
+   sincronização contínua de migração depois do cutover para `GitLab`
 3. o namespace alvo recomendado é `gitlab.com/jader-germano/*`, porque:
    - o repositório `docs` já opera com `origin + gitlab`
    - `jpglabs-saas` já foi aberto nesse namespace
@@ -41,9 +42,9 @@ portfólio para `GitLab` em execução local controlada.
 
 | Repo | Papel atual | Path local | Branch atual | Remotes atuais | Estado local | GitLab target | Status GitLab | Decisão |
 |---|---|---|---|---|---|---|---|
-| `portfolio-backend` | backend/BFF canônico do portfólio | `/Users/philipegermano/code/jpglabs/portfolio-backend` | `develop` | `origin = git@github.com:jader-germano/jpglabs-portfolio-backend.git`<br>`gitlab = git@gitlab.com:jader-germano/portfolio-backend.git` | `dirty` | `git@gitlab.com:jader-germano/portfolio-backend.git` | provisionado + `main` default/protected + `develop` protected | migrar primeiro |
-| `jpglabs-portfolio` | candidato forte para frontend público | `/Users/philipegermano/code/jpglabs/jpglabs-portfolio` | `main` | `origin = git@github.com:jader-germano/jpglabs-portfolio.git`<br>`gitlab = git@gitlab.com:jader-germano/jpglabs-portfolio.git` | `dirty` | `git@gitlab.com:jader-germano/jpglabs-portfolio.git` | provisionado + `main` default/protected | migrar depois do backend |
-| `portfolio-mobile` | cliente mobile do portfólio | `/Users/philipegermano/code/jpglabs/portfolio-mobile` | `main` | `origin = git@github.com:jader-germano/jpglabs-portifolio-mobile.git`<br>`gitlab = git@gitlab.com:jader-germano/portfolio-mobile.git` | `dirty` | `git@gitlab.com:jader-germano/portfolio-mobile.git` | provisionado + `main` default/protected | migrar com correção de naming |
+| `portfolio-backend` | backend/BFF canônico do portfólio | `/Users/philipegermano/code/jpglabs/portfolio-backend` | `wip/resume-parse-contract` | `origin = git@github.com:jader-germano/jpglabs-portfolio-backend.git`<br>`gitlab = git@gitlab.com:jader-germano/portfolio-backend.git` | `isolada` | `git@gitlab.com:jader-germano/portfolio-backend.git` | provisionado + `main` default/protected + `develop` protected + upstream canônico local em `gitlab/*` | preservar WIP local sem MR |
+| `jpglabs-portfolio` | candidato forte para frontend público | `/Users/philipegermano/code/jpglabs/jpglabs-portfolio` | `main` | `origin = git@github.com:jader-germano/jpglabs-portfolio.git`<br>`gitlab = git@gitlab.com:jader-germano/jpglabs-portfolio.git` | `limpa` | `git@gitlab.com:jader-germano/jpglabs-portfolio.git` | provisionado + `main` default/protected + upstream local em `gitlab/main` | manter limpo em `main` |
+| `portfolio-mobile` | cliente mobile do portfólio | `/Users/philipegermano/code/jpglabs/portfolio-mobile` | `chore/node-pin-and-async-storage` | `origin = git@github.com:jader-germano/jpglabs-portifolio-mobile.git`<br>`gitlab = git@gitlab.com:jader-germano/portfolio-mobile.git` | `isolada` | `git@gitlab.com:jader-germano/portfolio-mobile.git` | provisionado + `main` default/protected + branch `chore/node-pin-and-async-storage` publicada sem MR | preservar branch publicada sem MR |
 | `portfolio-v2` | referência visual/funcional, não runtime final | `/Users/philipegermano/code/jpglabs/portfolio-v2` | `feature/gitlab-cicd-pipeline` | `origin = git@github.com:jader-germano/portfolio-v2.git` | `dirty` | `n/a nesta onda` | não provisionar nesta onda | congelar como referência |
 | `jpglabs-dashboard` | cockpit local-first de coordenação | `/Users/philipegermano/code/jpglabs/jpglabs-dashboard` | `main` | `sem remote configurado` | `dirty` | `n/a nesta onda` | fora da Onda 0 | reavaliar depois |
 
@@ -64,27 +65,43 @@ portfólio para `GitLab` em execução local controlada.
   - `portfolio-backend`: `main` = default/protected; `develop` = protected
   - `jpglabs-portfolio`: `main` = default/protected
   - `portfolio-mobile`: `main` = default/protected
+- as branches canônicas locais já apontam para `gitlab/*` como upstream:
+  - `portfolio-backend`: `main -> gitlab/main`; `develop -> gitlab/develop`
+  - `jpglabs-portfolio`: `main -> gitlab/main`
+  - `portfolio-mobile`: `main -> gitlab/main`
+- o `remote.pushDefault` local já foi alinhado para `gitlab` nos três
+  repositórios da Onda 0
+- o isolamento operacional das worktrees úteis já foi executado sem abrir MR:
+  - `portfolio-backend`: branch local `wip/resume-parse-contract`, commit
+    `3c96a0b`
+  - `jpglabs-portfolio`: worktree limpa em `main`
+  - `portfolio-mobile`: branch `chore/node-pin-and-async-storage`, commit
+    `f4183e2`, publicada no `GitLab` sem `merge request`
 - o próximo bloqueio real deixou de ser provisionamento e passou a ser:
-  limpeza/isolation das worktrees antes de troca de upstream e sincronização
-  contínua
+  sincronização contínua segura, decisão de merge das branches auxiliares e
+  canonicalização final de remotes
 
 ### `portfolio-backend`
 
-- worktree suja com alterações rastreadas e arquivos novos
+- a worktree útil foi isolada na branch local `wip/resume-parse-contract`
+- o commit local preservado é `3c96a0b`
+- não há upstream nem MR para a branch WIP, por escolha explícita do usuário
 - o repo ainda carrega naming legado no `origin`
 - é a superfície que define contrato de backend/BFF; qualquer erro aqui
   propaga para web e mobile
 
 ### `jpglabs-portfolio`
 
-- worktree suja com mudanças locais de app/documentação
+- a worktree foi saneada e o repo voltou a ficar limpo em `main`
 - o `remote` `gitlab` já existe e o branch `main` já está default/protected no
   GitLab
-- depende de fechamento prévio da fronteira do `portfolio-backend`
+- não ficou branch auxiliar pendente nesta rodada
 
 ### `portfolio-mobile`
 
-- worktree suja
+- a worktree útil foi isolada na branch `chore/node-pin-and-async-storage`
+- o commit preservado é `f4183e2`
+- a branch auxiliar já foi publicada no `GitLab`, mas sem abrir `merge request`
 - o `origin` atual tem typo legado em `portifolio`
 - a correção de naming deve acontecer junto da migração para evitar novo drift
 
@@ -119,11 +136,13 @@ portfólio para `GitLab` em execução local controlada.
    - motivo: revisar só depois que o caminho crítico do portfólio estiver fora
      de risco
 
-## Checklist Local Antes De Trocar Upstream
+## Checklist Local Antes De Abrir Sync Contínuo
 
-- [ ] confirmar se a worktree do repo está limpa ou isolada por branch/commit
-- [ ] confirmar se o branch atual é o branch canônico que deve subir no
-      `GitLab`
+- [x] confirmar se a worktree do repo-alvo da Onda 0 está limpa ou isolada por
+      branch/commit
+- [x] confirmar se o branch canônico do repo está identificado e publicado no
+      `GitLab`, mesmo quando a worktree ativa estiver estacionada em branch
+      auxiliar
 - [x] confirmar se o projeto já existe no namespace alvo do `GitLab`
 - [ ] confirmar se o nome final do repositório elimina naming legado
 - [x] registrar ownership e objetivo do repo no hub antes do corte
@@ -131,8 +150,10 @@ portfólio para `GitLab` em execução local controlada.
 - [x] validar `remote -v` após o corte
 - [x] publicar o branch canônico inicial no GitLab
 - [x] proteger os branches canônicos no GitLab
-- [ ] só então trocar upstream local quando a worktree estiver limpa e a
-      estratégia de sync estiver aprovada
+- [x] alinhar upstream local das branches canônicas para `gitlab/*`
+- [x] alinhar `remote.pushDefault = gitlab`
+- [ ] só então iniciar `pull --ff-only` e sincronização contínua quando a
+      worktree estiver limpa e a estratégia de sync estiver aprovada
 
 ## Sequência Operacional Recomendada
 
@@ -141,21 +162,25 @@ portfólio para `GitLab` em execução local controlada.
 git -C <repo> status --short
 git -C <repo> remote -v
 
-# 2. sync só quando a worktree estiver limpa
-git -C <repo> pull --ff-only
-
-# 3. corte local de remote após confirmar repo existente no GitLab
+# 2. corte local de remote após confirmar repo existente no GitLab
 git -C <repo> remote add gitlab git@gitlab.com:jader-germano/<repo>.git
 
-# 4. validação local
+# 3. validação local
 git -C <repo> remote -v
 
-# 5. publicação inicial quando o repo remoto existir e o branch canônico estiver aprovado
+# 4. publicação inicial quando o repo remoto existir e o branch canônico estiver aprovado
 git -C <repo> push gitlab <branch>:<branch>
 
-# 6. alinhamento de default/protection no GitLab
+# 5. alinhamento de default/protection no GitLab
 glab repo update jader-germano/<repo> --defaultBranch <default-branch>
 glab api projects/<project-id>/protected_branches -X POST -f name=<branch>
+
+# 6. cutover metadata-only do tracking local
+git -C <repo> branch --set-upstream-to=gitlab/<branch> <branch>
+git -C <repo> config remote.pushDefault gitlab
+
+# 7. sync só quando a worktree estiver limpa
+git -C <repo> pull --ff-only
 ```
 
 ## Riscos E Trade-offs
@@ -168,17 +193,23 @@ glab api projects/<project-id>/protected_branches -X POST -f name=<branch>
   reintroduziria a leitura errada de que ele ainda é runtime válido
 - deixar `portfolio-mobile` com o naming legado no `origin` diminui atrito de
   curto prazo, mas cristaliza um erro de nomenclatura no destino novo
+- publicar branch auxiliar sem MR preserva retomada rápida, mas exige disciplina
+  para não confundir branch de estacionamento com branch pronta para merge
 
 ## Recomendação Direta
 
-1. não trocar upstream nem iniciar sincronização contínua de nenhum repo do
-   portfólio enquanto as worktrees permanecerem sujas
-2. tratar `portfolio-backend` como primeiro repositório a limpar e migrar
-3. usar `jpglabs-portfolio` como frontend público alvo e `portfolio-mobile`
-   como cliente dependente
-4. considerar provisionamento GitLab e proteção de branch como concluídos na
-   Onda 0, deixando o risco remanescente concentrado em limpeza de worktree e
-   cutover de upstream
+1. não rodar `pull`, rebase automático nem sincronização contínua de nenhum
+   repo do portfólio enquanto existir branch auxiliar estacionada sem decisão
+   de merge
+2. tratar `portfolio-backend` como primeiro repositório a retomar, partindo da
+   branch local `wip/resume-parse-contract`
+3. manter `jpglabs-portfolio` limpo em `main` e usar `portfolio-mobile` como
+   branch auxiliar já publicada, ainda sem MR
+4. considerar provisionamento GitLab, proteção de branch e isolamento mínimo
+   das worktrees como concluídos na
+   Onda 0, deixando o risco remanescente concentrado em limpeza de worktree,
+   decisão de merge das branches auxiliares, primeiro ciclo de sync e
+   canonicalização final de remotes
 5. manter `portfolio-v2` fora da Onda 0 e registrar isso explicitamente na
    governança
 

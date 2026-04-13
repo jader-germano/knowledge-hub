@@ -3,6 +3,295 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Session Handoff - 2026-04-13 02:08 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 02:08:38 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `ops/portfolio-gitlab-worktree-isolation-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `feature/unified-memory-center`
+- Objetivo aprovado: estacionar as mudanças úteis da Onda 0 em branches
+  separadas, descartar resíduo `Pi`/`Pie family`, evitar abertura de MR e
+  consolidar o estado canônico da migração local.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - isolar a fatia útil do backend em branch própria, sem upstream/MR
+  - limpar `jpglabs-portfolio` de resíduo local não promovível
+  - isolar a fatia útil do mobile em branch própria, preservando retomada
+  - descartar mudanças ligadas à família `Pi` fora do escopo canônico atual
+  - atualizar a documentação canônica para refletir o estado pós-isolamento
+- O que ficou fora do escopo:
+  - abrir `merge request`
+  - mergear branches auxiliares
+  - renomear remotes legados
+  - zipar/remover `/Users/philipegermano/code` antes da validação final da
+    migração
+
+### Prototype And Evidence
+
+- Esta sessão foi higiene Git + preservação controlada de WIP, não entrega de
+  feature de produto.
+- Evidências principais:
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+  - `gitlab.com/jader-germano/portfolio-mobile/-/tree/chore/node-pin-and-async-storage`
+
+### Summary
+
+- `portfolio-backend` teve o resíduo não promovível descartado e a fatia útil
+  foi preservada na branch local `wip/resume-parse-contract`, commit `3c96a0b`,
+  sem upstream e sem MR.
+- `jpglabs-portfolio` foi saneado e voltou a ficar limpo em `main`, mantendo
+  `gitlab/main` como tracking canônico sem branch auxiliar aberta nesta rodada.
+- `portfolio-mobile` teve a fatia válida preservada na branch
+  `chore/node-pin-and-async-storage`, commit `f4183e2`; a branch existe no
+  `GitLab`, mas nenhum `merge request` foi aberto por decisão explícita do
+  usuário.
+- O inventário canônico passou a distinguir claramente branches canônicas de
+  branches auxiliares de estacionamento.
+
+### Validation
+
+- Builds executados:
+  - nenhum build de produto
+- Testes executados:
+  - `portfolio-backend`: compilação de `tsconfig.test.json` + suíte isolada
+    `resume-parse-contract` com `6/6` testes passando
+  - `portfolio-mobile`: `npm run lint` com sucesso sob `Node 20.19.4`
+  - `jpglabs-portfolio`: validação de higiene Git com `status --short` limpo
+  - `portfolio-mobile`: validação remota da branch auxiliar via `glab api`
+- Cobertura atingida na fatia entregue:
+  - validação funcional parcial do helper de parsing no backend
+  - validação estática/lint da fatia móvel preservada
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - a suíte completa do backend continua falhando em testes legados de auth
+    (`PRIME_OWNER` vs `ROOT_ADMIN`), fora da fatia preservada nesta sessão
+  - não houve MR nem revisão remota das branches auxiliares
+- Validação em macOS:
+  - confirmado:
+    - `portfolio-backend`: branch atual `wip/resume-parse-contract`
+    - `jpglabs-portfolio`: `main -> gitlab/main` e worktree limpa
+    - `portfolio-mobile`: `chore/node-pin-and-async-storage -> gitlab/chore/node-pin-and-async-storage`
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend switch -c wip/resume-parse-contract`
+  - Action: abrir branch de estacionamento local para a fatia útil do backend.
+  - Result: branch criada e ativada.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend restore -- DOCS.md Dockerfile README.md docs/data-model.md docs/scale-foundation.md lib/i18n.ts`
+  - Action: descartar resíduo não promovível e derivações erradas ligadas ao legado `Pi`.
+  - Result: arquivos rastreados voltaram à baseline.
+- `rm -rf /Users/philipegermano/code/jpglabs/portfolio-backend/.claude /Users/philipegermano/code/jpglabs/portfolio-backend/app/dashboard/status`
+  - Action: remover artefatos locais e superfície `Pi` fora do escopo.
+  - Result: resíduo untracked descartado.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend add lib/resume-parse-contract.ts tests/resume-parse-contract.test.ts`
+  - Action: stage cirúrgico da fatia útil do backend.
+  - Result: apenas o helper de contrato e seus testes ficaram preparados.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend commit -m "test(resume): add parse contract helpers"`
+  - Action: preservar a fatia útil do backend em commit local.
+  - Result: commit `3c96a0b`.
+- `/bin/zsh -lc 'cd /Users/philipegermano/code/jpglabs/portfolio-backend && npx tsc -p tsconfig.test.json && node --test .tmp-tests/tests/resume-parse-contract.test.js'`
+  - Action: validar isoladamente a fatia preservada do backend.
+  - Result: `6/6` testes passando.
+- `git -C /Users/philipegermano/code/jpglabs/jpglabs-portfolio restore -- package-lock.json public/docs/reactive-backend-migration.md src/App.tsx`
+  - Action: descartar derivações locais não promovíveis do frontend.
+  - Result: arquivos rastreados restaurados.
+- `rm -rf /Users/philipegermano/code/jpglabs/jpglabs-portfolio/.claude /Users/philipegermano/code/jpglabs/jpglabs-portfolio/src/lib`
+  - Action: remover artefatos locais auxiliares do frontend.
+  - Result: repo voltou ao estado limpo em `main`.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-mobile switch -c chore/node-pin-and-async-storage`
+  - Action: abrir branch auxiliar para a fatia válida do mobile.
+  - Result: branch criada e ativada.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-mobile add .github/workflows/eas-build.yml .github/workflows/pr-validation.yml app.json 'app/(tabs)/_layout.tsx' app/_layout.tsx context/auth-context.tsx eslint.config.js package-lock.json package.json .node-version .nvmrc`
+  - Action: stage da fatia preservada do mobile.
+  - Result: apenas os arquivos validados ficaram no commit.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-mobile commit -m "chore(mobile): pin node and async storage runtime"`
+  - Action: preservar a fatia útil do mobile em commit dedicado.
+  - Result: commit `f4183e2`.
+- `/bin/zsh -lc 'cd /Users/philipegermano/code/jpglabs/portfolio-mobile && source ~/.nvm/nvm.sh && nvm use 20.19.4 >/dev/null && npm run lint'`
+  - Action: validar a fatia preservada do mobile.
+  - Result: lint concluído com sucesso.
+- `glab api projects/jader-germano%2Fportfolio-mobile/repository/branches/chore%2Fnode-pin-and-async-storage`
+  - Action: confirmar existência da branch auxiliar publicada no `GitLab`.
+  - Result: branch remota confirmada, sem `merge request`.
+- `date '+%Y-%m-%d %H:%M:%S %z'`
+  - Action: fixar o timestamp exato do fechamento.
+  - Result: `2026-04-13 02:08:38 -0300`.
+
+### Files Created
+
+- nenhum arquivo funcional novo nesta subetapa; houve apenas preservação de
+  fatias já existentes e atualização documental
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+- `/Users/philipegermano/code/daily/2026-04-13.md`
+
+### Risks And Gaps
+
+- `portfolio-backend` ainda depende de decisão futura sobre merge, descarte ou
+  evolução da branch local `wip/resume-parse-contract`
+- a suíte ampla do backend permanece com falhas legadas de auth fora desta
+  fatia
+- `portfolio-mobile` ainda mantém typo legado no `origin`
+- a etapa de zip/remover `/Users/philipegermano/code` continua pendente até a
+  validação final explícita da migração
+
+### Next Actions
+
+- decidir o destino da branch local `wip/resume-parse-contract`
+- decidir quando publicar ou revisar a branch auxiliar do mobile sem abrir MR
+  prematuramente
+- canonicalizar o `origin` legado do `portfolio-mobile`
+- só depois da validação final da migração considerar o arquivamento de
+  `/Users/philipegermano/code`
+
+### Handoff Notes
+
+- não abrir MR automaticamente para nenhuma branch auxiliar desta trilha
+- tratar `jpglabs-portfolio` como repo estabilizado em `main` nesta rodada
+- manter o descarte de resíduo `Pi`/`Pie family` como decisão ativa
+
+## Session Handoff - 2026-04-13 01:54 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 01:54:32 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `ops/portfolio-gitlab-upstream-cutover-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `feature/unified-memory-center`
+- Objetivo aprovado: concluir o cutover mínimo local para `GitLab`, apontando as branches canônicas para `gitlab/*` sem perder as worktrees em andamento.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - alinhar upstream local das branches canônicas para `gitlab/*`
+  - alinhar `remote.pushDefault = gitlab`
+  - mover a worktree ativa de `portfolio-backend` para `main`
+  - preservar as mudanças locais em andamento
+  - atualizar a documentação canônica para o estado pós-cutover
+- O que ficou fora do escopo:
+  - limpar worktrees
+  - rodar `pull --ff-only`
+  - renomear remotes legados
+  - alterar código de produto
+
+### Prototype And Evidence
+
+- Esta sessão foi cutover metadata-only de Git, sem mudança funcional de produto.
+- Evidências principais:
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+
+### Summary
+
+- `portfolio-backend`, `jpglabs-portfolio` e `portfolio-mobile` agora têm suas branches canônicas locais apontando para `gitlab/*`.
+- `remote.pushDefault` foi configurado como `gitlab` nos três repositórios, consolidando `git push` sem argumento para o destino novo.
+- A worktree ativa de `portfolio-backend` saiu de `develop` e foi movida para `main`, preservando os arquivos modificados e untracked.
+- O único conflito real no cutover foi `lib/i18n.ts` do backend; ele foi resolvido restaurando exatamente o snapshot local preservado no stash, e o stash foi descartado depois da reconciliação.
+- O bloqueio operacional remanescente não é mais upstream: é higiene Git antes do primeiro `pull --ff-only` e antes da canonicalização final dos remotes.
+
+### Validation
+
+- Builds executados:
+  - nenhum
+- Testes executados:
+  - leitura de upstream com `rev-parse @{u}`
+  - validação de `remote.pushDefault`
+  - conferência de status com `git status --short`
+- Cobertura atingida na fatia entregue:
+  - não aplicável; sessão de Git metadata e governança
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - ainda não foi executado `pull --ff-only` porque isso continua inadequado em worktrees sujas
+- Validação em macOS:
+  - confirmado:
+    - `portfolio-backend`: branch atual `main`, upstream `gitlab/main`
+    - `jpglabs-portfolio`: `main -> gitlab/main`
+    - `portfolio-mobile`: `main -> gitlab/main`
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend branch --set-upstream-to=gitlab/develop develop`
+  - Action: alinhar `develop` do backend ao `GitLab`.
+  - Result: `develop -> gitlab/develop`.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend branch --set-upstream-to=gitlab/main main`
+  - Action: alinhar `main` do backend ao `GitLab`.
+  - Result: `main -> gitlab/main`.
+- `git -C /Users/philipegermano/code/jpglabs/jpglabs-portfolio branch --set-upstream-to=gitlab/main main`
+  - Action: alinhar `main` do frontend ao `GitLab`.
+  - Result: `main -> gitlab/main`.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-mobile branch --set-upstream-to=gitlab/main main`
+  - Action: alinhar `main` do mobile ao `GitLab`.
+  - Result: `main -> gitlab/main`.
+- `git -C <repo> config remote.pushDefault gitlab`
+  - Action: consolidar `git push` padrão para `GitLab`.
+  - Result: `pushDefault -> gitlab` nos três repositórios da Onda 0.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend stash push -m 'cutover-main-2026-04-13-backend-tracked'`
+  - Action: criar snapshot temporário dos arquivos rastreados antes do switch de branch no backend.
+  - Result: stash criado com sucesso.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend switch main`
+  - Action: mover a worktree ativa do backend para a branch canônica.
+  - Result: backend passou a operar localmente em `main`.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend stash pop`
+  - Action: reidratar as alterações rastreadas sobre `main`.
+  - Result: cinco arquivos voltaram limpos e um conflito apareceu em `lib/i18n.ts`.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend restore --source=stash@{0} -- lib/i18n.ts`
+  - Action: restaurar o snapshot local correto para resolver o conflito.
+  - Result: `lib/i18n.ts` voltou ao conteúdo local preservado.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend stash drop stash@{0}`
+  - Action: remover o snapshot temporário após a reconciliação.
+  - Result: stash descartado.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend rev-parse --abbrev-ref --symbolic-full-name @{u}`
+  - Action: validar o tracking da worktree ativa do backend.
+  - Result: `gitlab/main`.
+- `date '+%Y-%m-%d %H:%M:%S %z'`
+  - Action: fixar o timestamp exato do fechamento.
+  - Result: `2026-04-13 01:54:32 -0300`.
+
+### Files Created
+
+- nenhum
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+- `/Users/philipegermano/code/daily/2026-04-13.md`
+
+### Risks And Gaps
+
+- `portfolio-backend` ainda retém worktree suja, mesmo já estando em `main`
+- `portfolio-mobile` continua com naming legado no remote `origin`
+- os remotes legados do `GitHub` ainda não foram canonicalizados nem removidos
+
+### Next Actions
+
+- limpar ou isolar as worktrees dos três repositórios da Onda 0 antes do primeiro `pull --ff-only` no novo upstream
+
+### Handoff Notes
+
+- considerar `gitlab/*` como tracking local canônico da Onda 0
+- não interpretar esse cutover metadata-only como autorização para sincronização automática com worktree suja
+
 ## Session Handoff - 2026-04-13 01:35 -0300
 
 ### Session Metadata
