@@ -3,6 +3,151 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Session Handoff - 2026-04-13 00:44 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 00:44:44 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `docs/planned-project-contract-template-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code` (workspace root; não é um repositório Git)
+- Branch ativa: `não aplicável`
+- Objetivo aprovado: materializar o template fixo de contrato para projetos planejados e incorporar nele a distinção entre conta única do `Supabase`, base canônica atual e eventual isolamento dedicado por contexto.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - criar o template fixo de contrato para projetos planejados
+  - criar o checklist arquitetural mínimo antes de implementação
+  - ancorar os artefatos no plano canônico e no roadmap
+  - registrar explicitamente a distinção entre base canônica atual e isolamento dedicado
+- O que ficou fora do escopo:
+  - aplicar o template a um projeto real
+  - criar `ADR` específica de um projeto concreto
+  - alterar código de produto
+
+### Prototype And Evidence
+
+- Esta sessão não foi entrega funcional de feature; foi materialização documental de governança pós-migração.
+- Evidências principais:
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_CONTRACT_TEMPLATE.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_ARCHITECTURE_CHECKLIST.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+
+### Summary
+
+- O template fixo de contrato para projetos planejados foi criado e agora é superfície canônica.
+- O checklist arquitetural mínimo também foi criado para virar gate antes da primeira linha de código.
+- O contrato novo deixa explícito que o default atual parte da conta única existente no `Supabase` e da base canônica atual, com isolamento lógico por schemas.
+- O mesmo contrato também registra quando projeto ou banco dedicado passam a ser necessários, com gatilhos objetivos.
+- O plano canônico e o roadmap agora apontam para esses artefatos, então a trilha deixou de depender apenas de intenção textual.
+
+### Validation
+
+- Builds executados:
+  - nenhum
+- Testes executados:
+  - leitura dirigida dos artefatos novos
+  - validação textual com `rg`
+- Cobertura atingida na fatia entregue:
+  - não aplicável; sessão documental e de governança
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - ainda falta aplicar o template ao primeiro projeto real para validar ergonomia operacional
+- Validação em macOS:
+  - confirmado que o template e o checklist registram explicitamente conta única, base canônica atual e promoção condicional para isolamento dedicado
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `rg -n --glob '*.md' "template fixo|contrato de projeto|criação de novos projetos|project contract|template de contrato|arquitetura mínima|checklist arquitetural|ADR|boundary de dados|GitLab" ...`
+  - Action: localizar superfícies existentes para ancorar o template novo.
+  - Result: confirmado que havia decisão canônica no plano, mas ainda não existia o artefato operacional do contrato.
+- `find /Users/philipegermano/code/jpglabs/docs -type f \( -iname '*template*' -o -iname '*contract*' -o -iname '*checklist*' -o -iname '*project*' \) | sed -n '1,240p'`
+  - Action: localizar templates ou contratos reutilizáveis no hub.
+  - Result: confirmada a ausência de um template específico para projetos planejados no contexto `jpglabs`.
+- `sed -n '1,220p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+  - Action: revisar o plano canônico antes de ancorar os novos artefatos.
+  - Result: confirmada a necessidade de transformar a intenção de Onda 1 em documento operacional.
+- `sed -n '1,240p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PROJECT_CONTEXT.md`
+  - Action: revalidar o contexto estratégico do domínio `jpglabs`.
+  - Result: mantido o foco em governança estratégica e portfólio de produtos.
+- `sed -n '1,260p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_CONTRACT_TEMPLATE.md`
+  - Action: validar o template novo após criação.
+  - Result: confirmado que o contrato contém lane, stack, boundary de dados, gates e aprovação.
+- `sed -n '1,240p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_ARCHITECTURE_CHECKLIST.md`
+  - Action: validar o checklist novo após criação.
+  - Result: confirmado que o checklist transforma a arquitetura mínima em gate verificável.
+- `rg -n "conta única|base canônica atual|isolamento dedicado|PLANNED_PROJECT_CONTRACT_TEMPLATE|PLANNED_PROJECT_ARCHITECTURE_CHECKLIST" ...`
+  - Action: validar que a distinção pedida ficou explícita e que os links já estão ancorados no plano.
+  - Result: confirmado o registro da distinção no template, no checklist, no plano e no roadmap.
+- `date '+%Y-%m-%d %H:%M:%S %z'`
+  - Action: fixar o timestamp exato do fechamento.
+  - Result: `2026-04-13 00:44:44 -0300`.
+
+### Files Created
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_CONTRACT_TEMPLATE.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_ARCHITECTURE_CHECKLIST.md`
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code
+├── daily
+│   └── 2026-04-13.md [modified]
+└── jpglabs
+    └── docs
+        ├── agents
+        │   └── AGENT_BRIDGE.md [modified]
+        └── projects
+            └── jpglabs
+                ├── APPLICATION_STRUCTURE_MIGRATION_PLAN.md [modified]
+                ├── PLANNED_PROJECT_ARCHITECTURE_CHECKLIST.md [new]
+                ├── PLANNED_PROJECT_CONTRACT_TEMPLATE.md [new]
+                └── ROADMAP.md [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `docs/planned-project-contract-template`
+- Commit: `docs(architecture): add planned project contract template and checklist`
+- Review request: confirmar o wording dos artefatos novos e a ancoragem no plano antes de qualquer commit.
+
+### References And Glossary
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md` — plano canônico relido e atualizado para referenciar os artefatos novos
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md` — roadmap atualizado para apontar para template e checklist
+- `/Users/philipegermano/code/jpglabs/docs/_templates/project-context.md` — template genérico inspecionado apenas como referência de estilo
+- Glossary: nenhum termo novo entrou no glossário nesta sessão
+
+### Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+### Risks And Gaps
+
+- ainda falta o teste operacional do template em um projeto real
+- a decisão concreta entre base canônica e isolamento dedicado continuará exigindo julgamento arquitetural por contexto
+- o gate de `lint` técnico ainda depende da skill operacional correspondente estar efetivamente pronta para a fase de implementação
+
+### Next Actions
+
+- aplicar o `PLANNED_PROJECT_CONTRACT_TEMPLATE.md` ao primeiro projeto real pós-migração no `GitLab` e validar o checklist arquitetural contra esse caso concreto
+
+### Handoff Notes
+
+- não abrir scaffold planejado novo sem contrato preenchido e checklist verde
+- tratar o template novo como referência canônica para a próxima fase da trilha
+
 ## Session Handoff - 2026-04-13 00:36 -0300
 
 ### Session Metadata

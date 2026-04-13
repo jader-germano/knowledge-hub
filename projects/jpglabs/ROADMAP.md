@@ -73,6 +73,11 @@ Entregáveis:
 - fronteiras claras de auth, sessão, upload, APIs e persistência
 - plano de execução de banco com `schema` por aplicativo documentado em
   [`APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md`](/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md)
+- template fixo de contrato e checklist arquitetural prontos para a fase
+  pós-migração:
+  [`PLANNED_PROJECT_CONTRACT_TEMPLATE.md`](/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_CONTRACT_TEMPLATE.md)
+  e
+  [`PLANNED_PROJECT_ARCHITECTURE_CHECKLIST.md`](/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_ARCHITECTURE_CHECKLIST.md)
 
 Dependência:
 

@@ -74,6 +74,13 @@ Documento complementar obrigatório para a trilha de dados e persistência:
 20. A definição de template fixo de contrato e arquitetura mínima obrigatória
     fica explicitamente posicionada como primeira entrega pós-migração.
 
+## Artefatos Canônicos Já Preparados
+
+- template fixo de contrato:
+  [`PLANNED_PROJECT_CONTRACT_TEMPLATE.md`](/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_CONTRACT_TEMPLATE.md)
+- checklist arquitetural mínimo:
+  [`PLANNED_PROJECT_ARCHITECTURE_CHECKLIST.md`](/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_ARCHITECTURE_CHECKLIST.md)
+
 ## Escopo Imediato
 
 ### Onda 0 — migração estrutural para `GitLab`
@@ -87,6 +94,8 @@ Documento complementar obrigatório para a trilha de dados e persistência:
 
 - definir template fixo de contrato para novos projetos
 - definir arquitetura mínima obrigatória antes de qualquer implementação
+- revisar, aprovar e operacionalizar o template fixo de contrato já preparado
+- revisar, aprovar e operacionalizar o checklist arquitetural já preparado
 - definir critérios de escolha entre `React` e `Angular`
 - definir critérios de escolha entre `Express`, `NestJS`, `Spring` e
   `Quarkus`
@@ -236,12 +245,13 @@ knowledge-hub/
 - concluir migração estrutural para `GitLab`
 - normalizar naming e ownership
 - consolidar os documentos canônicos desta trilha
-- preparar o template fixo de contrato pós-migração
+- manter pronto o template fixo de contrato pós-migração
 
 ### Sprint 1 — template e arquitetura obrigatória
 
 - definir template de criação de projeto planejado
 - definir checklist arquitetural obrigatório
+- aprovar os artefatos já preparados e adaptar ao primeiro projeto real
 - definir matriz de escolha tecnológica
 - definir gate operacional da skill de revisão/lint técnico
 
@@ -293,5 +303,6 @@ planejados, sem alterar código de produto antes do fechamento da estrutura em
 ## Próximo Passo Recomendado
 
 Concluir a migração estrutural para `GitLab` e, imediatamente depois, abrir a
-fatia de contrato fixo para novos projetos planejados, com template, checklist
-arquitetural e gate técnico de revisão antes da primeira linha de código.
+fatia de aprovação e uso do contrato fixo para novos projetos planejados, com
+template, checklist arquitetural e gate técnico de revisão antes da primeira
+linha de código.
