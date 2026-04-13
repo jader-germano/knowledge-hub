@@ -42,9 +42,9 @@ portfólio para `GitLab` em execução local controlada.
 
 | Repo | Papel atual | Path local | Branch atual | Remotes atuais | Estado local | GitLab target | Status GitLab | Decisão |
 |---|---|---|---|---|---|---|---|
-| `portfolio-backend` | backend/BFF canônico do portfólio | `/Users/philipegermano/code/jpglabs/portfolio-backend` | `wip/resume-parse-contract` | `origin = git@github.com:jader-germano/jpglabs-portfolio-backend.git`<br>`gitlab = git@gitlab.com:jader-germano/portfolio-backend.git` | `isolada` | `git@gitlab.com:jader-germano/portfolio-backend.git` | provisionado + `main` default/protected + `develop` protected + upstream canônico local em `gitlab/*` | preservar WIP local sem MR |
+| `portfolio-backend` | backend/BFF canônico do portfólio | `/Users/philipegermano/code/jpglabs/portfolio-backend` | `wip/resume-parse-contract` | `origin = git@github.com:jader-germano/jpglabs-portfolio-backend.git`<br>`gitlab = git@gitlab.com:jader-germano/portfolio-backend.git` | `isolada + publicada em origin` | `git@gitlab.com:jader-germano/portfolio-backend.git` | provisionado + `main` default/protected + `develop` protected + upstream canônico local em `gitlab/*` | preservar WIP publicada, sem MR |
 | `jpglabs-portfolio` | candidato forte para frontend público | `/Users/philipegermano/code/jpglabs/jpglabs-portfolio` | `main` | `origin = git@github.com:jader-germano/jpglabs-portfolio.git`<br>`gitlab = git@gitlab.com:jader-germano/jpglabs-portfolio.git` | `limpa` | `git@gitlab.com:jader-germano/jpglabs-portfolio.git` | provisionado + `main` default/protected + upstream local em `gitlab/main` | manter limpo em `main` |
-| `portfolio-mobile` | cliente mobile do portfólio | `/Users/philipegermano/code/jpglabs/portfolio-mobile` | `chore/node-pin-and-async-storage` | `origin = git@github.com:jader-germano/jpglabs-portifolio-mobile.git`<br>`gitlab = git@gitlab.com:jader-germano/portfolio-mobile.git` | `isolada` | `git@gitlab.com:jader-germano/portfolio-mobile.git` | provisionado + `main` default/protected + branch `chore/node-pin-and-async-storage` publicada sem MR | preservar branch publicada sem MR |
+| `portfolio-mobile` | cliente mobile do portfólio | `/Users/philipegermano/code/jpglabs/portfolio-mobile` | `chore/node-pin-and-async-storage` | `origin = git@github.com:jader-germano/jpglabs-portifolio-mobile.git`<br>`gitlab = git@gitlab.com:jader-germano/portfolio-mobile.git` | `isolada + publicada em origin/gitlab` | `git@gitlab.com:jader-germano/portfolio-mobile.git` | provisionado + `main` default/protected + branch `chore/node-pin-and-async-storage` publicada sem MR | preservar branch publicada, sem MR |
 | `portfolio-v2` | referência visual/funcional, não runtime final | `/Users/philipegermano/code/jpglabs/portfolio-v2` | `feature/gitlab-cicd-pipeline` | `origin = git@github.com:jader-germano/portfolio-v2.git` | `dirty` | `n/a nesta onda` | não provisionar nesta onda | congelar como referência |
 | `jpglabs-dashboard` | cockpit local-first de coordenação | `/Users/philipegermano/code/jpglabs/jpglabs-dashboard` | `main` | `sem remote configurado` | `dirty` | `n/a nesta onda` | fora da Onda 0 | reavaliar depois |
 
@@ -72,11 +72,11 @@ portfólio para `GitLab` em execução local controlada.
 - o `remote.pushDefault` local já foi alinhado para `gitlab` nos três
   repositórios da Onda 0
 - o isolamento operacional das worktrees úteis já foi executado sem abrir MR:
-  - `portfolio-backend`: branch local `wip/resume-parse-contract`, commit
-    `3c96a0b`
+  - `portfolio-backend`: branch `wip/resume-parse-contract`, commit `3c96a0b`,
+    publicada em `origin` sem `merge request`
   - `jpglabs-portfolio`: worktree limpa em `main`
   - `portfolio-mobile`: branch `chore/node-pin-and-async-storage`, commit
-    `f4183e2`, publicada no `GitLab` sem `merge request`
+    `f4183e2`, publicada em `gitlab + origin` sem `merge request`
 - o próximo bloqueio real deixou de ser provisionamento e passou a ser:
   sincronização contínua segura, decisão de merge das branches auxiliares e
   canonicalização final de remotes
@@ -85,7 +85,8 @@ portfólio para `GitLab` em execução local controlada.
 
 - a worktree útil foi isolada na branch local `wip/resume-parse-contract`
 - o commit local preservado é `3c96a0b`
-- não há upstream nem MR para a branch WIP, por escolha explícita do usuário
+- a branch WIP também já foi publicada em `origin`, mas segue sem `upstream`
+  local nem `merge request`, por escolha explícita do usuário
 - o repo ainda carrega naming legado no `origin`
 - é a superfície que define contrato de backend/BFF; qualquer erro aqui
   propaga para web e mobile
@@ -101,9 +102,11 @@ portfólio para `GitLab` em execução local controlada.
 
 - a worktree útil foi isolada na branch `chore/node-pin-and-async-storage`
 - o commit preservado é `f4183e2`
-- a branch auxiliar já foi publicada no `GitLab`, mas sem abrir `merge request`
-- o `origin` atual tem typo legado em `portifolio`
-- a correção de naming deve acontecer junto da migração para evitar novo drift
+- a branch auxiliar já foi publicada em `gitlab + origin`, sem abrir `merge request`
+- o `origin` atual já foi normalizado explicitamente em SSH para o slug real
+  existente no GitHub: `jpglabs-portifolio-mobile`
+- o typo legado em `portifolio` continua existindo no repositório GitHub e
+  segue como pendência de naming fora desta rodada
 
 ### `portfolio-v2`
 

@@ -29,15 +29,9 @@ repositories:
   - id: docs
     path: /Users/philipegermano/code/jpglabs/docs
     role: shared-orchestration-docs
-  - id: apple-study-checklist
-    path: /Users/philipegermano/code/jpglabs/apple-study-checklist
-    role: native-app
   - id: FrankMD
     path: /Users/philipegermano/code/FrankMD
     role: vault-reference-and-optional-backend
-  - id: pi-local-app
-    path: /Users/philipegermano/code/jpglabs/pi-local-app
-    role: pi-runtime-api
   - id: portfolio-backend
     path: /Users/philipegermano/code/jpglabs/portfolio-backend
     role: portfolio-web-surface
@@ -47,21 +41,46 @@ repositories:
   - id: imap-server
     path: /Users/philipegermano/code/jpglabs/imap-server
     role: mcp-email-server
+  - id: openclaude
+    path: /Users/philipegermano/code/openclaude
+    role: open-source-coding-agent-cli
+  - id: jpglabs-dashboard
+    path: /Users/philipegermano/code/jpglabs/jpglabs-dashboard
+    role: local-first-operator-dashboard
+planned_contexts:
+  - id: apple-study-checklist
+    path: /Users/philipegermano/code/jpglabs/apple-study-checklist
+    role: native-study-app
+    status: missing-local-path
   - id: knowledge-hub-app
     path: /Users/philipegermano/code/jpglabs/knowledge-hub-app
     role: knowledge-hub-web-app
-  - id: piphone-ios
-    path: /Users/philipegermano/code/jpglabs/piphone-ios
-    role: ios-pi-client
-  - id: pibar-macos
-    path: /Users/philipegermano/code/jpglabs/pibar-macos
-    role: macos-pi-client
-  - id: PieCenter
-    path: /Users/philipegermano/code/jpglabs/PieCenter
-    role: unified-apple-shell
-  - id: Playground 2
+    status: missing-local-path
+  - id: playground-2
     path: /Users/philipegermano/code/Playground 2
     role: experimental-bootstrap
+    status: missing-local-path
+  - id: jpglabs-saas
+    path: /Users/philipegermano/code/jpglabs/jpglabs-saas
+    role: planned-b2b-saas
+    status: strategic-context-only
+archived_contexts:
+  - id: pi-local-app
+    path: /Users/philipegermano/code/jpglabs/pi-local-app
+    role: archived-pi-runtime-api
+    status: archived
+  - id: piphone-ios
+    path: /Users/philipegermano/code/jpglabs/piphone-ios
+    role: archived-ios-pi-client
+    status: archived
+  - id: pibar-macos
+    path: /Users/philipegermano/code/jpglabs/pibar-macos
+    role: archived-macos-pi-client
+    status: archived
+  - id: PieCenter
+    path: /Users/philipegermano/code/jpglabs/PieCenter
+    role: archived-unified-apple-shell
+    status: archived
 internal_contexts:
   - id: infrastructure
     path: /Users/philipegermano/code/jpglabs/docs/projects/infrastructure

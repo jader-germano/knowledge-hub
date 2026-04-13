@@ -14,6 +14,7 @@
 
 - produto ativo com foco mobile-first
 - houve merges e ajuste pós-conflito em `2026-03-31`
+- o path local esperado ainda não está materializado nesta rodada do workspace
 
 ## Git Recente
 
@@ -24,3 +25,4 @@
 ## Repo Real
 
 - `/Users/philipegermano/code/jpglabs/apple-study-checklist`
+- status atual: path reservado, ainda ausente localmente

@@ -32,7 +32,11 @@ Princípio central:
   compartilhadas entre providers
 - o baseline compartilhado do Docker MCP vive em `/Users/philipegermano/code/config/mcp/`
 - o antigo `_archive/` do root do workspace foi auditado; o conteúdo útil já
-  absorvido vive em `context/`, `infrastructure/docs/` e `archive/`
+  absorvido vive em `projects/`, `projects/infrastructure/`, `research/` e
+  `archive/`
+- qualquer conteúdo residual em `/Users/philipegermano/code/docs/` deve ser
+  reclassificado para `jpglabs/docs/` ou descartado; essa raiz não é mais uma
+  taxonomia documental válida
 - o diário pessoal por sessão vive no root do workspace em `/Users/philipegermano/code/daily/`
 - `Jira` e `Confluence` são as superfícies-alvo de task, roadmap e especificação compartilhável
 - `Notion` fica restrito ao Diário de Bordo

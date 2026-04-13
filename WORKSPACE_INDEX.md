@@ -36,18 +36,8 @@
   - Papel no workspace: companion documental e referência de vault/editor
   - Contexto: `projects/FrankMD/PROJECT_CONTEXT.md`
 
-- `Playground 2`
-  - Nicho: repositório experimental sem commits úteis ainda
-  - Papel no workspace: área de bootstrap/experimentos
-  - Contexto: `projects/playground-2/PROJECT_CONTEXT.md`
-
-- `apple-study-checklist`
-  - Nicho: app SwiftUI para plano técnico de estudos Apple
-  - Papel no workspace: produto ativo com foco mobile-first
-  - Contexto: `projects/apple-study-checklist/PROJECT_CONTEXT.md`
-
 - `portfolio-backend`
-  - Nicho: superfície web/backend do portfólio e do ecossistema Pi
+  - Nicho: superfície web/backend do portfólio
   - Papel no workspace: backend web com governança de release
   - Contexto: `projects/portfolio-backend/PROJECT_CONTEXT.md`
 
@@ -61,22 +51,50 @@
   - Papel no workspace: projeto produto separado da camada documental
   - Contexto: `projects/imap-server/PROJECT_CONTEXT.md`
 
-- `knowledge-hub-app`
-  - Nicho: appNest.js para a superfície operacional do knowledge hub
-  - Papel no workspace: UI web do hub e fluxos financeiros
-  - Contexto: `projects/knowledge-hub-app/PROJECT_CONTEXT.md`
-
 - `openclaude`
   - Nicho: open-source coding-agent CLI para cloud e local model providers
   - Papel no workspace: alternativa aberta e agnóstica ao Claude Code integrada ao hub
   - Contexto: `projects/openclaude/PROJECT_CONTEXT.md`
 
+- `jpglabs-dashboard`
+  - Nicho: dashboard operacional do JPGLabs para trilhas, infra, MCP e ações pre-prompt
+  - Papel no workspace: cockpit local-first de coordenação do workspace
+  - Contexto: `projects/jpglabs-dashboard/PROJECT_CONTEXT.md`
+
+## Repositórios Operacionais Sem Contexto Próprio No Hub
+
+- `jpglabs-portfolio`
+  - Nicho: frontend visual público do portfólio
+  - Papel no workspace: superfície web ativa da lane visual do portfólio
+  - Contexto canônico desta fase: `projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+
+- `portfolio-v2`
+  - Nicho: referência visual/funcional do portfólio
+  - Papel no workspace: baseline comparativa, não runtime final
+  - Contexto canônico desta fase: `projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+
+## Contextos Planejados Ou Sem Materialização Local
+
+- `apple-study-checklist`
+  - Status: contexto mantido no hub, mas sem diretório real no workspace nesta rodada
+  - Referência: `projects/apple-study-checklist/PROJECT_CONTEXT.md`
+
+- `knowledge-hub-app`
+  - Status: contexto mantido no hub, mas sem diretório real no workspace nesta rodada
+  - Referência: `projects/knowledge-hub-app/PROJECT_CONTEXT.md`
+
+- `Playground 2`
+  - Status: área experimental referenciada no hub, sem diretório real no workspace nesta rodada
+  - Referência: `projects/playground-2/PROJECT_CONTEXT.md`
+
 - `jpglabs-saas`
-  - Nicho: SaaS B2B Monitor de Licitações — produto comercial priorizado da JPGLabs
-  - Papel no workspace: trilha de receita principal via JPGLABS TECNOLOGIA LTDA
-  - Contexto: `projects/jpglabs-saas/PROJECT_CONTEXT.md`
+  - Status: contexto estratégico/comercial ativo, sem repo materializado localmente neste workspace
+  - Referência: `projects/jpglabs-saas/PROJECT_CONTEXT.md`
 
 ## Legado Arquivado
+
+Os contextos abaixo permanecem apenas como referência histórica e não fazem mais
+parte da taxonomia ativa do workspace.
 
 - `pi-local-app`
   - Status: descontinuado — diretório real vazio (apenas `.idea/workspace.xml`)

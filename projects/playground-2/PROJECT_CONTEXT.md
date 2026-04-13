@@ -12,6 +12,7 @@
 
 - o branch atual não possui commits
 - tratar como área de bootstrap e não como base estável
+- o path local esperado ainda não está materializado nesta rodada do workspace
 
 ## Git Recente
 
@@ -20,3 +21,4 @@
 ## Repo Real
 
 - `/Users/philipegermano/code/Playground 2`
+- status atual: path reservado, ainda ausente localmente

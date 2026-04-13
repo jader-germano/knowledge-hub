@@ -3,6 +3,185 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Session Handoff - 2026-04-13 02:35 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 02:35:05 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `ops/workspace-taxonomy-and-origin-publish-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `ops/portfolio-gitlab-worktree-isolation-2026-04-13`
+- Objetivo aprovado: publicar as branches auxiliares em `origin`,
+  canonicalizar o `origin` legado do `portfolio-mobile` no slug GitHub real e
+  aplicar a próxima mudança da taxonomia do workspace após o pre-flight já
+  concluído na VPS.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - publicar `wip/resume-parse-contract` em `origin`
+  - publicar `chore/node-pin-and-async-storage` em `origin`
+  - normalizar explicitamente o `origin` do `portfolio-mobile` no slug SSH
+    real do GitHub
+  - reconciliar a taxonomia do hub com o estado real do workspace
+  - absorver o resíduo documental restante de `code/docs/` para `jpglabs/docs`
+- O que ficou fora do escopo:
+  - abrir `merge request`
+  - renomear o repositório GitHub com typo legado em `portifolio`
+  - começar implementação de produto fora da trilha estrutural
+  - zipar/remover `/Users/philipegermano/code` antes da validação final da
+    migração
+
+### Prototype And Evidence
+
+- Esta sessão foi governança Git + taxonomia documental do workspace, não
+  entrega funcional de feature de produto.
+- Evidências principais:
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+  - `/Users/philipegermano/code/jpglabs/docs/WORKSPACE_INDEX.md`
+  - `/Users/philipegermano/code/jpglabs/docs/manifests/workspace.index.yaml`
+  - `/Users/philipegermano/code/jpglabs/docs/archive/root-docs/superpowers/plans/2026-04-08-agent-dashboard.md`
+
+### Summary
+
+- `portfolio-backend` teve a branch `wip/resume-parse-contract` publicada em
+  `origin`, sem abrir `merge request`.
+- `portfolio-mobile` teve a branch
+  `chore/node-pin-and-async-storage` publicada em `origin`; o `origin`
+  permaneceu explicitamente fixado em
+  `git@github.com:jader-germano/jpglabs-portifolio-mobile.git`, que é o slug
+  real hoje existente no GitHub.
+- A taxonomia ativa do workspace foi saneada no hub:
+  - `Pi`/`Pie family` saiu da taxonomia viva e ficou apenas em contexto
+    arquivado
+  - contextos sem path local passaram a ser classificados como `planejados`
+  - `jpglabs-dashboard` e `openclaude` entraram no inventário operacional
+    coerente do workspace
+- O diretório residual `/Users/philipegermano/code/docs` foi desmontado; o
+  plano remanescente foi reclassificado para
+  `jpglabs/docs/archive/root-docs/superpowers/plans/`.
+
+### Validation
+
+- Builds executados:
+  - nenhum build de produto
+- Testes executados:
+  - validação de push remoto para `origin` nas duas branches auxiliares
+  - validação de `remote -v` do `portfolio-mobile` após canonicalização
+  - validação estrutural da remoção de `/Users/philipegermano/code/docs`
+  - conferência de diff e `git status --short` no hub documental
+- Cobertura atingida na fatia entregue:
+  - não aplicável; sessão de Git metadata e taxonomia documental
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - o typo do repositório GitHub `jpglabs-portifolio-mobile` continua
+    existindo porque renomear o repositório remoto ficou fora desta rodada
+- Validação em macOS:
+  - confirmado:
+    - `wip/resume-parse-contract` publicada em `origin`
+    - `chore/node-pin-and-async-storage` publicada em `origin`
+    - `/Users/philipegermano/code/docs` removido
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-backend push origin wip/resume-parse-contract`
+  - Action: publicar a branch auxiliar do backend em `origin`.
+  - Result: branch criada no GitHub sem `merge request`.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-mobile push origin chore/node-pin-and-async-storage`
+  - Action: publicar a branch auxiliar do mobile em `origin`.
+  - Result: branch criada no GitHub sem `merge request`.
+- `git -C /Users/philipegermano/code/jpglabs/portfolio-mobile remote set-url origin git@github.com:jader-germano/jpglabs-portifolio-mobile.git`
+  - Action: canonicalizar explicitamente o `origin` do mobile no slug SSH
+    realmente existente hoje.
+  - Result: `origin` fetch/push confirmado em SSH com o slug legado atual.
+- `mkdir -p /Users/philipegermano/code/jpglabs/docs/archive/root-docs/superpowers/plans && mv /Users/philipegermano/code/docs/superpowers/plans/2026-04-08-agent-dashboard.md /Users/philipegermano/code/jpglabs/docs/archive/root-docs/superpowers/plans/2026-04-08-agent-dashboard.md`
+  - Action: absorver o último plano residual da taxonomia paralela em
+    `code/docs/`.
+  - Result: plano reclassificado para o archive canônico do hub.
+- `rmdir /Users/philipegermano/code/docs/superpowers/plans && rmdir /Users/philipegermano/code/docs/superpowers && rm -f /Users/philipegermano/code/docs/.DS_Store && rmdir /Users/philipegermano/code/docs`
+  - Action: desmontar o diretório documental legado fora da taxonomia canônica.
+  - Result: `/Users/philipegermano/code/docs` deixou de existir.
+- `git -C /Users/philipegermano/code/jpglabs/docs status --short`
+  - Action: validar a superfície documental alterada antes do fechamento.
+  - Result: diff restrito ao saneamento de taxonomia e inventário.
+- `date '+%Y-%m-%d %H:%M:%S %z'`
+  - Action: fixar o timestamp exato do fechamento.
+  - Result: `2026-04-13 02:35:05 -0300`.
+
+### Files Created
+
+- `/Users/philipegermano/code/jpglabs/docs/archive/root-docs/superpowers/plans/2026-04-08-agent-dashboard.md`
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/README.md`
+- `/Users/philipegermano/code/jpglabs/docs/WORKSPACE_INDEX.md`
+- `/Users/philipegermano/code/jpglabs/docs/manifests/docs.index.yaml`
+- `/Users/philipegermano/code/jpglabs/docs/manifests/workspace.index.yaml`
+- `/Users/philipegermano/code/jpglabs/docs/projects/apple-study-checklist/PROJECT_CONTEXT.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/knowledge-hub-app/PROJECT_CONTEXT.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/playground-2/PROJECT_CONTEXT.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md`
+
+### Change Tree
+
+```text
+jpglabs/docs
+├── README.md [modified]
+├── WORKSPACE_INDEX.md [modified]
+├── archive
+│   └── root-docs
+│       └── superpowers
+│           └── plans
+│               └── 2026-04-08-agent-dashboard.md [new]
+├── manifests
+│   ├── docs.index.yaml [modified]
+│   └── workspace.index.yaml [modified]
+└── projects
+    ├── apple-study-checklist
+    │   └── PROJECT_CONTEXT.md [modified]
+    ├── jpglabs
+    │   └── PORTFOLIO_GITLAB_MIGRATION_INVENTORY.md [modified]
+    ├── knowledge-hub-app
+    │   └── PROJECT_CONTEXT.md [modified]
+    └── playground-2
+        └── PROJECT_CONTEXT.md [modified]
+```
+
+### Versioning Proposal
+
+- Branch proposta: manter `ops/portfolio-gitlab-worktree-isolation-2026-04-13`
+  como branch documental desta rodada
+- Commit message proposta:
+  `docs(workspace): reconcile taxonomy and publish auxiliary branches state`
+- Review request: revisar o recorte de taxonomia antes de qualquer nova rodada
+  de materialização de paths planejados
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — revalidado como
+  contrato da taxonomia raiz e do fechamento de sessão
+- `/Users/philipegermano/code/jpglabs/docs/README.md` — consultado para alinhar
+  a taxonomia canônica do hub
+- `/Users/philipegermano/code/jpglabs/docs/WORKSPACE_INDEX.md` — reconciliado
+  com o estado real do workspace
+- `/Users/philipegermano/code/jpglabs/docs/manifests/workspace.index.yaml` —
+  saneado para distinguir `repositories`, `planned_contexts` e
+  `archived_contexts`
+- `GitHub origin` dos repositórios auxiliares — validado por `git push` com
+  sucesso nas duas branches publicadas
+- Glossário: não houve termo novo além da normalização explícita entre
+  `ativo`, `planejado` e `arquivado`
+
+### Glossário multilíngue
+
+- `origin canonicalized` → `origin canonicalizado`
+- `planned context` → `contexto planejado`
+- `archived context` → `contexto arquivado`
+
 ## Session Handoff - 2026-04-13 02:08 -0300
 
 ### Session Metadata
