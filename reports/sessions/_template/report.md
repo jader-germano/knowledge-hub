@@ -86,15 +86,16 @@ Tom desejado:
 - usar as colunas `Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文`
 
 | Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文 |
-|---|---|---|---|---|---|---|
-| | | | | | | |
+|---------------|----|----|----|----|--------|------|
+|               |    |    |    |    |        |      |
+|               |    |    |    |    |        |      |
 
 ### Curiosidades linguísticas
 
 - Registrar apenas notas curtas, úteis e fáceis de lembrar
-- Pode usar etimologia, transliteração, falso cognato ou analogia técnica
-- Em `日本語`, incluir kana ou `romaji` quando ajudar
-- Em `中文`, preferir `简体中文`
+- Pode usar etimologia, transliteração, falso cognato ou analogia técnica + curiosidades
+- Em `日本語`, incluir kana ou `romaji` quando ajudar e explicar o sobre o significado(simbolo+taxonomia), origem e uso com 1 exemplo de uso + tradução
+- Em `中文`, preferir `简体中文` e divagar sobre o significado(simbolo+taxonomia), origem e uso com 1 exemplo de uso + tradução
 
 ## Risks And Gaps
 
