@@ -1,4 +1,4 @@
-# Kubernetes app-lane manifest for the Next.js backend/BFF lane.
+# Kubernetes app-lane manifest for theNest.js backend/BFF lane.
 # This file remains non-root-domain until the final Kubernetes web owner for
 # `jpglabs.com.br` is explicitly chosen. The platform direction is now
 # Kubernetes-first for app services; this manifest stays available as part of

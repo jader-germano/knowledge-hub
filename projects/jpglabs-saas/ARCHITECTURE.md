@@ -21,7 +21,7 @@ B2B vertical para engenharia: empresas de engenharia e construção que precisam
 | Componente | Tecnologia | Deploy |
 |------------|-----------|--------|
 | API REST + Batch | Spring Boot 3.x / Java 21 | Railway |
-| Frontend | Next.js 15 + TypeScript + shadcn/ui + Tailwind | Vercel |
+| Frontend |Nest.js 15 + TypeScript + shadcn/ui + Tailwind | Vercel |
 | Banco de dados | Supabase PostgreSQL (multi-tenant, RLS) | Supabase Cloud |
 | Pagamentos | Pagar.me (PIX + cartão) | Pagar.me API |
 | Ingestão de editais | Spring Batch (jobs agendados) | Railway |
@@ -135,7 +135,7 @@ Alerta
 
 #### 1.1 Scaffold Técnico
 - [ ] Inicializar Spring Boot 3.x no GitLab
-- [ ] Inicializar Next.js 15 + shadcn/ui no GitLab
+- [ ] InicializarNest.js 15 + shadcn/ui no GitLab
 - [ ] Configurar Supabase projeto com schema inicial
 - [ ] Deploy base: Railway (API) + Vercel (Frontend)
 - [ ] `.ai-jail` na raiz + `ai-jail --bootstrap`
@@ -225,5 +225,5 @@ Alerta
 **Bloqueante:** aguardar resposta da Keycont sobre CNAE TI.  
 **Paralelo enquanto espera:**
 1. Pull `qwen2.5-coder:7b` na VPS e validar endpoint
-2. Inicializar scaffold Spring Boot + Next.js no GitLab
+2. Inicializar scaffold Spring Boot +Nest.js no GitLab
 3. Configurar Supabase projeto com schema inicial de `licitacoes` e `tenants`

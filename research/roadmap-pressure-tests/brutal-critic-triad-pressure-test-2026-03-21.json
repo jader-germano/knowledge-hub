@@ -7,12 +7,20 @@
     "now_items_analyzed": 11,
     "supabase_project": "bykeqyqleicrbyqtnaet",
     "personas": {
-      "RUTHLESS_ARCHITECT": { "severity": "10/10", "focus": "SOLID, escalabilidade, acoplamento, anti-patterns" },
-      "SECURITY_RELIABILITY": { "severity": "8/10", "focus": "Auth, injection, PII, race conditions, rollback" },
-      "PRAGMATIC_MAINTAINER": { "severity": "5/10", "focus": "Legibilidade, ROI, velocidade de entrega" }
+      "RUTHLESS_ARCHITECT": {
+        "severity": "10/10",
+        "focus": "SOLID, escalabilidade, acoplamento, anti-patterns"
+      },
+      "SECURITY_RELIABILITY": {
+        "severity": "8/10",
+        "focus": "Auth, injection, PII, race conditions, rollback"
+      },
+      "PRAGMATIC_MAINTAINER": {
+        "severity": "5/10",
+        "focus": "Legibilidade, ROI, velocidade de entrega"
+      }
     }
   },
-
   "now_items_analysis": [
     {
       "id": "k8s-staged-environments",
@@ -24,12 +32,19 @@
         "RUTHLESS_ARCHITECT": {
           "verdict": "DEMOTE to 'next'",
           "reasoning": "4-tier topology is premature. You have ONE deployed service (pi-local-app) on PRD. DSV/TST/STG without automated test gates is just namespace sprawl. The dependency 'Supabase environments table seeded' is circular — you seeded it to justify this item. Real promotion gates need: test coverage > 60%, helm diff on PRD, rollback manifests. None exist.",
-          "anti_patterns_detected": ["Premature abstraction", "Infrastructure-before-application", "Circular dependency seeding"]
+          "anti_patterns_detected": [
+            "Premature abstraction",
+            "Infrastructure-before-application",
+            "Circular dependency seeding"
+          ]
         },
         "SECURITY_RELIABILITY": {
           "verdict": "KEEP but narrow scope",
           "reasoning": "Staging environments ARE security-relevant — you're deploying directly to PRD without any staging gate today. But the fix is a single STG namespace with Traefik route, not a full 4-tier topology. Focus on STG → PRD promotion with rollback, skip DSV/TST until you have developers plural.",
-          "risks": ["Direct-to-PRD deploys are the actual vulnerability", "No rollback manifests documented"]
+          "risks": [
+            "Direct-to-PRD deploys are the actual vulnerability",
+            "No rollback manifests documented"
+          ]
         },
         "PRAGMATIC_MAINTAINER": {
           "verdict": "DEMOTE aggressively",
@@ -44,7 +59,6 @@
         "conflicts_with": "local-k8s-ci-cd-parity (item #8) — both try to solve deployment topology simultaneously from different angles. Pick ONE."
       }
     },
-
     {
       "id": "traefik-ingress-hardening",
       "title": "Traefik ingress hardening and TLS automation",
@@ -55,12 +69,18 @@
         "RUTHLESS_ARCHITECT": {
           "verdict": "KEEP as critical — but SSH is dead",
           "reasoning": "Good item, real dependency for 8+ downstream items. BUT: SSH VPS timeout on port 22 means you CANNOT execute this today. The actual blocker is VPS access, not architecture. Dependency declaration is incomplete — it says 'VPS SSH access confirmed' but SSH is DOWN.",
-          "anti_patterns_detected": ["Dependency listed as met when it's actively broken"]
+          "anti_patterns_detected": [
+            "Dependency listed as met when it's actively broken"
+          ]
         },
         "SECURITY_RELIABILITY": {
           "verdict": "HIGHEST PRIORITY of all 11 items",
           "reasoning": "Without TLS automation, Let's Encrypt certs will expire. Without middleware chains, the ingress is wide open. Cloudflare token possibly exposed (per your state report). This is the only item where 'doing nothing' actively degrades security posture day over day. Rate limiting, CORS, auth middleware — all missing.",
-          "risks": ["TLS cert expiry timeline unknown", "No rate limiting = DDoS surface", "Cloudflare token exposure = DNS hijack risk"]
+          "risks": [
+            "TLS cert expiry timeline unknown",
+            "No rate limiting = DDoS surface",
+            "Cloudflare token exposure = DNS hijack risk"
+          ]
         },
         "PRAGMATIC_MAINTAINER": {
           "verdict": "KEEP but unblock SSH first",
@@ -75,7 +95,6 @@
         "conflicts_with": "cloudflare-dns-mail (item #6) — both touch CF/DNS layer. Should be done together in same session."
       }
     },
-
     {
       "id": "supabase-live-portfolio-manager",
       "title": "PortfolioManager wired to Supabase live data",
@@ -86,12 +105,17 @@
         "RUTHLESS_ARCHITECT": {
           "verdict": "KEEP — this is the correct next step",
           "reasoning": "Clean boundary: Supabase is the data layer, frontend consumes it. But the implementation approach matters. Don't build a custom ORM wrapper — use @supabase/supabase-js directly with typed queries. The risk is over-abstracting the data access layer before you have 2 consumers.",
-          "anti_patterns_detected": ["Potential over-abstraction if a 'PortfolioManager' class wraps simple CRUD"]
+          "anti_patterns_detected": [
+            "Potential over-abstraction if a 'PortfolioManager' class wraps simple CRUD"
+          ]
         },
         "SECURITY_RELIABILITY": {
           "verdict": "KEEP with RLS caveat",
           "reasoning": "VITE_SUPABASE_ANON_KEY in .env means the anon key ships to the browser. RLS policies MUST be in place before going live. Are they? If not, any user can read/write all portfolio data. Check: are RLS policies enabled on portfolio_projects, portfolio_experiences, portfolio_skills?",
-          "risks": ["Anon key in browser without RLS = full data exposure", "No audit of current RLS policies mentioned"]
+          "risks": [
+            "Anon key in browser without RLS = full data exposure",
+            "No audit of current RLS policies mentioned"
+          ]
         },
         "PRAGMATIC_MAINTAINER": {
           "verdict": "KEEP — highest ROI item",
@@ -103,13 +127,12 @@
         "really_critical_now": "YES. Correct priority. Unblocks the revenue-generating chain.",
         "dependencies_satisfied": "YES. Schema migrated, supabase-js available, env vars configurable.",
         "risk_of_stalling": "MEDIUM. Portfolio stays on mock data. No public credibility.",
-        "conflicts_with": "dual-frontend-consolidation (item #4) — if you wire Supabase into the Vite app now, and later decide the portfolio should live in Next.js, you rework. Resolve #4 FIRST or accept the risk."
+        "conflicts_with": "dual-frontend-consolidation (item #4) — if you wire Supabase into the Vite app now, and later decide the portfolio should live inNest.js, you rework. Resolve #4 FIRST or accept the risk."
       }
     },
-
     {
       "id": "dual-frontend-consolidation",
-      "title": "Dual frontend consolidation: Vite public + Next.js authenticated shell",
+      "title": "Dual frontend consolidation: Vite public +Nest.js authenticated shell",
       "priority_index": 3,
       "classification": "Abstraction-first",
       "classification_rationale": "No ADR document exists. No routing audit completed. This is a governance/architecture decision that's been deferred. The 'deliverable' is a document, not running code.",
@@ -117,16 +140,23 @@
         "RUTHLESS_ARCHITECT": {
           "verdict": "ELEVATE — this is the architectural bottleneck",
           "reasoning": "This is the single most important architectural decision on the board. Every frontend item (portfolio-homepage, supabase-live-portfolio-manager, portfolio-seo-content) is implicitly betting on the Vite path. If this decision flips, all that work is waste. The anti-pattern is building on an unresolved architectural fork. Write the ADR TODAY — even a 1-page decision doc unblocks everything downstream.",
-          "anti_patterns_detected": ["Building on unresolved architectural fork", "Implicit decisions via code velocity instead of explicit ADR"]
+          "anti_patterns_detected": [
+            "Building on unresolved architectural fork",
+            "Implicit decisions via code velocity instead of explicit ADR"
+          ]
         },
         "SECURITY_RELIABILITY": {
           "verdict": "CRITICAL for auth boundary",
           "reasoning": "The split between anon (Vite) and authenticated (Next.js) determines where auth tokens live, where session management happens, where PII flows. Without this decision, you risk leaking auth context into the public surface or duplicating auth logic in two places.",
-          "risks": ["Auth boundary undefined", "PII routing ambiguous", "Session management split unclear"]
+          "risks": [
+            "Auth boundary undefined",
+            "PII routing ambiguous",
+            "Session management split unclear"
+          ]
         },
         "PRAGMATIC_MAINTAINER": {
           "verdict": "30-minute ADR is enough",
-          "reasoning": "Don't overthink this. The answer is obvious from the codebase: Vite=public, Next.js=authenticated. Write it down. 30 minutes. Move on. The risk is analysis paralysis, not wrong architecture.",
+          "reasoning": "Don't overthink this. The answer is obvious from the codebase: Vite=public,Nest.js=authenticated. Write it down. 30 minutes. Move on. The risk is analysis paralysis, not wrong architecture.",
           "effort_vs_impact": "Very low effort / High unblocking impact"
         }
       },
@@ -137,7 +167,6 @@
         "conflicts_with": "supabase-live-portfolio-manager (item #3) and portfolio-homepage-public (item #11) — both proceed blind without this decision."
       }
     },
-
     {
       "id": "n8n-runbook-secrets",
       "title": "n8n operational documentation and pending key inventory",
@@ -148,12 +177,18 @@
         "RUTHLESS_ARCHITECT": {
           "verdict": "KEEP but it's a 2-hour doc task, not a sprint",
           "reasoning": "This isn't engineering work — it's documentation. The architecture exists (n8n on k3s). What's missing is: which workflows exist, which secrets are configured, which are missing. An `n8n export` + secrets audit is 2 hours max.",
-          "anti_patterns_detected": ["Elevating documentation to 'critical' priority alongside actual engineering items"]
+          "anti_patterns_detected": [
+            "Elevating documentation to 'critical' priority alongside actual engineering items"
+          ]
         },
         "SECURITY_RELIABILITY": {
           "verdict": "CRITICAL — secrets inventory is security work",
           "reasoning": "Unknown secrets = unknown attack surface. If n8n has stale API keys, exposed webhook URLs, or unconfigured auth, it's an active liability. The 'runbook' is secondary — the secrets inventory is the security deliverable.",
-          "risks": ["Unknown API keys in n8n config", "Webhook URLs possibly exposed without auth", "No secret rotation policy"]
+          "risks": [
+            "Unknown API keys in n8n config",
+            "Webhook URLs possibly exposed without auth",
+            "No secret rotation policy"
+          ]
         },
         "PRAGMATIC_MAINTAINER": {
           "verdict": "DO IT NOW — it's fast and unblocks automation chain",
@@ -168,7 +203,6 @@
         "conflicts_with": "No direct conflict. Complements cloudflare-dns-mail."
       }
     },
-
     {
       "id": "cloudflare-dns-mail",
       "title": "DNS, Cloudflare and mail hardening runbook",
@@ -179,12 +213,20 @@
         "RUTHLESS_ARCHITECT": {
           "verdict": "IMMEDIATE — but it's incident response, not roadmap",
           "reasoning": "A possibly exposed CF token is not a roadmap item — it's an incident. Rotate the token NOW. Then document DNS state. The fact this is sitting as a 'roadmap item' at priority_index 7 instead of being treated as a P0 incident is concerning.",
-          "anti_patterns_detected": ["Security incident disguised as roadmap item", "Normalizing exposed credentials"]
+          "anti_patterns_detected": [
+            "Security incident disguised as roadmap item",
+            "Normalizing exposed credentials"
+          ]
         },
         "SECURITY_RELIABILITY": {
           "verdict": "P0 INCIDENT — ROTATE TOKEN IMMEDIATELY",
           "reasoning": "If the CF token is exposed, an attacker can: redirect DNS, issue certificates for your domain, intercept traffic, send email as jpglabs.com.br. This is not 'critical' — it's 'on fire'. Token rotation should have happened before this roadmap review.",
-          "risks": ["DNS hijack", "Certificate issuance by attacker", "Email spoofing", "Traffic interception"]
+          "risks": [
+            "DNS hijack",
+            "Certificate issuance by attacker",
+            "Email spoofing",
+            "Traffic interception"
+          ]
         },
         "PRAGMATIC_MAINTAINER": {
           "verdict": "15 minutes to rotate, 1 hour to document",
@@ -199,7 +241,6 @@
         "conflicts_with": "traefik-ingress-hardening — Traefik cert automation depends on valid CF token."
       }
     },
-
     {
       "id": "local-k8s-ci-cd-parity",
       "title": "Local Kubernetes and CI/CD parity for the full platform",
@@ -210,7 +251,11 @@
         "RUTHLESS_ARCHITECT": {
           "verdict": "DEMOTE to 'planned'",
           "reasoning": "You have ONE service on k3s. 'Full platform parity' implies modeling every future service locally before deploying. This is waterfall thinking dressed as DevOps. Ship to VPS, iterate. Local parity is a luxury for teams with 10+ services and breaking deploys. You have neither.",
-          "anti_patterns_detected": ["Waterfall-as-DevOps", "Premature local replication", "Conflicts with k8s-staged-environments"]
+          "anti_patterns_detected": [
+            "Waterfall-as-DevOps",
+            "Premature local replication",
+            "Conflicts with k8s-staged-environments"
+          ]
         },
         "SECURITY_RELIABILITY": {
           "verdict": "LOW PRIORITY",
@@ -230,7 +275,6 @@
         "conflicts_with": "k8s-staged-environments (item #1) — overlapping scope, competing for infra attention."
       }
     },
-
     {
       "id": "openclaw-pi-integration",
       "title": "OpenClaw — Claude Code first-class citizen in Pi ecosystem",
@@ -241,12 +285,19 @@
         "RUTHLESS_ARCHITECT": {
           "verdict": "DEMOTE until Pi local runs",
           "reasoning": "You can't integrate with a service that's down. Pi local refuses connections on 127.0.0.1:3131. AGENTS.md is documentation, not integration. The dependency chain is: pi-local-app running → endpoints exist → Claude can call them. Step 1 is false. 7 downstream items depend on this (pi-life-manager-endpoints, pi-mobile-voice-refactory, pi-saas-commercialization, pi-mcp-server-public, etc). This is a critical-path bottleneck that's blocked.",
-          "anti_patterns_detected": ["Coding against an offline dependency", "7-item dependency chain on an unavailable runtime"]
+          "anti_patterns_detected": [
+            "Coding against an offline dependency",
+            "7-item dependency chain on an unavailable runtime"
+          ]
         },
         "SECURITY_RELIABILITY": {
           "verdict": "BLOCKED — but when unblocked, auth is priority",
           "reasoning": "When Pi local comes up: PI_API_KEY auth, session token validation, and the /session/sync PII surface all need review. But today? The service is down. Fix that first.",
-          "risks": ["PI_API_KEY handling unclear", "Session sync may carry PII", "/life/* endpoints have no auth spec"]
+          "risks": [
+            "PI_API_KEY handling unclear",
+            "Session sync may carry PII",
+            "/life/* endpoints have no auth spec"
+          ]
         },
         "PRAGMATIC_MAINTAINER": {
           "verdict": "Unblock Pi local OR decouple",
@@ -261,7 +312,6 @@
         "conflicts_with": "No direct conflict, but its failure radiates to 14% of the roadmap."
       }
     },
-
     {
       "id": "income-remote-fulltime",
       "title": "Income Track A — Full-time remote job",
@@ -272,12 +322,17 @@
         "RUTHLESS_ARCHITECT": {
           "verdict": "OUT OF SCOPE for technical roadmap",
           "reasoning": "This is a career action item, not a technical deliverable. It doesn't belong in the same backlog as K8s namespaces and Traefik middleware. Having it here inflates the 'now' count and makes the technical roadmap look busier than it is. Track separately.",
-          "anti_patterns_detected": ["Mixing life goals with technical backlog", "Inflated 'now' count"]
+          "anti_patterns_detected": [
+            "Mixing life goals with technical backlog",
+            "Inflated 'now' count"
+          ]
         },
         "SECURITY_RELIABILITY": {
           "verdict": "N/A — human task",
           "reasoning": "No security surface. Only risk: PII in pitch letters stored in repo. Ensure CV/cover letters with personal info aren't committed to public repos.",
-          "risks": ["PII in pitch documents if repo goes public"]
+          "risks": [
+            "PII in pitch documents if repo goes public"
+          ]
         },
         "PRAGMATIC_MAINTAINER": {
           "verdict": "KEEP — this is the ACTUAL #1 priority",
@@ -292,7 +347,6 @@
         "conflicts_with": "Competes for Jader's TIME with all other items. Every hour on K8s is an hour not applying for jobs."
       }
     },
-
     {
       "id": "income-freelance-upwork",
       "title": "Income Track B — Freelance alto valor",
@@ -303,7 +357,10 @@
         "RUTHLESS_ARCHITECT": {
           "verdict": "SAME AS INCOME TRACK A — separate backlog",
           "reasoning": "Duplicate concern. This and Track A should be a single 'income' lane tracked outside the technical roadmap. Having two income items in 'now' makes the technical backlog look like it has 11 critical items when it really has 9 technical + 2 career.",
-          "anti_patterns_detected": ["Backlog inflation", "Career items in technical roadmap"]
+          "anti_patterns_detected": [
+            "Backlog inflation",
+            "Career items in technical roadmap"
+          ]
         },
         "SECURITY_RELIABILITY": {
           "verdict": "N/A",
@@ -323,7 +380,6 @@
         "conflicts_with": "income-remote-fulltime — false dependency. These are parallel activities, not sequential."
       }
     },
-
     {
       "id": "portfolio-homepage-public",
       "title": "Homepage pública — seção de projetos, skills e CTA para contato",
@@ -334,12 +390,17 @@
         "RUTHLESS_ARCHITECT": {
           "verdict": "KEEP but fix dependency chain",
           "reasoning": "This is the correct end-goal: a public homepage that converts visitors to clients/employers. But its declared dependencies are both 'next' status items. Either promote those dependencies to 'now' or accept this item can't actually start. Also: priority_index 47 out of 50 contradicts 'critical now' status.",
-          "anti_patterns_detected": ["Critical item with 'next' dependencies", "priority_index contradicts status"]
+          "anti_patterns_detected": [
+            "Critical item with 'next' dependencies",
+            "priority_index contradicts status"
+          ]
         },
         "SECURITY_RELIABILITY": {
           "verdict": "LOW RISK — it's a public page",
           "reasoning": "Public portfolio page has minimal security surface. Just ensure: no PII beyond professional info, no admin endpoints exposed, Supabase anon key RLS policies enforced.",
-          "risks": ["RLS policies must be verified before public launch"]
+          "risks": [
+            "RLS policies must be verified before public launch"
+          ]
         },
         "PRAGMATIC_MAINTAINER": {
           "verdict": "THIS SHOULD BE #1 TECHNICAL PRIORITY",
@@ -355,7 +416,6 @@
       }
     }
   ],
-
   "VERDICT": {
     "status": "INFLATED AND MISALIGNED",
     "summary": "The roadmap has 11 'now' items but only 4-5 are genuinely executable today. 2 are career items misplaced in a technical backlog. 2 are blocked by VPS SSH access. 1 is blocked by pi-local-app being offline. 1 should be demoted (local-k8s-ci-cd-parity). The priority_index ordering contradicts actual impact: portfolio-homepage-public is index 47 but should be the #1 technical deliverable given the income dependency.",
@@ -366,44 +426,63 @@
       "bloat_factor": "HIGH — 25 items marked is_active_priority, 11 marked 'now', realistic 'now' capacity for solo dev is 3-4"
     }
   },
-
   "BLOCKERS": {
     "hard_blockers": [
       {
         "id": "SSH_VPS_ACCESS",
         "description": "SSH timeout on port 22 blocks ALL VPS infrastructure work: traefik-ingress-hardening, k8s-staged-environments, n8n-ingress-deploy, cloudflare-dns-mail token rotation on services",
-        "items_blocked": ["traefik-ingress-hardening", "k8s-staged-environments", "n8n-runbook-secrets (partial)", "cloudflare-dns-mail (partial)"],
+        "items_blocked": [
+          "traefik-ingress-hardening",
+          "k8s-staged-environments",
+          "n8n-runbook-secrets (partial)",
+          "cloudflare-dns-mail (partial)"
+        ],
         "resolution": "Contact Hostinger support OR fix via Hostinger web terminal (check iptables, sshd status, fail2ban)"
       },
       {
         "id": "PI_LOCAL_OFFLINE",
         "description": "pi-local-app refuses connections on 127.0.0.1:3131. Blocks openclaw-pi-integration and its 7 transitive dependents.",
-        "items_blocked": ["openclaw-pi-integration", "pi-life-manager-endpoints", "pi-mobile-voice-refactory", "pi-saas-commercialization", "pi-mcp-server-public", "pi-agent-sdk-endpoint", "pi-session-protocol-skill"],
+        "items_blocked": [
+          "openclaw-pi-integration",
+          "pi-life-manager-endpoints",
+          "pi-mobile-voice-refactory",
+          "pi-saas-commercialization",
+          "pi-mcp-server-public",
+          "pi-agent-sdk-endpoint",
+          "pi-session-protocol-skill"
+        ],
         "resolution": "Debug pi-local-app startup. Check logs, port conflicts, Node/Bun process."
       },
       {
         "id": "CF_TOKEN_POSSIBLY_EXPOSED",
         "description": "Cloudflare API token possibly exposed. This is an active security incident, not a roadmap item.",
-        "items_blocked": ["All DNS-dependent items trust on domain integrity"],
+        "items_blocked": [
+          "All DNS-dependent items trust on domain integrity"
+        ],
         "resolution": "IMMEDIATE: Rotate token in Cloudflare dashboard. Update all consumers."
       }
     ],
     "soft_blockers": [
       {
         "id": "NO_ADR_DUAL_FRONTEND",
-        "description": "Vite vs Next.js decision not documented. All frontend items proceed on implicit assumptions.",
-        "items_blocked": ["supabase-live-portfolio-manager", "portfolio-homepage-public", "portfolio-seo-content"],
+        "description": "Vite vsNest.js decision not documented. All frontend items proceed on implicit assumptions.",
+        "items_blocked": [
+          "supabase-live-portfolio-manager",
+          "portfolio-homepage-public",
+          "portfolio-seo-content"
+        ],
         "resolution": "Write 1-page ADR. 30 minutes."
       },
       {
         "id": "SOLO_DEV_BANDWIDTH",
         "description": "11 'now' items for 1 person. Realistic throughput: 2-3 items per week. Current burn rate: 0 items completed in 'now'.",
-        "items_blocked": ["Everything competes for the same human"],
+        "items_blocked": [
+          "Everything competes for the same human"
+        ],
         "resolution": "Ruthless prioritization. Max 3 'now' items at any time."
       }
     ]
   },
-
   "HIGH_RISK": {
     "description": "Items where stalling >7 days creates exponential technical debt",
     "items": [
@@ -437,7 +516,6 @@
       }
     ]
   },
-
   "DEBATE": {
     "description": "Points where the 3 personas fundamentally disagree",
     "disagreements": [
@@ -478,7 +556,6 @@
       }
     ]
   },
-
   "MINIMAL_FIX_PLAN": {
     "description": "Top 5 actions ordered by impact/effort to unblock the roadmap in 48h",
     "actions": [
@@ -487,7 +564,9 @@
         "action": "Rotate Cloudflare API token",
         "effort": "15 minutes",
         "impact": "Eliminates catastrophic DNS hijack risk",
-        "items_unblocked": ["cloudflare-dns-mail"],
+        "items_unblocked": [
+          "cloudflare-dns-mail"
+        ],
         "how": "Cloudflare dashboard → API Tokens → Rotate → Update in: n8n secrets, CI env vars, Traefik config. Can be done via browser, no SSH needed.",
         "persona_consensus": "UNANIMOUS"
       },
@@ -496,8 +575,13 @@
         "action": "Write dual-frontend ADR (1-page decision doc)",
         "effort": "30 minutes",
         "impact": "Unblocks all frontend items by making implicit architecture explicit",
-        "items_unblocked": ["dual-frontend-consolidation", "supabase-live-portfolio-manager", "portfolio-homepage-public", "portfolio-seo-content"],
-        "how": "Create docs/adr/001-dual-frontend-split.md. Decision: Vite=public portfolio, Next.js=authenticated dashboard. Done.",
+        "items_unblocked": [
+          "dual-frontend-consolidation",
+          "supabase-live-portfolio-manager",
+          "portfolio-homepage-public",
+          "portfolio-seo-content"
+        ],
+        "how": "Create docs/adr/001-dual-frontend-split.md. Decision: Vite=public portfolio,Nest.js=authenticated dashboard. Done.",
         "persona_consensus": "UNANIMOUS"
       },
       {
@@ -505,7 +589,11 @@
         "action": "Ship portfolio homepage MVP with seed data",
         "effort": "4-6 hours",
         "impact": "Every job application now has a live portfolio URL. Directly boosts income tracks.",
-        "items_unblocked": ["portfolio-homepage-public", "income-remote-fulltime (indirectly)", "income-freelance-upwork (indirectly)"],
+        "items_unblocked": [
+          "portfolio-homepage-public",
+          "income-remote-fulltime (indirectly)",
+          "income-freelance-upwork (indirectly)"
+        ],
         "how": "Use existing Supabase seed data (7 projects, 25 skills). Build hero + projects grid + skills grid + CTA. Ship to Vite public frontend. Even hardcoded is fine for v1.",
         "persona_consensus": "PRAGMATIC_MAINTAINER + SECURITY_RELIABILITY agree. RUTHLESS_ARCHITECT accepts with 'refactor to live queries in sprint 2' caveat."
       },
@@ -514,7 +602,12 @@
         "action": "Fix VPS SSH access",
         "effort": "30-60 minutes (via Hostinger web terminal)",
         "impact": "Unblocks ALL infrastructure items",
-        "items_unblocked": ["traefik-ingress-hardening", "k8s-staged-environments", "n8n-runbook-secrets", "n8n-ingress-deploy"],
+        "items_unblocked": [
+          "traefik-ingress-hardening",
+          "k8s-staged-environments",
+          "n8n-runbook-secrets",
+          "n8n-ingress-deploy"
+        ],
         "how": "Hostinger web terminal → check: systemctl status sshd, iptables -L, fail2ban-client status. Likely: fail2ban banned your IP or iptables rule dropped. Fix and test.",
         "persona_consensus": "UNANIMOUS"
       },
@@ -523,30 +616,83 @@
         "action": "Debug and restart pi-local-app",
         "effort": "30-120 minutes",
         "impact": "Unblocks 7 transitive dependents (14% of roadmap)",
-        "items_unblocked": ["openclaw-pi-integration", "pi-life-manager-endpoints", "pi-mobile-voice-refactory", "pi-saas-commercialization", "pi-mcp-server-public", "pi-agent-sdk-endpoint", "pi-session-protocol-skill"],
+        "items_unblocked": [
+          "openclaw-pi-integration",
+          "pi-life-manager-endpoints",
+          "pi-mobile-voice-refactory",
+          "pi-saas-commercialization",
+          "pi-mcp-server-public",
+          "pi-agent-sdk-endpoint",
+          "pi-session-protocol-skill"
+        ],
         "how": "cd ~/code/pessoal/pi-local-app && check logs, port conflicts, .env. Start with: npm start or bun run. If persistent: check if port 3131 is held by zombie process.",
         "persona_consensus": "RUTHLESS_ARCHITECT + PRAGMATIC_MAINTAINER agree. SECURITY_RELIABILITY says 'audit auth before reconnecting clients'."
       }
     ],
     "48h_realistic_outcome": "If all 5 actions complete: CF token rotated (security P0 resolved), ADR written (architecture unblocked), portfolio homepage live (income tracks strengthened), SSH restored (infra unblocked), Pi local running (integration chain unblocked). Roadmap goes from 4/10 executability to 7/10.",
     "items_to_demote_immediately": [
-      { "id": "local-k8s-ci-cd-parity", "from": "now", "to": "planned", "reason": "Not started, zero dependencies, solo dev doesn't need local K8s parity" },
-      { "id": "k8s-staged-environments", "from": "now/critical", "to": "next/foundation", "reason": "Narrow to STG-only when SSH is restored. Full 4-tier is premature." }
+      {
+        "id": "local-k8s-ci-cd-parity",
+        "from": "now",
+        "to": "planned",
+        "reason": "Not started, zero dependencies, solo dev doesn't need local K8s parity"
+      },
+      {
+        "id": "k8s-staged-environments",
+        "from": "now/critical",
+        "to": "next/foundation",
+        "reason": "Narrow to STG-only when SSH is restored. Full 4-tier is premature."
+      }
     ],
     "priority_index_corrections": [
-      { "id": "cloudflare-dns-mail", "current_index": 7, "recommended_index": 0, "reason": "Active security incident" },
-      { "id": "portfolio-homepage-public", "current_index": 47, "recommended_index": 3, "reason": "Highest business-impact technical item" },
-      { "id": "dual-frontend-consolidation", "current_index": 3, "recommended_index": 1, "reason": "30-min unblock for all frontend items" },
-      { "id": "local-k8s-ci-cd-parity", "current_index": 8, "recommended_index": 45, "reason": "Zero urgency, zero current impact" }
+      {
+        "id": "cloudflare-dns-mail",
+        "current_index": 7,
+        "recommended_index": 0,
+        "reason": "Active security incident"
+      },
+      {
+        "id": "portfolio-homepage-public",
+        "current_index": 47,
+        "recommended_index": 3,
+        "reason": "Highest business-impact technical item"
+      },
+      {
+        "id": "dual-frontend-consolidation",
+        "current_index": 3,
+        "recommended_index": 1,
+        "reason": "30-min unblock for all frontend items"
+      },
+      {
+        "id": "local-k8s-ci-cd-parity",
+        "current_index": 8,
+        "recommended_index": 45,
+        "reason": "Zero urgency, zero current impact"
+      }
     ]
   },
-
   "SUMMARY_STATS": {
-    "items_keep_as_critical_now": ["traefik-ingress-hardening", "supabase-live-portfolio-manager", "cloudflare-dns-mail", "portfolio-homepage-public", "n8n-runbook-secrets"],
-    "items_keep_but_blocked": ["openclaw-pi-integration"],
-    "items_demote_to_next": ["k8s-staged-environments", "dual-frontend-consolidation (after ADR is written)"],
-    "items_demote_to_planned": ["local-k8s-ci-cd-parity"],
-    "items_move_to_separate_board": ["income-remote-fulltime", "income-freelance-upwork"],
+    "items_keep_as_critical_now": [
+      "traefik-ingress-hardening",
+      "supabase-live-portfolio-manager",
+      "cloudflare-dns-mail",
+      "portfolio-homepage-public",
+      "n8n-runbook-secrets"
+    ],
+    "items_keep_but_blocked": [
+      "openclaw-pi-integration"
+    ],
+    "items_demote_to_next": [
+      "k8s-staged-environments",
+      "dual-frontend-consolidation (after ADR is written)"
+    ],
+    "items_demote_to_planned": [
+      "local-k8s-ci-cd-parity"
+    ],
+    "items_move_to_separate_board": [
+      "income-remote-fulltime",
+      "income-freelance-upwork"
+    ],
     "evidence_backed_count": 4,
     "mock_backed_count": 4,
     "abstraction_first_count": 3,

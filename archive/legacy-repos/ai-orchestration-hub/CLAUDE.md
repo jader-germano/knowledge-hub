@@ -268,13 +268,13 @@ Internet → Cloudflare DNS
 - **Responsabilidade:** dono canônico de todas as rotas `/api/*`
 
 ### Frontend AI (`jpglabs-portfolio-backend`)
-- **Stack:** Next.js 14, next-auth (JWT), TypeScript, Tailwind, AI SDK UI
+- **Stack:**Nest.js 14, next-auth (JWT), TypeScript, Tailwind, AI SDK UI
 - **Responsabilidade:** surface conversacional/agentic, CRUD e dashboard de manutenção do Pi
 - **k8s manifests:** `app/k8s/` — portfolio, n8n, ollama, knowledge-hub
 - ⚠️ `SUPABASE_SERVICE_ROLE` pendente de configuração
 
 ### Knowledge Hub App (`knowledge-hub-app`)
-- **Stack:** Next.js, Supabase, next-auth, GitHub OAuth
+- **Stack:**Nest.js, Supabase, next-auth, GitHub OAuth
 - **Status:** Manifests prontos, não deployado ainda
 
 ### Pi Local App (`pi-local-app`)
@@ -385,7 +385,7 @@ PR merge → CI build → TST (testes de contrato) → STG (smoke tests)
 | 1 | Rotar CF_API_TOKEN → atualizar k8s secret | Renovação TLS | Jader |
 | 2 | Obter SUPABASE_SERVICE_ROLE → `hub-secrets` | Auth backend | Jader |
 | 3 | Configurar WhatsApp tokens em `n8n-secrets` | Workflows n8n | Jader |
-| 4 | Wiring Next.js BFF com Supabase service-role | Auth dashboard | Claw |
+| 4 | WiringNest.js BFF com Supabase service-role | Auth dashboard | Claw |
 | 5 | Aplicar k8s service manifests (portfolio, hub) | Não deployado | Claw |
 | 6 | Criar Traefik IngressRoutes por serviço | Roteamento TLS | Claw |
 | 7 | Seed `portfolio_projects`, `experiences`, `skills` | Portfolio vazio | Claw+Jader |
@@ -407,7 +407,7 @@ PR merge → CI build → TST (testes de contrato) → STG (smoke tests)
 # Frontend Vite
 cd ~/code/pessoal/jpglabs/jpglabs-portfolio-frontend && npm run dev  # :8082
 
-# Backend Next.js
+# BackendNest.js
 cd ~/code/pessoal/jpglabs/jpglabs-portfolio-backend && npm run dev   # :3000
 
 # Pi local app

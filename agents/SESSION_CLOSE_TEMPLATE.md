@@ -166,20 +166,50 @@ Obrigatório quando a sessão introduzir ou consolidar termos em mais de um
 idioma, ou quando houver decisão relevante de nomenclatura, tradução, prompt,
 copy, UX ou documentação bilíngue/multilíngue.
 
+Estilo desejado quando aplicável:
+
+- manter útil e memorável, não acadêmico nem burocrático
+- preferir tom leve, direto e um pouco mais solto, como nota de linguagem de
+  trabalho
+- usar o glossário para preservar contraste semântico entre idiomas, não para
+  inflar a sessão com taxonomia desnecessária
+
 Quando não se aplicar, declarar explicitamente:
 
 - `Glossário multilíngue: não aplicável nesta sessão.`
 
 Formato mínimo quando aplicável:
 
-- tabela com colunas `Termo (pt-BR) | English | Français | Italiano | 日本語`
+- tabela com colunas `Termo (pt-BR) | English | Français | Italiano | 日本語 (Nihongo)`
 - listar apenas os termos realmente introduzidos, corrigidos, validados ou
   harmonizados na sessão
-- após a tabela, usar `Curiosidades linguísticas` apenas quando isso preservar
-  contexto técnico, etimologia útil, diferença semântica entre idiomas ou
-  convenção operacional importante
+- transliteração, nota curta ou grafia de apoio podem entrar na própria célula
+  quando isso ajudar a leitura
+- após a tabela, preferir uma seção `Curiosidades linguísticas` curta, leve e
+  útil, especialmente quando houver:
+  - etimologia prática
+  - contraste semântico relevante
+  - analogia de engenharia que ajude a fixar o conceito
 - se o termo também precisar entrar no glossário canônico do workspace,
   registrar em `GLOSSARY.md` e citar a referência em `References And Glossary`
+
+Exemplo de tom aceitável:
+
+```md
+## Glossário multilíngue
+
+| Termo (pt-BR) | English | Français | Italiano | 日本語 (Nihongo) |
+|---|---|---|---|---|
+| Desacoplamento | Decoupling | Découplage | Disaccoppiamento | 疎結合 (soketsugo) |
+| Esquema de banco | Database schema | Schéma de base de données | Schema del database | データベーススキーマ |
+
+### Curiosidades linguísticas
+
+- `Decoupling` veio da engenharia elétrica e continua sendo uma ótima analogia
+  para separar componentes sem propagar interferência.
+- `疎結合` significa literalmente algo como “ligação frouxa”, o que comunica
+  bem a ideia de baixo acoplamento.
+```
 
 ## Risks And Gaps
 

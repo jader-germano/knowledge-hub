@@ -5,7 +5,7 @@ Snapshot classificado do histórico do repositório em 2026-04-03.
 ## Commits Relevantes
 
 - `2026-04-03 890c749 Initial commit from Create Next App`
-  - ponto de partida do dashboard Next.js
+  - ponto de partida do dashboardNest.js
 
 ## Leitura Operacional
 

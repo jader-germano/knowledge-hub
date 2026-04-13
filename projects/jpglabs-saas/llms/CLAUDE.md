@@ -17,7 +17,7 @@ Ao trabalhar neste projeto, carregar a skill obrigatória de sessão:
 ## Stack Principal
 
 - Java 21 + Spring Boot 3.x (back-end API + Spring Batch)
-- Next.js 15 + TypeScript (front-end)
+-Nest.js 15 + TypeScript (front-end)
 - Supabase PostgreSQL (banco multi-tenant)
 - Claude API Sonnet 4.6 (análise de editais)
 

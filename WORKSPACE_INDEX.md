@@ -62,7 +62,7 @@
   - Contexto: `projects/imap-server/PROJECT_CONTEXT.md`
 
 - `knowledge-hub-app`
-  - Nicho: app Next.js para a superfície operacional do knowledge hub
+  - Nicho: appNest.js para a superfície operacional do knowledge hub
   - Papel no workspace: UI web do hub e fluxos financeiros
   - Contexto: `projects/knowledge-hub-app/PROJECT_CONTEXT.md`
 

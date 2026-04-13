@@ -56,7 +56,7 @@ Separate standalone lane:
 
 ### Backend / BFF
 - Repo: `jpglabs-portfolio-backend`
-- Stack: Next.js + Supabase + NextAuth
+- Stack:Nest.js + Supabase + NextAuth
 
 ## Still Pending
 The only intentionally unresolved architecture point is:
@@ -64,7 +64,7 @@ The only intentionally unresolved architecture point is:
 ### Who owns the final production root domain in Kubernetes?
 One of these must eventually become the final owner of `jpglabs.com.br`:
 - `jpglabs-portfolio-frontend`
-- a different integrated web edge built around the Next.js lane
+- a different integrated web edge built around theNest.js lane
 
 Until that is explicitly decided, do not force a blind cutover of the root-domain ingress.
 

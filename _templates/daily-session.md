@@ -43,6 +43,12 @@ Se não se aplicar nesta sessão, declarar explicitamente:
 
 `Glossário multilíngue: não aplicável nesta sessão.`
 
+Quando se aplicar:
+
+- manter o tom leve, direto e memorável
+- usar a seção para registrar nuance real de linguagem, não para virar aula
+- listar só os termos que realmente importaram na sessão
+
 | Termo (pt-BR) | English | Français | Italiano | 日本語 (Nihongo) |
 |---|---|---|---|---|
 | | | | | |
@@ -51,15 +57,9 @@ Se não se aplicar nesta sessão, declarar explicitamente:
 
 ### Curiosidades linguísticas
 
-**EN** — <!-- etimologia ou curiosidade sobre um dos termos em inglês -->
-
-**FR** — <!-- como os franceses adaptam/traduzem termos técnicos -->
-
-**IT** — <!-- proximidade com latim/português, particularidade fonética -->
-
-**JP** — <!-- 2-3 frases com ênfase especial -->:
-- <!-- sistema de escrita usado (katakana/kanji/hiragana) -->
-- <!-- decompor 1 kanji mostrando radicais e significado -->
+- <!-- usar notas curtas e soltas -->
+- <!-- pode registrar etimologia, transliteracao, falso cognato ou contraste semantico -->
+- <!-- nao precisa cobrir todos os idiomas; so o que ajudou de verdade -->
 - <!-- exemplo de frase SOV em japonês -->
 
 ---

@@ -30,14 +30,14 @@
 
 ### 2. jpglabs-portfolio-backend (BFF)
 - **Repo:** `~/code/pessoal/jpglabs/jpglabs-portfolio-backend`
-- **Stack:** Next.js 15 + Supabase + NextAuth + Tailwind
+- **Stack:**Nest.js 15 + Supabase + NextAuth + Tailwind
 - **Deploy:** ghcr.io/jader-germano/jpglabs-portfolio-backend:latest → k8s
 - **Status:** ⏸️ Awaiting VPS SSH + k8s deploy
 
 ### 3. knowledge-hub-app
 - **Repo:** `~/code/pessoal/jpglabs/knowledge-hub-app`
 - **URL:** https://hub.jpglabs.com.br
-- **Stack:** Next.js 15 + Supabase + NextAuth + Recharts + PWA
+- **Stack:**Nest.js 15 + Supabase + NextAuth + Recharts + PWA
 - **Features:** Knowledge vault viewer (Obsidian markdown), Finance dashboard (income / expenses / goals), PWA manifest
 - **Vault sync:** `scripts/sync-vault.sh` → GitHub → k8s CronJob every 5 min
 - **Status:** ✅ Scaffolded — needs `npm install`, Supabase migration, .env fill, k8s deploy
@@ -221,7 +221,7 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | Portfolio deploy | Frontend (Vite/Docker) + Backend/BFF (Next.js/k8s) as separate services |
 | Mobile | Expo SDK 51 + Expo Router (consumes Node + Java edge) |
 | VPS orchestration | Docker Compose (Traefik/n8n/mail) + k3s (app services) |
-| Knowledge hub | Next.js 15 app at hub.jpglabs.com.br + Obsidian vault sync via git |
+| Knowledge hub |Nest.js 15 app at hub.jpglabs.com.br + Obsidian vault sync via git |
 | Finance data | Supabase with RLS per user_id — income_sources / transactions / financial_goals |
 | Auth strategy | NextAuth (GitHub OAuth owner-gate + Credentials) shared across portfolio + hub |
 
@@ -237,7 +237,7 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 
 ## Engineering Profile (carry-forward)
 - **Primary stack:** Java 21 · Spring Boot 3.x · Spring Security 6 · Spring Data JPA · MyBatis · Oracle · Angular 20 · TypeScript · RxJS · Angular Material · PrimeNG · Tailwind
-- **Complementary:** Node.js · React · Vite · Next.js 15 · Expo · Docker · k8s · GitHub Actions · n8n · MCP
+- **Complementary:** Node.js · React · Vite ·Nest.js 15 · Expo · Docker · k8s · GitHub Actions · n8n · MCP
 - **Patterns:** SOLID · Clean Architecture · DDD · Hexagonal · CQRS · Event Sourcing
 - **Scope rule:** Confirm target file/component when ambiguous. Break into steps. Show plan. No lateral redesigns without approval.
 - **Tests:** Update or add for every behavior change. State if no test applies.
@@ -277,7 +277,7 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | Date | Item |
 |------|------|
 | 2026-03-12 | memory-sync.ts Pi extension — injects PI_MEMORY at session_start; /memory-status, /memory-sync |
-| 2026-03-12 | knowledge-hub-app scaffolded — Next.js 15, Finance dashboard, Vault viewer, PWA, Dockerfile, k8s |
+| 2026-03-12 | knowledge-hub-app scaffolded —Nest.js 15, Finance dashboard, Vault viewer, PWA, Dockerfile, k8s |
 | 2026-03-12 | jpglabs-portifolio-mobile scaffolded — Expo SDK 51, 4 tabs, hub API integration |
 | 2026-03-12 | k8s: knowledge-hub.yaml — PVC, vault-sync CronJob (5min), Deployment, Ingress → hub.jpglabs.com.br |
 | 2026-03-12 | Supabase migration 001_finance.sql — income_sources, transactions, goals + RLS policies |

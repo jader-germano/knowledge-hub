@@ -9,7 +9,7 @@
 ## Stack
 
 - **Backend**: Spring Boot 3.x / Java 21 (API REST + Spring Batch para ingestão)
-- **Frontend**: Next.js 15 + shadcn/ui + Tailwind CSS
+- **Frontend**:Nest.js 15 + shadcn/ui + Tailwind CSS
 - **Banco**: PostgreSQL via Supabase (multi-tenant, RLS)
 - **Deploy**: Railway (Java) + Vercel (Next.js)
 - **IA**: Claude API Sonnet 4.6 (análise de editais)
@@ -34,6 +34,6 @@
 ## Próximos Marcos
 
 1. Concluir processo JUCESP (razão social + CNAEs)
-2. Scaffold Next.js + Spring Boot no repo
+2. ScaffoldNest.js + Spring Boot no repo
 3. Landing page + lista de espera
 4. MVP Monitor de Licitações (integração PNCP)

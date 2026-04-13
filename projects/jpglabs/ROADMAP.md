@@ -72,7 +72,7 @@ Entregáveis:
 - decisão formal sobre a nova lane do frontend visual
 - fronteiras claras de auth, sessão, upload, APIs e persistência
 - plano de execução de banco com `schema` por aplicativo documentado em
-  [`PIE_DB_SCHEMA_EXECUTION_PLAN.md`](/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PIE_DB_SCHEMA_EXECUTION_PLAN.md)
+  [`APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md`](/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md)
 
 Dependência:
 

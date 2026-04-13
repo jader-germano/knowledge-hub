@@ -71,13 +71,20 @@ feature-root
 
 Quando aplicável, substituir a linha acima por:
 
-| Termo (pt-BR) | English | Français | Italiano | 日本語 |
+Tom desejado:
+
+- leve, direto e memorável
+- útil para preservar nuance, não para soar acadêmico
+
+| Termo (pt-BR) | English | Français | Italiano | 日本語 (Nihongo) |
 |---|---|---|---|---|
 | | | | | |
 
 ### Curiosidades linguísticas
 
-- Registrar apenas notas que preservem contexto técnico ou semântico relevante
+- Registrar apenas notas curtas, úteis e fáceis de lembrar
+- Pode usar etimologia, transliteração, falso cognato ou analogia técnica
+- Não precisa cobrir todos os idiomas; cobrir só o que realmente agregou
 
 ## Risks And Gaps
 

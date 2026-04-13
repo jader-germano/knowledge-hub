@@ -12,7 +12,7 @@ graph TD
     Cloudflare --> VPS[187.77.227.151]
     
     subgraph K3s Cluster
-        Traefik[Traefik Ingress] --> Port[Portfolio - Next.js]
+        Traefik[Traefik Ingress] --> Port[Portfolio -Nest.js]
         Traefik --> n8n[n8n Automation]
         
         Port --> Ollama[Ollama API - Deepseek-R1]
@@ -27,7 +27,7 @@ graph TD
 
 ## 🚀 Frontend (Portfolio)
 
-- **Framework:** Next.js 14 (App Router)
+- **Framework:**Nest.js 14 (App Router)
 - **Styling:** Tailwind CSS + Framer Motion (for "Visionary Operator" animations)
 - **Features:**
   - **Dynamic Identity:** Auto-populated from professional history.
@@ -38,7 +38,7 @@ graph TD
 
 ## ⚙️ Backend & API
 
-The backend is integrated into the Next.js API Routes, providing a "headless" approach for the SaaS features.
+The backend is integrated into theNest.js API Routes, providing a "headless" approach for the SaaS features.
 
 ### 📖 API Reference (Swagger-style)
 
@@ -81,7 +81,7 @@ The backend is integrated into the Next.js API Routes, providing a "headless" ap
 
 ```text
 portfolio/
-├── app/                # Next.js App Router
+├── app/                #Nest.js App Router
 ├── components/         # UI Components (Hero, ResumeUpload, etc.)
 ├── k8s/                # Kubernetes Manifests
 ├── lib/                # Shared utilities (ollama, supabase)

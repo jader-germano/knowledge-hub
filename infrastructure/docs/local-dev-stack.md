@@ -9,8 +9,8 @@ The canonical lane naming and endpoint registry lives in `~/code/jpglabs/docs/in
 | Service | Repo | Mode | Local URL / Port |
 |---|---|---|---|
 | Portfolio Frontend | `~/code/jpglabs/portfolio-frontend` | Vite dev | `http://localhost:8082` |
-| Portfolio Backend | `~/code/jpglabs/portfolio-backend` | Next.js dev | `http://localhost:3000` |
-| Knowledge Hub / Finance App | `~/code/jpglabs/knowledge-hub-app` | Next.js dev (UI + API) | `http://localhost:3001` |
+| Portfolio Backend | `~/code/jpglabs/portfolio-backend` |Nest.js dev | `http://localhost:3000` |
+| Knowledge Hub / Finance App | `~/code/jpglabs/knowledge-hub-app` |Nest.js dev (UI + API) | `http://localhost:3001` |
 | GoBarber DB | `~/code/pessoal/backend-goBarber` | Docker Compose `db` only | `localhost:5432` |
 | GoBarber Backend | `~/code/pessoal/backend-goBarber` | Node/TS dev | `http://localhost:3333` |
 | GoBarber Frontend | `~/code/pessoal/frontend-gobarber` | Vite dev | `http://localhost:8084` |

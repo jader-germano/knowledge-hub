@@ -3,6 +3,420 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Session Handoff - 2026-04-13 00:36 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 00:36:41 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `governance/multilingual-glossary-template-relaxation-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code` (workspace root; não é um repositório Git)
+- Branch ativa: `não aplicável`
+- Objetivo aprovado: recuperar o estilo mais descontraído do `Glossário multilíngue` usado em sessões anteriores e refleti-lo nos templates canônicos de fechamento.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - localizar exemplos anteriores realmente preenchidos do `Glossário multilíngue`
+  - atualizar o template canônico de fechamento para um tom mais leve e memorável
+  - alinhar os templates derivados de `report.md` e `daily-session.md`
+- O que ficou fora do escopo:
+  - reescrever sessões históricas antigas
+  - alterar o contrato de obrigatoriedade da seção
+  - mexer em código de produto
+
+### Prototype And Evidence
+
+- Esta sessão não foi entrega funcional de feature; foi ajuste de governança e template documental.
+- Evidências principais:
+  - `/Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md`
+  - `/Users/philipegermano/code/jpglabs/docs/reports/sessions/_template/report.md`
+  - `/Users/philipegermano/code/jpglabs/docs/_templates/daily-session.md`
+  - `/Users/philipegermano/code/daily/2026-04-10.md`
+
+### Summary
+
+- Foi localizado um exemplo preenchido em `2026-04-10` com o tom mais solto e memorável que o usuário queria recuperar.
+- O template canônico agora orienta explicitamente um glossário multilíngue útil, leve e não acadêmico.
+- A seção `Curiosidades linguísticas` deixou de ser implícita e rígida; agora ela é curta, prática e opcional por relevância real.
+- Os templates derivados de relatório de sessão e de daily também foram alinhados para não haver duas instruções concorrentes.
+- A obrigatoriedade da seção foi preservada; mudou o estilo, não o gate.
+
+### Validation
+
+- Builds executados:
+  - nenhum
+- Testes executados:
+  - busca histórica com `rg`
+  - leitura dirigida dos templates atualizados
+- Cobertura atingida na fatia entregue:
+  - não aplicável; sessão de governança documental
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - ainda será útil validar esse estilo novo no primeiro fechamento futuro que realmente use glossário preenchido
+- Validação em macOS:
+  - confirmado que os três templates relevantes agora apontam para o mesmo tom de glossário
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `rg -n "Glossário multilíngue|Curiosidades linguísticas|multilíngue" /Users/philipegermano/code/jpglabs/docs/agents /Users/philipegermano/code/daily --glob '*.md'`
+  - Action: localizar sessões e templates com a seção de glossário.
+  - Result: encontrados o template canônico e ocorrências no diário; a maior parte estava marcada como não aplicável.
+- `rg -n "Termo \(pt-BR\)|Français|Curiosidades linguísticas|English \|" /Users/philipegermano/code/daily /Users/philipegermano/code/jpglabs/docs/agents --glob '*.md'`
+  - Action: localizar um exemplo real preenchido.
+  - Result: encontrado exemplo útil em `/Users/philipegermano/code/daily/2026-04-10.md`.
+- `sed -n '228,282p' /Users/philipegermano/code/daily/2026-04-10.md`
+  - Action: revisar o exemplo antigo com tom mais solto.
+  - Result: confirmado o estilo mais descontraído com tabela curta e curiosidades memoráveis.
+- `sed -n '161,214p' /Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md`
+  - Action: validar o template canônico após a edição.
+  - Result: confirmado o novo guidance de estilo leve e o exemplo embutido.
+- `sed -n '64,95p' /Users/philipegermano/code/jpglabs/docs/reports/sessions/_template/report.md`
+  - Action: validar o template de relatório.
+  - Result: confirmado alinhamento com o tom leve e com a seção opcional de curiosidades.
+- `sed -n '38,65p' /Users/philipegermano/code/jpglabs/docs/_templates/daily-session.md`
+  - Action: validar o template diário.
+  - Result: confirmado alinhamento com o novo estilo e remoção da exigência rígida por idioma.
+- `date '+%Y-%m-%d %H:%M:%S %z'`
+  - Action: fixar o timestamp exato do fechamento.
+  - Result: `2026-04-13 00:36:41 -0300`.
+
+### Files Created
+
+- nenhum
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md`
+- `/Users/philipegermano/code/jpglabs/docs/reports/sessions/_template/report.md`
+- `/Users/philipegermano/code/jpglabs/docs/_templates/daily-session.md`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code
+├── daily
+│   └── 2026-04-13.md [modified]
+└── jpglabs
+    └── docs
+        ├── _templates
+        │   └── daily-session.md [modified]
+        ├── agents
+        │   ├── AGENT_BRIDGE.md [modified]
+        │   └── SESSION_CLOSE_TEMPLATE.md [modified]
+        └── reports
+            └── sessions
+                └── _template
+                    └── report.md [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `docs/multilingual-glossary-template-relaxation`
+- Commit: `docs(session-close): relax multilingual glossary template tone`
+- Review request: confirmar o wording final dos três templates antes de consolidar qualquer commit.
+
+### References And Glossary
+
+- `/Users/philipegermano/code/daily/2026-04-10.md` — exemplo histórico preenchido usado como referência de tom
+- `/Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md` — template canônico atualizado
+- `/Users/philipegermano/code/jpglabs/docs/reports/sessions/_template/report.md` — template derivado alinhado
+- `/Users/philipegermano/code/jpglabs/docs/_templates/daily-session.md` — template derivado alinhado
+- Glossary: nenhum termo novo entrou no glossário nesta sessão
+
+### Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+### Risks And Gaps
+
+- o novo tom ainda precisa ser exercitado numa próxima sessão com glossário preenchido para validar ergonomia real
+- ainda há sessões históricas antigas usando formatos diferentes, preservadas por rastreabilidade
+
+### Next Actions
+
+- aplicar este modelo atualizado na próxima sessão que realmente introduzir terminologia multilíngue e, depois disso, incorporar a distinção entre conta única, base canônica e isolamento dedicado no template fixo de contrato pós-migração para `GitLab`
+
+### Handoff Notes
+
+- manter a seção obrigatória, mas evitar tratamento burocrático quando ela for usada
+- usar `2026-04-10` como referência de tom, não como formato rígido linha a linha
+
+## Session Handoff - 2026-04-13 00:31 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 00:31:12 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `docs/supabase-boundary-ambiguity-fix-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code` (workspace root; não é um repositório Git)
+- Branch ativa: `não aplicável`
+- Objetivo aprovado: corrigir a ambiguidade documental sobre `Supabase`, deixando claro que a conta é única, a base canônica atual segue como default e o isolamento dedicado depende do contexto de implementação.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - corrigir a redação ambígua dos planos canônicos de arquitetura e dados
+  - deixar explícito que o default atual parte da conta única e da base canônica atual
+  - preservar abertura para projeto ou banco dedicado quando o contexto exigir
+- O que ficou fora do escopo:
+  - alterar a decisão atual de base canônica
+  - provisionar novos projetos ou bancos
+  - mudar código de produto
+
+### Prototype And Evidence
+
+- Esta sessão não foi entrega funcional de feature; foi ajuste fino de contrato documental.
+- Evidências principais:
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md`
+
+### Summary
+
+- A redação anterior podia sugerir `Supabase` dedicado por aplicação como default imediato.
+- O texto agora deixa explícito que o default parte da conta única e da base canônica atual, com isolamento lógico por schemas de negócio.
+- Também ficou explícito que projeto ou banco dedicado continuam possíveis quando houver necessidade real de contexto, compliance, escala ou operação.
+- A decisão atual de base única não foi revertida; apenas ficou semanticamente mais precisa.
+
+### Validation
+
+- Builds executados:
+  - nenhum
+- Testes executados:
+  - leitura dirigida das seções alteradas nos dois documentos canônicos
+- Cobertura atingida na fatia entregue:
+  - não aplicável; sessão documental
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - ainda será necessário validar o template pós-migração para evitar ambiguidade semelhante em contratos futuros
+- Validação em macOS:
+  - confirmado que as seções alteradas agora distinguem conta única, base canônica atual e eventual isolamento dedicado
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `rg -n "Supabase próprio por aplicação|boundary próprio usa \`Supabase\` próprio|project/database \+ app-owned schemas|boundary próprio de dados no \`Supabase\`|Supabase project/database" ...`
+  - Action: localizar os trechos ambíguos.
+  - Result: a primeira tentativa sofreu interpolação indevida do shell por causa de crases; ainda assim indicou os pontos relevantes a revisar.
+- `sed -n '24,70p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+  - Action: revisar a decisão canônica do plano estrutural.
+  - Result: identificado o trecho que sugeria projeto/banco próprio como default.
+- `sed -n '18,60p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md`
+  - Action: revisar a decisão canônica do plano de dados.
+  - Result: identificado o trecho que sugeria `Supabase` próprio por aplicação como default.
+- `sed -n '28,55p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+  - Action: validar a redação após a correção.
+  - Result: confirmado que o texto agora aponta para conta única e base canônica atual como default.
+- `sed -n '1,45p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md`
+  - Action: validar a redação após a correção.
+  - Result: confirmado que o texto agora abre espaço para isolamento dedicado apenas quando o contexto exigir.
+- `date '+%Y-%m-%d %H:%M:%S %z'`
+  - Action: fixar o timestamp exato do fechamento.
+  - Result: `2026-04-13 00:31:12 -0300`.
+
+### Files Created
+
+- nenhum
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code
+├── daily
+│   └── 2026-04-13.md [modified]
+└── jpglabs
+    └── docs
+        ├── agents
+        │   └── AGENT_BRIDGE.md [modified]
+        └── projects
+            └── jpglabs
+                ├── APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md [modified]
+                └── APPLICATION_STRUCTURE_MIGRATION_PLAN.md [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `docs/supabase-boundary-ambiguity-fix`
+- Commit: `docs(architecture): clarify supabase default boundary wording`
+- Review request: confirmar o wording final antes de consolidar qualquer commit.
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — contrato de fechamento reaplicado
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md` — decisão arquitetural refinada
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md` — decisão de dados refinada
+- Glossary: nenhum termo novo entrou no glossário nesta sessão
+
+### Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+### Risks And Gaps
+
+- ainda existe risco de ambiguidade futura se o template fixo pós-migração não carregar essa distinção explicitamente
+- a decisão de quando promover isolamento dedicado por aplicação ainda precisará de critérios objetivos em `ADR` ou checklist arquitetural
+
+### Next Actions
+
+- incorporar essa mesma distinção entre conta única, base canônica e isolamento dedicado no template fixo de contrato que será criado após a migração estrutural para `GitLab`
+
+### Handoff Notes
+
+- não interpretar `boundary próprio` como sinônimo automático de banco dedicado imediato
+- tratar `Supabase` aqui como plataforma/base operacional atual, com evolução por contexto
+
+## Session Handoff - 2026-04-13 00:21 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 00:21:34 -0300`
+- Data da sessão: `2026-04-13`
+- Feature/session id: `docs/application-structure-rebaseline-2026-04-13`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code` (workspace root; não é um repositório Git)
+- Branch ativa: `não aplicável`
+- Objetivo aprovado: remover o naming legado da trilha canônica de migração e rebaselinar a arquitetura para boundaries próprios por aplicação.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - substituir os documentos canônicos antigos por novos planos com naming neutro
+  - remover a hipótese de backend único e alinhar a arquitetura ao modelo por aplicação
+  - registrar regras de `Supabase` próprio por aplicação, frontend desacoplado e layering obrigatório
+  - atualizar o `ROADMAP.md` para apontar para o plano novo de boundary de dados
+- O que ficou fora do escopo:
+  - criar scaffolds reais
+  - provisionar projetos reais no `Supabase`
+  - alterar código de produto
+  - reescrever handoffs históricos antigos
+
+### Prototype And Evidence
+
+- Esta sessão não foi entrega funcional de feature; foi rebaseline documental e arquitetural.
+- Evidências principais:
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md`
+  - `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+
+### Summary
+
+- O plano canônico antigo foi substituído por um plano neutro, sem o naming legado e sem o conceito de API única para tudo.
+- A arquitetura agora fica explícita como modelo por aplicação: frontend desacoplado, API própria e boundary próprio de dados no `Supabase`.
+- O contrato mínimo de backend foi registrado com `MVC`, `DTO`, `Controller` sem negócio, `Service` com interface e `Repository` desacoplado do ORM.
+- `TDD`, `BDD`, `DDD`, `SOLID`, `Clean Code`, `Clean Architecture` e gate de revisão/lint técnico ficaram formalizados como obrigatórios para a lane planejada.
+- O roadmap ativo passou a apontar para o novo plano de boundary de dados.
+- Os arquivos antigos `PIE_PLATFORM_MIGRATION_PLAN.md` e `PIE_DB_SCHEMA_EXECUTION_PLAN.md` foram removidos da superfície canônica.
+
+### Validation
+
+- Builds executados:
+  - nenhum
+- Testes executados:
+  - validação documental com `rg` e leitura dirigida dos arquivos novos
+- Cobertura atingida na fatia entregue:
+  - não aplicável; sessão documental e arquitetural
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - a skill operacional de `lint` técnico ainda precisa estar instalada/validada antes da fase de implementação planejada
+- Validação em macOS:
+  - confirmado via `rg` que não restou referência ativa ao naming legado nem ao backend único nos documentos canônicos em `projects/jpglabs`
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `rg -n --hidden --glob '!**/node_modules/**' --glob '!**/.git/**' '\bPIE\b|pie-api|PIE_PLATFORM_MIGRATION_PLAN' /Users/philipegermano/code/jpglabs/docs /Users/philipegermano/code/daily /Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md`
+  - Action: localizar o acoplamento documental ao naming legado e ao backend único.
+  - Result: confirmado que o plano canônico, o handoff e o diário atual ainda apontavam para a nomenclatura antiga.
+- `sed -n '1,260p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PIE_PLATFORM_MIGRATION_PLAN.md`
+  - Action: revisar o plano antigo antes da substituição.
+  - Result: confirmadas as decisões incompatíveis com o modelo por aplicação pedido pelo usuário.
+- `sed -n '260,760p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PIE_PLATFORM_MIGRATION_PLAN.md`
+  - Action: revisar as seções de arquitetura, banco, sprints e quality gates.
+  - Result: confirmado o acoplamento a `pie-api`, `NestJS` único e naming legado.
+- `sed -n '1,360p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PIE_DB_SCHEMA_EXECUTION_PLAN.md`
+  - Action: revisar o plano antigo de dados.
+  - Result: confirmado o pressuposto de banco compartilhado com ownership centralizado.
+- `sed -n '60,95p' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+  - Action: validar referências ativas ao plano antigo.
+  - Result: encontrada referência ativa ao arquivo antigo de boundary de dados.
+- `rg -n '\bPIE\b|pie-api|PIE_PLATFORM_MIGRATION_PLAN|PIE_DB_SCHEMA_EXECUTION_PLAN' /Users/philipegermano/code/jpglabs/docs/projects/jpglabs`
+  - Action: validar a superfície canônica depois da reescrita.
+  - Result: nenhuma referência ativa restante nos documentos canônicos do contexto.
+- `date '+%Y-%m-%d %H:%M:%S %z'`
+  - Action: fixar o timestamp exato do fechamento.
+  - Result: `2026-04-13 00:21:34 -0300`.
+
+### Files Created
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_STRUCTURE_MIGRATION_PLAN.md`
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md`
+
+### Files Modified
+
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code
+├── daily
+│   └── 2026-04-13.md [modified]
+└── jpglabs
+    └── docs
+        ├── agents
+        │   └── AGENT_BRIDGE.md [modified]
+        └── projects
+            └── jpglabs
+                ├── APPLICATION_DATA_BOUNDARY_EXECUTION_PLAN.md [new]
+                ├── APPLICATION_STRUCTURE_MIGRATION_PLAN.md [new]
+                ├── PIE_DB_SCHEMA_EXECUTION_PLAN.md [deleted]
+                ├── PIE_PLATFORM_MIGRATION_PLAN.md [deleted]
+                └── ROADMAP.md [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `docs/application-structure-rebaseline`
+- Commit: `docs(architecture): rebaseline migration plan to app-owned boundaries`
+- Review request: confirmar o diff documental e a remoção dos arquivos antigos antes de qualquer commit manual.
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — bootstrap relido para respeitar contrato de handoff e fechamento
+- `/Users/philipegermano/.codex/skills/ptbr-docs-standard/SKILL.md` — política de linguagem relida para manter docs em `pt-BR` e contratos técnicos em English
+- `/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/ROADMAP.md` — superfície ativa revisada e atualizada para apontar para o plano novo
+- Glossary: nenhum termo novo entrou no glossário nesta sessão
+
+### Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+### Risks And Gaps
+
+- o histórico antigo do diário e do handoff ainda contém menções à nomenclatura removida, preservadas por rastreabilidade
+- a fase de implementação planejada continua bloqueada até existir gate operacional de revisão/lint técnico
+- a escolha de stack por aplicação ainda depende do contrato pós-migração, que não foi escrito nesta sessão
+
+### Next Actions
+
+- fechar a migração estrutural para `GitLab` e abrir imediatamente a fatia de template fixo de contrato para projetos planejados, com checklist arquitetural e gate técnico obrigatório antes de iniciar implementação
+
+### Handoff Notes
+
+- não reintroduzir backend único nem boundary de dados compartilhado como default
+- usar os novos documentos canônicos para qualquer decisão posterior desta trilha
+
 ## Session Handoff - 2026-04-13 00:03 -0300
 
 ### Session Metadata
@@ -3045,7 +3459,7 @@ code
   - Result: `26/26` testes aprovados.
 - `npm run build`
   - Action: validar o build do `portfolio-backend`.
-  - Result: build Next.js concluído com sucesso.
+  - Result: buildNest.js concluído com sucesso.
 - `node --experimental-test-coverage --test ...`
   - Action: medir cobertura do slice de autenticação local.
   - Result: `100/100/100` para `auth-shared.js` e `local-operator-auth.js`.
@@ -8246,7 +8660,7 @@ code
 - Banana Slides em `/docker/banana-slides` na VPS — backlog, não tocar
 - Branch ativa: `feature/unified-memory-center` (commits `d586a8e`, `09f3bf8`)
 - Portfolio: `feature/portfolio-showcase-update`, PR #6 aberto
-- Cores JPGLabs: azul e roxo BANIDOS de todos os projetos (exceção temporária: portfolio Next.js atual)
+- Cores JPGLabs: azul e roxo BANIDOS de todos os projetos (exceção temporária: portfolioNest.js atual)
 - Sync cross-agent: executar NO INÍCIO da sessão, não no final
 - Prioridade financeira até 20/04: portfolio (#1) + freelas upfront (#2)
 <!-- session-bridge:maratona-2026-04-08-session:end -->

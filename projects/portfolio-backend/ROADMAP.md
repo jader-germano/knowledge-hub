@@ -11,7 +11,7 @@ superfície pública primária.
 ## Leitura Atual
 
 - a documentação do próprio repo já declara `backend/BFF lane`
-- ainda existe ambiguidade histórica porque o repo nasceu como app Next.js
+- ainda existe ambiguidade histórica porque o repo nasceu como appNest.js
   completa
 - o release do portfólio depende de encerrar essa ambiguidade
 

@@ -6,7 +6,7 @@
 
 ## Stack
 
-- Next.js
+-Nest.js
 
 ## Sinal Atual
 

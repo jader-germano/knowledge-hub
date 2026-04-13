@@ -55,7 +55,7 @@ apply "$K8S_DIR/traefik/tls-config.yaml"
 # - Mail remains standalone for now
 # - Open WebUI is intentionally removed from the target platform
 # Portfolio root-domain ownership is still pending final cutover between
-# `jpglabs-portfolio-frontend` and the Next.js backend lane, so the k8s
+# `jpglabs-portfolio-frontend` and theNest.js backend lane, so the k8s
 # portfolio manifest stays out of the auto-apply path until that decision is explicit.
 for svc in ollama pi-local-app n8n knowledge-hub; do
   [[ -f "$K8S_DIR/services/$svc.yaml" ]] && apply "$K8S_DIR/services/$svc.yaml"
