@@ -1,0 +1,246 @@
+{
+  "$schema": "/Users/philipegermano/code/jpglabs/docs/memory/schemas/session-memory-sidecar.schema.json",
+  "schema_version": "1.0",
+  "session": {
+    "id": "docs-daily-technical-closure-2026-04-13-session",
+    "timestamp": "2026-04-13T21:48:39-03:00",
+    "date": "2026-04-13",
+    "provider": "Codex",
+    "workspace": "`workspace root /Users/philipegermano/code` (fechamento can\u00f4nico armazenado em `projects/docs/sessions/`)",
+    "status": "completed",
+    "feature_id": "daily-technical-closure",
+    "summary": "O dia consolidou quatro frentes substanciais: governan\u00e7a documental da migra\u00e7\u00e3o GitLab do portf\u00f3lio, cutover de taxonomia `memory/ + projects/` no Mac e na VPS, endurecimento do runtime/MCP do `openclaude` e alinhamento do runtime real do `claude-code` ao baseline Docker MCP. | No eixo documental, o repo `docs` concentrou a maior parte do delta corroborado: freeze/governan\u00e7a do portf\u00f3lio, rebaseline de boundaries por aplica\u00e7\u00e3o, invent\u00e1rio de migra\u00e7\u00e3o GitLab, template fixo de contrato para projetos planejados, ajuste \u00fatil do `Gloss\u00e1rio multil\u00edngue` e reconcilia\u00e7\u00e3o do estado publicado das branches reais.",
+    "reported_session_id": "automation/fechamento-tecnico-diario-2026-04-13",
+    "branch": "`ops/portfolio-gitlab-worktree-isolation-2026-04-13` em `/Users/philipegermano/code/jpglabs/docs` (`/Users/philipegermano/code` n\u00e3o \u00e9 um reposit\u00f3rio Git)",
+    "objective": "revisar o trabalho do dia nos workspaces configurados, atualizar a entrada corrente do Di\u00e1rio de Bordo no Notion com resumo t\u00e9cnico, refer\u00eancias, comandos e invent\u00e1rio de arquivos, e espelhar o mesmo handoff no hub can\u00f4nico."
+  },
+  "projects": [
+    {
+      "id": "docs",
+      "name": "jpglabs/docs",
+      "path": "/Users/philipegermano/code/jpglabs/docs",
+      "role": "canonical session report owner"
+    }
+  ],
+  "artifacts": {
+    "report": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/daily-technical-closure/2026-04-13-session/report.md",
+    "daily": "/Users/philipegermano/code/daily/2026-04-13.md",
+    "evidence_dir": "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/daily-technical-closure/2026-04-13-session"
+  },
+  "tags": [
+    "daily-technical-closure",
+    "docs",
+    "language-glossary",
+    "session-report"
+  ],
+  "decisions": [],
+  "findings": [
+    {
+      "id": "risk-o-repo-docs-segue-em-branch-local-sem-upstream-q",
+      "summary": "O repo `docs` segue em branch local sem upstream; qualquer publica\u00e7\u00e3o posterior ainda depende de decis\u00e3o expl\u00edcita de push/PR.",
+      "status": "recorded",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-a-worktree-do-openclaude-continua-amplamente-suj",
+      "summary": "A worktree do `openclaude` continua amplamente suja e o diff contra `origin/main` ainda \u00e9 grande demais para revis\u00e3o segura em uma \u00fanica fatia.",
+      "status": "recorded",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-semgrep-permanece-inst-vel-no-host-e-sonarqube-a",
+      "summary": "`semgrep` permanece inst\u00e1vel no host e `sonarqube` ainda n\u00e3o est\u00e1 pronto para promo\u00e7\u00e3o \u00e0 baseline funcional.",
+      "status": "recorded",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-o-cutover-memory-projects-no-mac-e-na-vps-foi-fe",
+      "summary": "O cutover `memory/ + projects/` no Mac e na VPS foi feito em modo compat\u00edvel; `/Users/philipegermano/code` e `/root/build` continuam como bases f\u00edsicas/transit\u00f3rias.",
+      "status": "recorded",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-antigravity-e-intellij-idea-precisam-de-restart-",
+      "summary": "`Antigravity` e `IntelliJ IDEA` precisam de restart para ativa\u00e7\u00e3o efetiva do plugin/launcher.",
+      "status": "recorded",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "risk-o-cwd-configurado-users-philipegermano-code-jpgl",
+      "summary": "O `cwd` configurado `/Users/philipegermano/code/jpglabs-knowledge-hub` permanece praticamente vazio; a automa\u00e7\u00e3o continua gastando lookup em uma superf\u00edcie inerte.",
+      "status": "recorded",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "next_actions": [
+    {
+      "id": "next-action-corrigir-os-cwds-da-automa-o-para-refletirem-sup",
+      "summary": "Corrigir os `cwds` da automa\u00e7\u00e3o para refletirem superf\u00edcies reais do workspace, preferindo `/Users/philipegermano/code` e `/Users/philipegermano/code/jpglabs/docs`.",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "next-action-separar-o-delta-amplo-do-openclaude-em-slices-re",
+      "summary": "Separar o delta amplo do `openclaude` em slices revis\u00e1veis antes de qualquer commit ou PR.",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "next-action-finalizar-a-lane-de-qualidade-com-secret-stack-d",
+      "summary": "Finalizar a lane de qualidade com secret/stack do `sonarqube` e s\u00f3 ent\u00e3o reavaliar `sonarqube` e `semgrep` para baseline.",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "next-action-reiniciar-antigravity-e-intellij-idea-e-fazer-um",
+      "summary": "Reiniciar `Antigravity` e `IntelliJ IDEA` e fazer um smoke test curto da integra\u00e7\u00e3o do `openclaude`.",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    },
+    {
+      "id": "next-action-decidir-o-destino-das-branches-auxiliares-de-por",
+      "summary": "Decidir o destino das branches auxiliares de `portfolio-backend` e `portfolio-mobile` depois da revis\u00e3o da migra\u00e7\u00e3o GitLab.",
+      "status": "open",
+      "project_ids": [
+        "docs"
+      ]
+    }
+  ],
+  "files_touched": [
+    "/Users/philipegermano/code/OPENCLAUDE.md",
+    "/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_ARCHITECTURE_CHECKLIST.md",
+    "/Users/philipegermano/code/jpglabs/docs/projects/jpglabs/PLANNED_PROJECT_CONTRACT_TEMPLATE.md",
+    "/Users/philipegermano/code/jpglabs/docs/archive/root-docs/superpowers/plans/2026-04-08-agent-dashboard.md",
+    "/Users/philipegermano/memory",
+    "/Users/philipegermano/projects",
+    "/Users/philipegermano/.antigravity/extensions/devnull-bootloader.openclaude-vscode-0.1.1-universal",
+    "/Users/philipegermano/Library/Application Support/JetBrains/IntelliJIdea2026.1/plugins/claude-code-jetbrains-plugin",
+    "/Users/philipegermano/Library/Application Support/JetBrains/WebStorm2026.1/plugins/claude-code-jetbrains-plugin",
+    "/Users/philipegermano/code/jpglabs/docs/projects/docs/sessions/daily-technical-closure/2026-04-13-session/report.md",
+    "/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md",
+    "/Users/philipegermano/code/README.md",
+    "/Users/philipegermano/code/.agents/scripts/sync_shared_skills.py",
+    "/Users/philipegermano/code/.agents/scripts/tests/test_sync_shared_skills.py",
+    "/Users/philipegermano/code/.agents/skills/README.md",
+    "/Users/philipegermano/code/.claude/README.md",
+    "/Users/philipegermano/.claude/settings.json",
+    "/Users/philipegermano/code/scripts/bootstrap.sh",
+    "/Users/philipegermano/code/scripts/healthcheck.sh",
+    "/Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md",
+    "/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md",
+    "/Users/philipegermano/code/jpglabs/docs/manifests/workspace.index.yaml",
+    "/Users/philipegermano/code/jpglabs/docs/manifests/docs.index.yaml",
+    "/Users/philipegermano/code/jpglabs/docs/manifests/skills.index.yaml",
+    "/Users/philipegermano/code/config/openclaude-home-lab/hostinger/taxonomy-analyst/taxonomy_worker.py",
+    "/Users/philipegermano/code/jpglabs/jpglabs-dashboard/src/data/providers.ts",
+    "/Users/philipegermano/code/openclaude/package.json",
+    "/Users/philipegermano/code/openclaude/src/utils/providerFlag.ts",
+    "/Users/philipegermano/code/openclaude/src/utils/schemaSanitizer.ts",
+    "/Users/philipegermano/code/openclaude/src/components/ProviderManager.tsx",
+    "/Users/philipegermano/Library/Application Support/Antigravity/User/settings.json",
+    "/Users/philipegermano/code/daily/2026-04-13.md",
+    "/Users/philipegermano/.codex/automations/fechamento-tecnico-diario/memory.md"
+  ],
+  "commands": [
+    {
+      "command": "sed -n '1,220p' /Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md`, `sed -n '1,220p' /Users/philipegermano/code/CODEX.md` e `sed -n '1,260p' /Users/philipegermano/code/jpglabs/docs/agents/SESSION_CLOSE_TEMPLATE.md",
+      "action": "reler o contrato do workspace, o delta do Codex e a estrutura obrigat\u00f3ria de fechamento antes de consolidar o dia.",
+      "result": "confirmado o rito can\u00f4nico `report.md` -> `daily` + `AGENT_BRIDGE` + mem\u00f3ria, com `Notion` restrito ao Di\u00e1rio de Bordo."
+    },
+    {
+      "command": "sed -n '1,240p' /Users/philipegermano/.codex/automations/fechamento-tecnico-diario/automation.toml` e `sed -n '1,260p' /Users/philipegermano/.codex/automations/fechamento-tecnico-diario/memory.md",
+      "action": "recuperar o escopo configurado da automa\u00e7\u00e3o e o \u00faltimo fechamento j\u00e1 persistido.",
+      "result": "confirmados os workspaces `/Users/philipegermano/code` e `/Users/philipegermano/code/jpglabs-knowledge-hub`; tamb\u00e9m ficou preservado o risco de `cwd` inerte."
+    },
+    {
+      "command": "git -C /Users/philipegermano/code/jpglabs/docs log --since='2026-04-13 00:00' --until='2026-04-13 23:59:59' --stat",
+      "action": "corroborar o delta real do dia no repo documental can\u00f4nico.",
+      "result": "confirmou o bloco dominante de governan\u00e7a, migra\u00e7\u00e3o e documenta\u00e7\u00e3o em `docs`, com destaque para `f07b214`, `ba40842`, `8886854`, `d32f4f4`, `5fa5a25`, `c3bd49f` e `d7b9ac4`."
+    },
+    {
+      "command": "git -C /Users/philipegermano/code/jpglabs/portfolio-backend switch -c wip/resume-parse-contract",
+      "action": "estacionar a fatia \u00fatil do backend fora do res\u00edduo n\u00e3o promov\u00edvel.",
+      "result": "branch local criada e helper de parse preservado com teste dedicado."
+    },
+    {
+      "command": "git -C /Users/philipegermano/code/jpglabs/portfolio-mobile switch -c chore/node-pin-and-async-storage",
+      "action": "preservar a fatia v\u00e1lida do mobile para revis\u00e3o posterior.",
+      "result": "branch auxiliar criada e validada com lint; `jpglabs-portfolio` ficou limpo em `main`."
+    },
+    {
+      "command": "ssh jpglabs-vps-tailnet 'mkdir -p /root/memory.new/... /root/projects ...'",
+      "action": "aplicar a taxonomia can\u00f4nica `memory/ + projects/` na VPS.",
+      "result": "`/root/memory` e `/root/projects` materializados com compatibilidade por `symlink`; `/root/code` rebaixado a staging transit\u00f3rio."
+    },
+    {
+      "command": "openclaude mcp doctor --json MCP_DOCKER",
+      "action": "validar no host a sa\u00fade do baseline Docker MCP usado pelo `openclaude`.",
+      "result": "baseline funcional confirmado; `docker` continuou fora da baseline compartilhada e `semgrep` permaneceu inst\u00e1vel."
+    },
+    {
+      "command": "make -C /Users/philipegermano/code bootstrap-quality",
+      "action": "consolidar a lane local de qualidade para `SonarQube`.",
+      "result": "a trilha saiu da fase de path quebrado, mas ainda depende de secret/stack e n\u00e3o pode ser tratada como pronta."
+    },
+    {
+      "command": "python3 /Users/philipegermano/code/.agents/scripts/sync_shared_skills.py --target-root /Users/philipegermano/.claude/skills --preserve-unmanaged",
+      "action": "alinhar o runtime real do `claude-code` \u00e0s skills compartilhadas do workspace.",
+      "result": "`7` skills sincronizadas sem apagar assets legados do usu\u00e1rio."
+    },
+    {
+      "command": "bun run build` e `openclaude --version",
+      "action": "rebuildar e confirmar a vers\u00e3o local do CLI ap\u00f3s o bump.",
+      "result": "`1.0.11 (Open Claude)`."
+    },
+    {
+      "command": "'/Applications/Antigravity.app/Contents/Resources/app/bin/antigravity' --list-extensions --show-versions",
+      "action": "validar a integra\u00e7\u00e3o do `openclaude` no host VS Code-like.",
+      "result": "extens\u00e3o `devnull-bootloader.openclaude-vscode@0.1.1` descoberta pelo runtime."
+    },
+    {
+      "command": "unzip -oq /tmp/claude-code-jetbrains-plugin-0.1.14-beta.zip -d <plugins-dir>",
+      "action": "instalar o plugin compat\u00edvel nas IDEs JetBrains.",
+      "result": "`IntelliJ IDEA 2026.1` e `WebStorm 2026.1` passaram a conter `claude-code-jetbrains-plugin` nos paths esperados pelo runtime."
+    },
+    {
+      "command": "find /Users/philipegermano/code/openclaude -type f -newermt '2026-04-13 00:00:00' ! -newermt '2026-04-14 00:00:00'",
+      "action": "corroborar os arquivos realmente tocados hoje no `openclaude`.",
+      "result": "atividade confirmada em providers, models, schema sanitizer, manager de providers e web terminal."
+    },
+    {
+      "command": "Notion MCP: notion_search` no parent `31ba2cee2bcc81e893d8fb95c4770334",
+      "action": "localizar a entrada t\u00e9cnica corrente do Di\u00e1rio de Bordo para `13/04/2026`.",
+      "result": "n\u00e3o havia p\u00e1gina t\u00e9cnica para a data."
+    },
+    {
+      "command": "`Notion MCP: notion_create_pages` com payload completo do fechamento",
+      "action": "tentar criar diretamente a p\u00e1gina di\u00e1ria completa no Notion.",
+      "result": "o write path retornou bloqueio Cloudflare com payload grande; foi necess\u00e1rio fallback incremental."
+    },
+    {
+      "command": "Notion MCP: notion_create_pages` com p\u00e1gina m\u00ednima seguido de `notion_update_page",
+      "action": "criar a p\u00e1gina placeholder e substituir o conte\u00fado em payload menor para contornar o bloqueio.",
+      "result": "p\u00e1gina criada e atualizada com sucesso em `https://app.notion.com/p/342a2cee2bcc811c8ffac2d1fd4847ec`."
+    }
+  ]
+}

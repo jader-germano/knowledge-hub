@@ -10570,3 +10570,68 @@ code
   - worktree local versus `origin/main`
   - arquivos não rastreados, que não aparecem no `git diff`
 <!-- session-bridge:fix-openclaude-version-and-origin-diff-2026-04-13:end -->
+
+
+<!-- session-bridge:docs-daily-technical-closure-2026-04-13-session:start -->
+## 2026-04-13 — daily technical closure
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-13 21:48:39 -0300`
+- Feature/session id: `automation/fechamento-tecnico-diario-2026-04-13`
+- Repositório: ``workspace root /Users/philipegermano/code` (fechamento canônico armazenado em `projects/docs/sessions/`)`
+- Branch ativa: ``ops/portfolio-gitlab-worktree-isolation-2026-04-13` em `/Users/philipegermano/code/jpglabs/docs` (`/Users/philipegermano/code` não é um repositório Git)`
+- Provider: `Codex`
+- Objetivo aprovado: revisar o trabalho do dia nos workspaces configurados, atualizar a entrada corrente do Diário de Bordo no Notion com resumo técnico, referências, comandos e inventário de arquivos, e espelhar o mesmo handoff no hub canônico.
+
+### Summary
+
+- O dia consolidou quatro frentes substanciais: governança documental da migração GitLab do portfólio, cutover de taxonomia `memory/ + projects/` no Mac e na VPS, endurecimento do runtime/MCP do `openclaude` e alinhamento do runtime real do `claude-code` ao baseline Docker MCP.
+- No eixo documental, o repo `docs` concentrou a maior parte do delta corroborado: freeze/governança do portfólio, rebaseline de boundaries por aplicação, inventário de migração GitLab, template fixo de contrato para projetos planejados, ajuste útil do `Glossário multilíngue` e reconciliação do estado publicado das branches reais.
+- No eixo de repos operacionais, `portfolio-backend` teve a fatia útil preservada em `wip/resume-parse-contract`, `portfolio-mobile` preservou a fatia válida em `chore/node-pin-and-async-storage` e `jpglabs-portfolio` voltou a ficar limpo em `main`, sem reabrir código de produto fora da trilha de migração.
+- No eixo `openclaude`, a instalação local deixou de depender de um profile inválido de `OpenAI/Codex`, passou a respeitar `OLLAMA_BASE_URL` no CLI, endureceu o saneamento de schema MCP, foi revalidada com build e testes direcionados, recebeu bump para `1.0.11` e ganhou um diagnóstico explícito do delta contra `origin/main`.
+- O dia também entregou ergonomia operacional real para o `openclaude`: `Antigravity` passou a descobrir a extensão local via sideload determinístico, `IntelliJ IDEA 2026.1` e `WebStorm 2026.1` receberam o plugin compatível `claude-code-jetbrains-plugin` e o launcher do host VS Code-like foi fixado em caminho absoluto para matar o problema de `PATH` em app GUI no macOS.
+- No eixo de infraestrutura do workspace, o Mac passou a expor `/Users/philipegermano/memory` e `/Users/philipegermano/projects` como superfícies compatíveis sem mover repositórios; `OPENCLAUDE.md` virou shim canônico de provider; `docs.index.yaml`, `skills.index.yaml`, `taxonomy_worker.py` e `jpglabs-dashboard/src/data/providers.ts` foram alinhados para reconhecer a nova surface.
+- A mesma taxonomia foi aplicada na VPS com `/root/memory` e `/root/projects`, preservando compatibilidade por `symlink` e rebaixando `/root/code` a staging transitório; o host remoto ainda não concluiu a simplificação física de `/root/build`.
+- No eixo `claude-code`, a lane de qualidade avançou da fase de misconfiguração para dependência explícita de secret/stack, o sync de skills compartilhadas virou idempotente com `--target-root`, `~/.claude/settings.json` foi realinhado ao bootstrap do workspace e a documentação legada que ainda sugeria `symlink` como caminho canônico foi saneada.
+- O workspace configurado `/Users/philipegermano/code/jpglabs-knowledge-hub` permaneceu inerte nesta rodada: não é repo Git e não produziu evidência material do dia. Isso continua sendo risco de configuração da automação.
+
+### Glossário multilíngue
+
+| Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文 |
+|---|---|---|---|---|---|---|
+| Link simbólico | Enlace simbólico | Symlink | Collegamento simbolico | Lien symbolique | シンボリックリンク | 符号链接 |
+| Shim | Capa shim | Shim | Shim | Shim | シム | 垫片层 |
+| Virada controlada | Cambio controlado | Cutover | Passaggio controllato | Bascule contrôlée | 切替 / きりかえ (kirikae) | 切换 |
+| Endurecimento | Endurecimiento | Hardening | Hardenizzazione | Durcissement | ハードニング | 加固 |
+| Linha de base | Línea base | Baseline | Linea base | Référence de base | ベースライン | 基线 |
+
+#### Curiosidades linguísticas
+
+- `Shim` continua útil porque comunica compatibilidade sem vender arquitetura final; é a peça que “faz conversar” o velho e o novo enquanto a transição não termina.
+- `Cutover` descreve a virada operacional propriamente dita; copiar arquivo sem trocar a rota ainda não é `cutover` completo.
+- `Hardening` sobrevive bem no jargão porque fala de redução prática de superfície de falha, não de “segurança abstrata” ou compliance decorativo.
+
+### Risks And Gaps
+
+- O repo `docs` segue em branch local sem upstream; qualquer publicação posterior ainda depende de decisão explícita de push/PR.
+- A worktree do `openclaude` continua amplamente suja e o diff contra `origin/main` ainda é grande demais para revisão segura em uma única fatia.
+- `semgrep` permanece instável no host e `sonarqube` ainda não está pronto para promoção à baseline funcional.
+- O cutover `memory/ + projects/` no Mac e na VPS foi feito em modo compatível; `/Users/philipegermano/code` e `/root/build` continuam como bases físicas/transitórias.
+- `Antigravity` e `IntelliJ IDEA` precisam de restart para ativação efetiva do plugin/launcher.
+- O `cwd` configurado `/Users/philipegermano/code/jpglabs-knowledge-hub` permanece praticamente vazio; a automação continua gastando lookup em uma superfície inerte.
+
+### Next Actions
+
+- Corrigir os `cwds` da automação para refletirem superfícies reais do workspace, preferindo `/Users/philipegermano/code` e `/Users/philipegermano/code/jpglabs/docs`.
+- Separar o delta amplo do `openclaude` em slices revisáveis antes de qualquer commit ou PR.
+- Finalizar a lane de qualidade com secret/stack do `sonarqube` e só então reavaliar `sonarqube` e `semgrep` para baseline.
+- Reiniciar `Antigravity` e `IntelliJ IDEA` e fazer um smoke test curto da integração do `openclaude`.
+- Decidir o destino das branches auxiliares de `portfolio-backend` e `portfolio-mobile` depois da revisão da migração GitLab.
+
+### Handoff Notes
+
+- O fechamento de `13/04` ficou distribuído entre documentação (`docs`), runtime local (`openclaude`, `claude-code`) e infraestrutura compatível (`memory/ + projects/` no Mac e na VPS); não tratar o dia como uma única fatia de repo isolado.
+- A página do Notion não existia para `13/04/2026`; esta rodada precisou criá-la do zero e depois substituir o conteúdo em payload menor por causa de bloqueio Cloudflare no create com payload grande.
+- O sync local deve espelhar este report para `/Users/philipegermano/code/daily/2026-04-13.md`, `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md` e sidecar JSON de memória; a única superfície externa já validada nesta rodada é a página do Notion em `342a2cee2bcc811c8ffac2d1fd4847ec`.
+<!-- session-bridge:docs-daily-technical-closure-2026-04-13-session:end -->
