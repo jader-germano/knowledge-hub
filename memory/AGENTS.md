@@ -33,33 +33,43 @@ Canonical location: `~/code/.agents/skills/`
 - User is Jader Philipe Germano (Brazilian). Gentle spelling/grammar feedback.
 
 ## Execution Model
-1. Prefer existing skills from `~/.pi/agent/skills/` or `~/.codex/skills/`
-2. Combine skills only when genuinely multi-domain
-3. Create a new skill for recurring capability with no home
-4. Do NOT fragment into multiple pseudo-agents
+1. Prefer existing skills from `~/code/.agents/skills/` (canonical) or `~/pi-skills/`
+2. Runtime wrappers live in `~/.claude/skills/` (synced via `sync_shared_skills.py`)
+3. Combine skills only when genuinely multi-domain
+4. Create a new skill for recurring capability with no home
+5. Do NOT fragment into multiple pseudo-agents
 
 ## Skill Registry
 | Skill | Location | Purpose |
 |-------|----------|---------|
-| `jader-engineering-profile` | `~/.codex/skills/jader-engineering-profile/` | Java/Spring/Angular stack |
-| `passive-income-architect`  | `~/.codex/skills/passive-income-architect/` | Monetization |
-| `chatgpt-apps`              | `~/.codex/skills/chatgpt-apps/` | ChatGPT Apps SDK / MCP |
-| `jpglabs-vps-ops`           | `~/.pi/agent/skills/jpglabs-vps-ops/` | VPS SSH/Docker/Traefik |
-| `mac-app-uninstaller`       | `~/.pi/agent/skills/mac-app-uninstaller/` | macOS app cleanup |
-| `brave-search`              | `~/pi-skills/brave-search/` | Web search |
-| `transcribe`                | `~/pi-skills/transcribe/` | Speech-to-text |
+| `brave-search`              | `~/pi-skills/brave-search/` | Web search via Brave |
+| `browser-tools`             | `~/pi-skills/browser-tools/` | Chrome DevTools automation |
+| `transcribe`                | `~/pi-skills/transcribe/` | Speech-to-text via Groq Whisper |
 | `youtube-transcript`        | `~/pi-skills/youtube-transcript/` | YT transcripts |
-| `browser-tools`             | `~/pi-skills/browser-tools/` | Chrome automation |
+| `email-daily-triage`        | `~/code/.agents/skills/email-daily-triage/` | Email triage |
+| `github-activity-digest`    | `~/code/.agents/skills/github-activity-digest/` | GitHub digest |
+| `income-roadmap-scanner`    | `~/code/.agents/skills/income-roadmap-scanner/` | Monetization scanner |
+| `infra-health-check`        | `~/code/.agents/skills/infra-health-check/` | VPS/infra health |
+| `job-opportunities-scanner` | `~/code/.agents/skills/job-opportunities-scanner/` | Job scanner |
+| `relatorio-mensal-tse`      | `~/code/.agents/skills/relatorio-mensal-tse/` | TSE monthly report |
+| `teams`                     | `~/code/.agents/skills/teams/` | Agent team orchestration |
+| `memory-sync`               | `~/.claude/skills/memory-sync/` | Cross-agent memory sync |
+| `scraper`                   | `~/.claude/skills/scraper/` | URL scraping |
+| `session-init`              | `~/.claude/skills/session-init/` | Session machine ID |
+| `chatgpt-apps`              | `~/.codex/skills/chatgpt-apps/` | ChatGPT Apps SDK / MCP |
 
 ## Agent Bundle
-| Agent | Location | Trigger |
-|-------|----------|---------|
-| `brutal-critic-triad` ← **MANDATORY pre-code** | `~/code/pessoal/jpglabs/jpglabs-ai-assets/agents-bundle/brutal-critic-triad.md` | Before any code change |
-| `knowledge-curator`   | `…/agents-bundle/knowledge-curator.md` | Knowledge capture |
-| `n8n-workflow-architect` | `…/agents-bundle/n8n-workflow-architect.md` | n8n design |
-| `mcp-integration-architect` | `…/agents-bundle/mcp-integration-architect.md` | MCP/tools |
-| `ui-design-crafter`   | `…/agents-bundle/ui-design-crafter.md` | UI/UX |
-| `jpglabs-dev-agent`   | `…/agents-bundle/jpglabs-dev-agent/SKILL.md` | JPGLabs dev |
+| Agent | Status | Trigger |
+|-------|--------|---------|
+| `brutal-critic-triad` | **archived** — path removed from workspace | Was: pre-code review |
+| `knowledge-curator`   | **archived** | Was: knowledge capture |
+| `n8n-workflow-architect` | **archived** | Was: n8n design |
+| `mcp-integration-architect` | **archived** | Was: MCP/tools |
+| `ui-design-crafter`   | **archived** | Was: UI/UX |
+| `jpglabs-dev-agent`   | **archived** | Was: JPGLabs dev |
+
+> Legacy agent bundles were at `~/code/pessoal/jpglabs/jpglabs-ai-assets/agents-bundle/`.
+> Path no longer exists. Skills that survive are now in `~/code/.agents/skills/` or `~/.claude/skills/`.
 
 ## Scheduled Agents (Claude)
 | Agent | Schedule |
@@ -71,10 +81,11 @@ Canonical location: `~/code/.agents/skills/`
 | `claude-code-release-digest` | Weekly |
 
 ## Models
-- **Primary:** `openai-codex/gpt-5.4` (thinking: high)
+- **Primary:** `anthropic/claude-opus-4-6` or `openai-codex/gpt-5.4` (thinking: high)
 - **Fallback:** `anthropic/claude-sonnet-4-6`
-- **Local fast:** Ollama `llama3.2:3b` → http://localhost:11434
-- **Local code:** Ollama `qwen2.5-coder:7b` → http://localhost:11434
+- **Local (M4):** Ollama `qwen2.5-coder:7b` or `gemma4:e4b` → http://localhost:11434
+- **VPS (Tailscale):** Ollama `gemma4:e4b` or `qwen2.5-coder:14b` → http://100.68.217.36:11434
+- **Cloud free:** Google Gemini `gemini-3.1-flash-preview`, OpenRouter `nemotron-3-super-free`
 - **Voice:** `pi -p` → gpt-5.4
 
 ## CPU Policy (Apple M4: 4P + 6E)
@@ -85,9 +96,8 @@ Canonical location: `~/code/.agents/skills/`
 ## Pre-Implementation Checklist
 1. Confirm file/component when ambiguous
 2. Show file plan before editing
-3. **Run brutal-critic-triad** → `…/agents-bundle/brutal-critic-triad.md`
-4. Update tests with every behavior change
-5. Verify version-sensitive patterns against official docs
+3. Update tests with every behavior change
+4. Verify version-sensitive patterns against official docs
 
 ## Commit Policy
 - Personal projects: commit after each stable implementation
