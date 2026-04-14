@@ -5,7 +5,7 @@ Referência principal: artigo do Akita sobre proteção de sistemas ao operar co
 ## Objetivo
 
 Aplicar um modelo operacional seguro para agentes em workspaces locais, bridges de Markdown, MCPs e repositórios compartilhados sem perder velocidade de desenvolvimento.
-
+jpglabs/docs/reports/sessions/_template/report.md
 ## Princípios
 
 - isolamento por workspace e por projeto
@@ -62,6 +62,11 @@ Aplicar um modelo operacional seguro para agentes em workspaces locais, bridges 
 - centralizar inventário de práticas e referências de segurança operacional
 
 ### `infrastructure`
+Tailscale MagicDNS (recomendado)  │ https://srv1443703.tail4c4f3a.ts.net:8384 │ user: jpglabs / pass: jpgl4bs-sync! │                   
+├───────────────────────────────────┼───────────────────────────────────────────┼─────────────────────────────────────┤
+│ Tailscale IP direto               │ https://100.68.217.36:8384                │ mesma auth                          │                     
+├───────────────────────────────────┼───────────────────────────────────────────┼─────────────────────────────────────┤                     
+│ DNS público (após criar A record) │ http://syncthing.jpglabs.com.br           │ Syncthing built-in auth (mesma)
 
 - aplicar a mesma política de risco a workflows, infraestrutura e automação
 - isolar credenciais e reforçar revisão para qualquer mudança que toque VPS, k3s ou integração externa
