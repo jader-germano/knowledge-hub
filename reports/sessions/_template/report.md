@@ -72,32 +72,51 @@ feature-root
 - Links estudados
 - Termos novos
 
-## Glossário multilíngue
+*Última atualização: 2026-04-08 — Sessão Obsidian LLM Wiki*  
+*Adicionar novos termos ao final da seção temática correspondente e atualizar o índice rápido.*
 
-- `Glossário multilíngue: não aplicável nesta sessão.`
+---
 
-Quando aplicável, substituir a linha acima por:
+## Glossário Multilíngue — Referência de Sessões
 
-Tom desejado:
+> Termos técnicos recorrentes da sessão traduzidos em 7 idiomas.
+> Atualizado automaticamente ao final de cada sessão  .
 
-- leve, direto e memorável
-- útil para preservar nuance, não para soar acadêmico
-- preferir entre `5` e `10` termos da sessão
-- usar as colunas `Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文`
+### Infraestrutura & DevOps
+
+|- usar as colunas `Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文`
+
 - usar as colunas seguintes com uma curiosidade sobre a palavra em cada lingua
 
 | Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文 |
 |---|---|---|---|---|---|---|
-| | | | | | | |
-| | | | | | | |
 
-### Curiosidades linguísticas
+### Programação & Arquitetura
 
-- Registrar apenas notas curtas, úteis e fáceis de lembrar
-- Pode usar etimologia, transliteração, falso cognato ou analogia técnica + curiosidades
-- Em `日本語`, incluir kana ou `romaji` quando ajudar e explicar o sobre o significado(simbolo+taxonomia), origem e uso com 1 exemplo de uso + tradução
-- Em `中文`, preferir `简体中文` e divagar sobre o significado(simbolo+taxonomia), origem e uso com 1 exemplo de uso + tradução
--
+| Termo (pt-BR) | ES | EN | IT | FR | 日本語 | 中文 |
+|---|---|---|---|---|---|---|
+
+### Notas sobre cada idioma
+
+**English (EN)**
+Língua germânica com forte influência latina/francesa. Termos técnicos de TI são majoritariamente inglês nativo (build, deploy, code) por ser o berço da computação moderna. Ordem: SVO.
+
+**Français (FR)**
+Língua românica como o português. A *Académie Française* traduz ativamente termos de TI: firewall → *pare-feu*, software → *logiciel*, computer → *ordinateur*. É a língua que mais resiste ao anglicismo técnico.
+
+**Italiano (IT)**
+A mais conservadora das línguas românicas — próxima do latim vulgar. Regra das doppie (duplas): consoantes duplas mudam a pronúncia e o significado (*pala* = pá, *palla* = bola). Se lê como se escreve, similar ao português.
+
+**日本語 / Japonês (JP)**
+Usa 3 sistemas de escrita simultâneos:
+
+- **カタカナ (Katakana):** silabário angular para palavras estrangeiras. A maioria dos termos de TI usa katakana: サーバー, コンテナ, デプロイ.
+- **漢字 (Kanji):** ~2.000 caracteres chineses de uso diário. Cada um tem radicais com significado: 鍵 (kagi/chave) = 金 (metal) + 建 (construir).
+- **ひらがな (Hiragana):** silabário cursivo para gramática e palavras nativas. する (suru = fazer) é hiragana.
+- **Ordem SOV:** サーバーを同期する (sābā wo dōki suru) = servidor [obj] sincronizar — o verbo sempre vai no final.
+- **Sem plural nem artigos:** サーバー pode ser o servidor, um servidor ou servidores — o contexto decide.
+
+---
 
 ## Risks And Gaps
 
