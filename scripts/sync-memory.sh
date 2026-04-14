@@ -1,33 +1,75 @@
 #!/usr/bin/env bash
-# Sync Pi memory files from Mac → VPS k8s ConfigMap
-# Run from Mac after every session or on demand
+# Sync canonical memory/bootstrap/provider shims from Mac -> VPS taxonomy roots.
+# This replaces the legacy ai-services/pi-local-app ConfigMap flow.
 set -euo pipefail
 
-VPS="${VPS:-root@srv1443703.hstgr.cloud}"
-MEMORY_FILE="${MEMORY_FILE:-$HOME/code/jpglabs/docs/memory/PI_MEMORY.md}"
-AGENTS_FILE="${AGENTS_FILE:-$HOME/code/jpglabs/docs/memory/AGENTS.md}"
-KUBECTL="ssh $VPS k3s kubectl"
+VPS="${VPS:-jpglabs-vps-tailnet}"
+LOCAL_CODE_ROOT="${LOCAL_CODE_ROOT:-$HOME/code}"
+LOCAL_MEMORY_ROOT="${LOCAL_MEMORY_ROOT:-$LOCAL_CODE_ROOT/jpglabs/docs/memory}"
+
+REMOTE_CANONICAL_ROOT="${REMOTE_CANONICAL_ROOT:-/root/memory}"
+REMOTE_LEGACY_MEMORY_ROOT="${REMOTE_LEGACY_MEMORY_ROOT:-/root/code/jpglabs/docs/memory}"
+REMOTE_VAULT_MEMORY_ROOT="${REMOTE_VAULT_MEMORY_ROOT:-/root/obsidian-vault/memory}"
 
 log() { echo "[$(date '+%H:%M:%S')] $*"; }
 ok()  { echo "[$(date '+%H:%M:%S')] ✅ $*"; }
+fail() { echo "[$(date '+%H:%M:%S')] ❌ $*" >&2; exit 1; }
 
-log "Syncing Pi memory to VPS k8s ConfigMap..."
+require_file() {
+  local path="$1"
+  [ -f "$path" ] || fail "missing required file: $path"
+}
 
-# Build the kubectl patch payload
-PI_MEMORY=$(cat "$MEMORY_FILE" | sed 's/\\/\\\\/g' | awk '{printf "%s\\n", $0}')
-AGENTS=$(cat "$AGENTS_FILE" | sed 's/\\/\\\\/g' | awk '{printf "%s\\n", $0}')
+remote_write_file() {
+  local source="$1"
+  local target="$2"
+  ssh "$VPS" "mkdir -p \"$(dirname "$target")\""
+  cat "$source" | ssh "$VPS" "cat > \"$target\""
+}
 
-$KUBECTL create configmap pi-memory \
-  --from-file=PI_MEMORY.md="$MEMORY_FILE" \
-  --from-file=AGENTS.md="$AGENTS_FILE" \
-  --namespace=ai-services \
-  --dry-run=client -o yaml | $KUBECTL apply -f -
+sync_file() {
+  local source="$1"
+  local target="$2"
+  require_file "$source"
+  remote_write_file "$source" "$target"
+  ok "$(basename "$source") -> $target"
+}
 
-ok "ConfigMap pi-memory updated"
+log "Syncing memory and taxonomy shims to VPS canonical roots..."
 
-# Restart pi-local-app to pick up new memory
-$KUBECTL rollout restart deployment/pi-local-app -n ai-services
-$KUBECTL rollout status deployment/pi-local-app -n ai-services --timeout=30s
+sync_file "$LOCAL_CODE_ROOT/README.md" \
+  "$REMOTE_CANONICAL_ROOT/bootstrap/README.md"
+sync_file "$LOCAL_CODE_ROOT/WORKSPACE_BOOTSTRAP.md" \
+  "$REMOTE_CANONICAL_ROOT/bootstrap/WORKSPACE_BOOTSTRAP.md"
+sync_file "$LOCAL_CODE_ROOT/.mcp.json" \
+  "$REMOTE_CANONICAL_ROOT/mcp/.mcp.json"
 
-ok "pi-local-app restarted with fresh memory"
-log "VPS AI API is now context-aware: https://jpglabs.com.br/pi"
+sync_file "$LOCAL_CODE_ROOT/AGENTS.md" \
+  "$REMOTE_CANONICAL_ROOT/providers/AGENTS.md"
+sync_file "$LOCAL_CODE_ROOT/CODEX.md" \
+  "$REMOTE_CANONICAL_ROOT/providers/CODEX.md"
+sync_file "$LOCAL_CODE_ROOT/CLAUDE.md" \
+  "$REMOTE_CANONICAL_ROOT/providers/CLAUDE.md"
+sync_file "$LOCAL_CODE_ROOT/GEMINI.md" \
+  "$REMOTE_CANONICAL_ROOT/providers/GEMINI.md"
+sync_file "$LOCAL_CODE_ROOT/OPENCLAUDE.md" \
+  "$REMOTE_CANONICAL_ROOT/providers/OPENCLAUDE.md"
+
+sync_file "$LOCAL_MEMORY_ROOT/PI_MEMORY.md" \
+  "$REMOTE_LEGACY_MEMORY_ROOT/PI_MEMORY.md"
+sync_file "$LOCAL_MEMORY_ROOT/AGENTS.md" \
+  "$REMOTE_LEGACY_MEMORY_ROOT/AGENTS.md"
+sync_file "$LOCAL_MEMORY_ROOT/MEMORY_SYNC.md" \
+  "$REMOTE_LEGACY_MEMORY_ROOT/MEMORY_SYNC.md"
+sync_file "$LOCAL_MEMORY_ROOT/PI_MEMORY.md" \
+  "$REMOTE_VAULT_MEMORY_ROOT/PI_MEMORY.md"
+sync_file "$LOCAL_MEMORY_ROOT/AGENTS.md" \
+  "$REMOTE_VAULT_MEMORY_ROOT/AGENTS.md"
+
+ssh "$VPS" \
+  "test -f \"$REMOTE_CANONICAL_ROOT/providers/AGENTS.md\" \
+    && test -f \"$REMOTE_CANONICAL_ROOT/bootstrap/WORKSPACE_BOOTSTRAP.md\" \
+    && test -f \"$REMOTE_LEGACY_MEMORY_ROOT/PI_MEMORY.md\""
+
+ok "VPS memory sync completed against canonical taxonomy roots"
+log "No app restart was performed; sync is now decoupled from the removed pi-local-app runtime."

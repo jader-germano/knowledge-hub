@@ -10635,3 +10635,52 @@ code
 - A página do Notion não existia para `13/04/2026`; esta rodada precisou criá-la do zero e depois substituir o conteúdo em payload menor por causa de bloqueio Cloudflare no create com payload grande.
 - O sync local deve espelhar este report para `/Users/philipegermano/code/daily/2026-04-13.md`, `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md` e sidecar JSON de memória; a única superfície externa já validada nesta rodada é a página do Notion em `342a2cee2bcc811c8ffac2d1fd4847ec`.
 <!-- session-bridge:docs-daily-technical-closure-2026-04-13-session:end -->
+<!-- session-bridge:ops-taxonomy-remediation-and-docx-2026-04-14:start -->
+## Session Handoff - 2026-04-14 08:05 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-14 08:05:31 -0300`
+- Data da sessão: `2026-04-14`
+- Feature/session id: `ops/taxonomy-remediation-and-docx-2026-04-14`
+- Provider: `Codex`
+- Repositório documental: `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `ops/portfolio-gitlab-worktree-isolation-2026-04-13`
+- Objetivo aprovado: instalar dependências locais de `.docx`, corrigir o tracking do branch documental e atacar as pendências abertas da taxonomia local/VPS com validação real do host remoto.
+
+### Summary
+
+- `python-docx` foi instalado no Mac e `LibreOffice/soffice` passou a existir no PATH local.
+- O branch atual de `docs` passou a rastrear `gitlab/ops/portfolio-gitlab-worktree-isolation-2026-04-13`; o `git pull --ff-only` confirmou estado atualizado.
+- O host local ganhou `projects/docs -> /Users/philipegermano/code/jpglabs/docs`.
+- Na VPS, `OPENCLAUDE.md` foi materializado em `/root/memory/providers/OPENCLAUDE.md` e exposto em `/root/OPENCLAUDE.md`.
+- O CLI `openclaude` da VPS foi reinstalado a partir do tarball local `1.0.11` e deixou de depender de `/root/openclaude`.
+- `mcp-config` e `provider-configs` foram reancorados para `/root/memory/mcp` e `/root/memory/providers/configs`.
+- `obsidian-vault` e as surfaces canônicas tocadas ficaram com ownership `root:root`.
+- `/root/openclaude` saiu do runtime ativo e foi arquivado em `/root/archive/openclaude-releases/openclaude-repo-20260414-1102`.
+- As surfaces `memory/bootstrap`, `agents`, `daily`, `scripts` e `skills` na VPS deixaram de resolver para `/root/code`.
+- `/root/code` foi rebaixado para shim de arquivo apontando para `/root/archive/taxonomy-cutover-20260414/code-staging-legacy`.
+- O documento atualizado desta rodada foi gerado em `/Users/philipegermano/code/output/doc/requisitos_migracao_taxonomia_2026-04-14.docx`.
+
+### Validation
+
+- `python3 -c "import docx; print(docx.__version__)"` retornou `1.2.0`.
+- `command -v soffice` retornou `/opt/homebrew/bin/soffice`.
+- `ssh jpglabs-vps-tailnet 'openclaude --version'` retornou `1.0.11 (Open Claude)`.
+- `readlink -f` confirmou que bootstrap, providers e mcp na VPS resolvem para `/root/memory/*`, não mais para `/root/code`.
+- `find /root/memory -maxdepth 2 -type l` retornou apenas `/root/memory/archive`.
+- A conversão `.docx -> .pdf` via `soffice --headless` falhou com `Abort trap: 6`; a validação visual do documento ficou incompleta.
+
+### Risks And Gaps
+
+- O Mac continua com `/Users/philipegermano/code` como base física real; o corte estrutural local não foi feito nesta rodada.
+- A VPS ainda mantém `/root/build` como base física real de `jpglabs-dashboard`, `portfolio-backend`, `portfolio-v2` e `portfolio-v2-new`.
+- Permanecem raízes legadas de operação fora do lookup canônico principal na VPS: `/root/Sync`, `/root/k8s`, `/root/backup` e `/root/obsidian-vault`.
+- O repo `docs` já estava com delta prévio em `scripts/sync-memory.sh`; esta sessão não tocou esse arquivo.
+
+### Handoff Notes
+
+- Tratar `/root/memory/*` como surface canônica efetiva da VPS a partir desta rodada; `/root/code` passou a ser apenas shim para archive.
+- Não remover nem mover `/root/build` sem inventário explícito dos consumers reais.
+- Se a próxima rodada exigir validação visual de `.docx`, investigar o `Abort trap: 6` do `soffice` antes de automatizar render PDF.
+<!-- session-bridge:ops-taxonomy-remediation-and-docx-2026-04-14:end -->
