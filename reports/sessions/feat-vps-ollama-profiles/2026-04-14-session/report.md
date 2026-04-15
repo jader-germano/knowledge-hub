@@ -196,23 +196,33 @@ VPS /root/
 
 ## Next Actions
 
-- Criar A record DNS `syncthing.jpglabs.com.br → 187.77.227.151`
+- **Windows SSH**: abrir PowerShell como Admin, `Restart-Service sshd`,
+  verificar firewall regra porta 22
+- **Windows Syncthing**: instalar/iniciar Syncthing, adicionar Mac e VPS como
+  devices, aceitar folders `workspace-sync` e `blender-projects`
 - Codex OAuth via `/provider` na próxima sessão OpenClaude
-- Aceitar folder "Workspace Sync" no Syncthing do Windows (JPRDTR)
 - Testar feature flags em sessão real (BRIDGE_MODE, BG_SESSIONS, WEB_BROWSER_TOOL)
-- Decidir sobre legados VPS na próxima rodada de taxonomia
-- Merge da branch para `main` após validação
+- Decidir sobre legados VPS (`/root/Sync`, `/root/k8s`, `/root/backup`)
+- Merge da branch `feat/vps-ollama-profiles` para `main` após validação
+- Syncthing GUI VPS acessível em `http://100.68.217.36:8384` (user: jpglabs,
+  pass: jpgl4bs-sync!). DNS `syncthing.jpglabs.com.br:8384` criado mas usar
+  porta direta sem Caddy.
 
 ## Handoff Notes
 
-- Branch `feat/vps-ollama-profiles` está no GitLab e deployed na VPS em
-  `/opt/openclaude`.
-- Ollama local no Mac tem `gemma4:e4b` (melhor custo/benefício no M4, 199
-  tok/s prompt eval) e `qwen2.5-coder:7b` (alternativa rápida para código).
-- VPS Ollama está com `gemma4:e4b` warm (24h KEEP_ALIVE). Para trocar modelo:
-  `ollama run <model>` para pre-load.
-- O `python/ollama_provider.py` é standalone legado — o path real de integração
-  é TypeScript: `providerProfiles.ts` → `providerDiscovery.ts` → shim
-  OpenAI-compatible `/v1`.
-- O `SESSION_CLOSE_TEMPLATE.md` em `agents/` é o template legado. Este report
-  segue o template atualizado em `reports/sessions/_template/report.md`.
+- Branch `feat/vps-ollama-profiles` (5 commits) no GitLab e deployed na VPS.
+- Ollama local no Mac: `gemma4:e4b` (199 tok/s prompt eval no M4) e
+  `qwen2.5-coder:7b` (alternativa rápida).
+- VPS Ollama: `gemma4:e4b` warm 24h. Para trocar: `ollama run <model>`.
+- Syncthing: Mac ↔ VPS connected. Windows pending (SSH + Syncthing install).
+- Folders sync: `workspace-sync` (~/Sync ↔ /root/Sync) e `blender-projects`
+  (~/BlenderProjects ↔ /root/BlenderProjects). Ambos com 3 devices (Mac, VPS,
+  Windows).
+- Taxonomia local limpa: 19 → 11 dirs. Archive em `~/code/.archive/`.
+- AGENTS.md saneado. Skills sincronizadas (7 canonical + 3 orphans + 4 pi).
+- Feature flags: 7 build-time + 3 runtime. Propagadas para Claude, Codex,
+  Gemini (Mac e VPS).
+- Cloudflare DNS token propagado para todos os providers (env var
+  `CLOUDFLARE_DNS_TOKEN`).
+- `python/ollama_provider.py` é standalone legado — path real é TS:
+  `providerProfiles.ts` → `providerDiscovery.ts` → `/v1`.
