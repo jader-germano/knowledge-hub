@@ -1,17 +1,18 @@
 # JPGLabs Roadmap
 
-Atualizado em `02/04/2026`.
+Atualizado em `16/04/2026`. Reestruturado com novo escopo em 3 lanes após auditoria de gaps em 2026-04-16.
 
 ## Escopo
 
 Este documento consolida o roadmap geral do ciclo atual da JPG Labs.
 
+**Reestruturação 2026-04-16**: O roadmap anterior operava com 4 trilhas paralelas (A-D) sem critérios de saída verificáveis, sem DRI explícito por entregável e com 11 dos 18 sistemas do workspace sem roadmap. O novo escopo consolida em 3 lanes sequenciais com critérios de saída objetivos.
+
 Foco imediato aprovado:
 
-- redesenhar UI/UX das superfícies ativas do portfólio e da operação interna
-- separar com clareza as camadas de front-end e back-end do portfólio
-- subir o portfólio com as últimas atualizações sem misturar superfície pública,
-  operador interno e superfícies auxiliares
+- **Lane 1** (P0, 4 semanas): resolver ambiguidade de backend/BFF vs. frontend, canonicalizar contratos, decidir papel do portfolio-mobile, definir contrato do operator shell
+- **Lane 2** (P0, 2-3 semanas, paralela com Lane 1): migrar governança de execução para Jira+Confluence, eliminar duplicação de discovery entre agentes
+- **Lane 3** (P0/P1, 6-8 semanas, depende da Lane 1): alinhar design system e navegação entre web, mobile, desktop e operator shells
 
 Superfícies de execução:
 
@@ -136,13 +137,82 @@ Critério de saída:
 - deploy atualizado do portfólio em ambiente alvo
 - sem ambiguidade de runtime entre superfície pública e superfície autenticada
 
+## Novo Escopo — 3 Lanes (2026-04-16)
+
+### Lane 1 — Architecture Clarity (P0 · 4 semanas)
+
+**Objetivo**: encerrar a ambiguidade de backend/BFF vs. frontend e canonicalizar contratos antes de qualquer novo deploy.
+
+Escopo:
+- Auditar `portfolio-backend`: marcar em código o que é backend/BFF e o que é frontend-visual
+- Documentar contrato canônico: endpoints, auth boundary, storage contracts (versionado)
+- Decidir o papel do `portfolio-mobile`: companion autenticado, operator shell ou cliente público
+Critérios de saída:
+- `portfolio-backend` tem seções marcadas de backend vs. frontend em código
+- Contrato canônico da API documentado e versionado no Confluence
+- Decisão do papel do `portfolio-mobile` formalizada no Jira ([SCRUM-29](https://jpglabs.atlassian.net/browse/SCRUM-29))
+
+> **Nota 17/04/2026**: `knowledge-hub-app`, `pibar-macos` e `piphone-ios` foram **arquivados**. O épico SCRUM-30 (Operator Shell Contract) foi cancelado. Lane 3 e as referências a operator shells Pi foram removidas do escopo.
+
+### Lane 2 — Execution Governance (P0 · 2-3 semanas · paralela com Lane 1)
+
+**Objetivo**: migrar autoridade de task/roadmap para Jira+Confluence e eliminar duplicação de discovery entre agentes.
+
+Escopo:
+- Formalizar épicos no Jira para split front/back e redesign de superfícies
+- Espelhar todas as decisões de roadmap no Confluence (decisioning record)
+- Definir política explícita de discovery de agentes: onde cada tipo de asset vive, sem re-indexação por agente
+- Criar roadmap para `jpglabs-dashboard` (atualmente sem roadmap, mas alvo do redesign de Trilha C)
+- Restringir Notion ao diário — nenhuma task nova nasce fora do Jira
+
+Critérios de saída:
+- Todas as tasks novas e tasks ativas migradas para o Jira
+- Sem duplicação ativa entre sistemas
+- Mirrors de roadmap existem no Confluence para os 7 sistemas com roadmap
+- Roadmap de `jpglabs-dashboard` criado com escopo mínimo e DRI
+
+### Lane 3 — Surface Coherence (P0/P1 · 6-8 semanas · depende da Lane 1)
+
+> **Escopo revisado em 17/04/2026**: `knowledge-hub-app`, `pibar-macos` e `piphone-ios` foram **arquivados**. Os sistemas-alvo da Lane 3 foram reduzidos.
+
+**Objetivo**: alinhar design system e navegação entre as superfícies ativas.
+
+Sistemas-alvo (após arquivamento):
+- `jpglabs-portfolio` (público)
+- `portfolio-mobile` (cliente fino)
+- `jpglabs-dashboard` (operator — requer roadmap da Lane 2)
+
+Critérios de saída:
+- Um artefato de design system compartilhado (Figma) referenciado pelos 3 sistemas
+- Paths de navegação e state machines documentados e testados
+- `jpglabs-dashboard` alinhado visualmente ao portfolio público
+- Sem drift de hierarquia visual entre web e mobile
+
+## Critérios de Saída do Ciclo
+
+**Tier 1 — Obrigatório**:
+- `portfolio-backend` tem separação backend/BFF de frontend-visual marcada em código
+- Contrato canônico da API documentado e versionado
+- Jira+Confluence são as superfícies de execução; Notion é diário apenas
+
+**Tier 2 — Deve ter**:
+- Papel do `portfolio-mobile` decidido e comunicado ([SCRUM-29](https://jpglabs.atlassian.net/browse/SCRUM-29))
+- Design system baseline em uso pelos 3 sistemas ativos (`jpglabs-portfolio`, `portfolio-mobile`, `jpglabs-dashboard`)
+- `jpglabs-dashboard` com roadmap e alinhamento visual ao portfolio
+
+**Tier 3 — Desejável**:
+- Portfolio release publicado com nova arquitetura
+- Migração GitLab iniciada com inventory completo
+
+> **17/04/2026**: `knowledge-hub-app`, `pibar-macos` e `piphone-ios` arquivados. SCRUM-30 (Operator Shell Contract) cancelado. Referências a esses sistemas removidas dos critérios de saída.
+
 ## Sequenciamento Recomendado
 
-1. Fechar governança `Jira + Confluence + Notion só diário`.
-2. Rodar split arquitetural do portfólio.
-3. Em paralelo, desenhar a linguagem nova de UI/UX para as superfícies ativas.
-4. Consolidar os roadmaps por sistema.
-5. Só então fechar o release do portfólio.
+1. Iniciar Lane 1 e Lane 2 em paralelo imediatamente.
+2. Lane 1 desbloqueia Lane 3 — não abrir surface coherence antes da clarity de contratos.
+3. Lane 2 não depende de Lane 1, mas deve fechar antes do final de Lane 1.
+4. Lane 3 começa com design system baseline enquanto Lane 1 ainda finaliza hardening.
+5. Release do portfolio só após conclusão de Lane 1 Tier 1.
 
 ## Contextos E Roadmaps Por Sistema
 
