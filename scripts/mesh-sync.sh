@@ -12,8 +12,8 @@ log "=== mesh-sync START | branch: $BRANCH ==="
 # 1. VPS — pull latest
 cd /sync/jpglabs-docs
 git fetch --all --prune 2>&1 | tee -a "$LOG"
-git checkout "$BRANCH" 2>/dev/null || git checkout -b "$BRANCH" "origin/$BRANCH"
-git pull origin "$BRANCH" 2>&1 | tee -a "$LOG"
+git checkout "$BRANCH" 2>/dev/null || git checkout -b "$BRANCH" "gitlab/$BRANCH"
+git pull gitlab "$BRANCH" 2>&1 | tee -a "$LOG"
 log "VPS atualizada"
 
 # 2. Windows (JPRDTR) — sync via Tailscale
