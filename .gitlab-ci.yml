@@ -12,4 +12,4 @@ mesh-sync:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: on_success
   script:
-    - /sync/jpglabs-docs/scripts/mesh-sync.sh "$CI_COMMIT_REF_NAME"
+    - sudo /sync/jpglabs-docs/scripts/mesh-sync.sh "$CI_COMMIT_REF_NAME"
