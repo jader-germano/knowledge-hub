@@ -4,13 +4,13 @@ Objetivo: dar ao Claude uma entrada curta e estável para este workspace.
 
 Consulta obrigatória:
 
-1. `CLAUDE.md`
-2. `RULES.md`
-3. `OWNERSHIP.md`
-4. `WORKSPACE_INDEX.md`
-5. `GIT_HISTORY_INDEX.md`
-6. `manifests/workspace.index.yaml`
-7. `DOC_INDEX.md`
+1. `RULES.md`
+2. `OWNERSHIP.md`
+3. `WORKSPACE_INDEX.md`
+4. `GIT_HISTORY_INDEX.md`
+5. `manifests/workspace.index.yaml`
+6. `DOC_INDEX.md`
+7. `MCP_SETUP.md`
 8. `agents/AGENT_BRIDGE.md`
 9. `agents/SESSION_CLOSE_TEMPLATE.md`
 

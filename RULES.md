@@ -129,31 +129,26 @@ Toda sessão com mudança relevante deve:
 - quando a UI do cliente suportar popup/card de aprovação, preferir esse
   formato
 
-## Regra 11A: Autoria Humana E Registro De IA
+## Regra 12: Cobertura Como Barra De Qualidade
 
-- commits continuam com autoria e responsabilidade humanas
-- agentes de IA atuam como apoio de pesquisa, arquitetura, implementação,
-  revisão, teste e documentação, mas não entram como coautores por padrão
-- não usar `Co-Authored-By` para agentes salvo decisão humana explícita e
-  contextual
-- quando a sessão usar IA de forma relevante, registrar isso fora do commit,
-  em `PR`, `ADR`, handoff ou diário, com resumo factual do apoio prestado
-- em contextos corporativos, regulados ou sensíveis, preservar assinatura
-  humana inequívoca no histórico Git é a regra default
-
-## Regra 12: Cobertura Total Como Barra Padrão
-
-- a meta padrão do workspace é `100%` de cobertura de testes
-- código novo, refatorado ou estabilizado deve vir com cobertura automatizada
-  para caminho feliz, bordas e falhas previsíveis
-- quando `100%` não fechar na mesma sessão, o agente deve registrar:
-  - qual parte ficou sem cobertura
-  - por que ela ainda não é testável ou segura de cobrir
-  - qual a próxima fatia para fechar o delta
-- decisões de arquitetura devem favorecer testabilidade:
-  desacoplamento, layering, SOLID, clean architecture e TDD
-- validação manual, build verde ou smoke test não substituem cobertura
-  automatizada
+- a barra padrão do workspace é cobertura **alta** das unidades criadas ou
+  alteradas no slice (caminho feliz, bordas e falhas previsíveis), não métrica
+  cega de `100%` global
+- `100%` é aspiração quando o custo do teste é menor que o custo do escape;
+  não deve ser exigido como meta pré-sprint nem como vara de medir qualidade
+- código novo, refatorado ou estabilizado só é considerado entregue quando
+  houver cobertura automatizada para os comportamentos que importam; validação
+  manual, build verde ou smoke test não substituem teste automatizado
+- quando houver gap de cobertura deliberado, o agente deve registrar:
+  - qual comportamento ficou sem teste
+  - por que testá-lo hoje não compensa (custo > risco, dependência instável,
+    fatia próxima que já vai refatorar, etc.)
+  - qual sinal de mudança exigiria fechar o gap
+- decisões de arquitetura devem favorecer testabilidade: desacoplamento,
+  layering, SOLID, clean architecture e TDD — isso reduz a escolha falsa
+  entre cobertura e velocidade
+- o `review-qa-engineer` é a autoridade caso a caso sobre o que precisa de
+  teste e onde `100%` vira cerimônia
 
 ## Regra 13: Context7 Antes De Docs E Implementação
 
@@ -164,34 +159,26 @@ Toda sessão com mudança relevante deve:
 - quando `context7` não cobrir a tecnologia, usar a documentação oficial mais
   atual e declarar explicitamente o fallback
 
-## Regra 14: Autoria Humana E Assistência De IA
-
-- commits em repositórios corporativos ou sensíveis devem permanecer com
-  autoria humana explícita
-- por padrão, agentes de IA não devem ser adicionados em trailers de commit
-  como `Co-Authored-By`
-- o uso de `Claude`, `Codex` ou outros agentes deve ser tratado como
-  assistência operacional, não como coautoria automática de código
-- quando houver necessidade de rastreabilidade, registrar o uso de agentes em
-  `PR description`, ADR, handoff técnico, relatório diário ou surface
-  equivalente, nunca como requisito no commit
-- responsabilidade por escopo, revisão de diff, aprovação e merge permanece
-  humana
-
 ## Regra 14: Autoria Humana E Uso De IA
 
-- commits em repositórios corporativos ou sensíveis devem permanecer com
-  autoria humana explícita
+- commits continuam com autoria e responsabilidade humanas; em repositórios
+  corporativos, regulados ou sensíveis, preservar assinatura humana inequívoca
+  no histórico Git é a regra default
 - por padrão, não adicionar `Co-Authored-By` para agentes como `Codex`,
   `Claude` ou equivalentes quando atuarem como assistentes sob direção e
   revisão humana
-- uso de agentes deve ser registrado em superfícies de processo, não no commit:
-  `PR`, `ADR`, handoff, diário técnico ou sessão classificada
-- quando agentes participarem de pesquisa, arquitetura, Figma handoff,
-  implementação, testes, revisão ou observabilidade, o registro deve deixar
-  claro que a aprovação final e a responsabilização continuam humanas
-- qualquer exceção a essa regra precisa ser deliberada de forma explícita pelo
-  responsável do repositório ou pela governança da trilha
+- o uso de agentes deve ser tratado como assistência operacional, não como
+  coautoria automática de código; agentes apoiam pesquisa, arquitetura, Figma
+  handoff, implementação, testes, revisão, observabilidade e documentação, mas
+  não entram como coautores por padrão
+- quando a sessão usar IA de forma relevante, registrar isso fora do commit,
+  em `PR`, `ADR`, handoff, diário técnico, relatório diário ou sessão
+  classificada, com resumo factual do apoio prestado
+- escopo, revisão de diff, aprovação, merge e responsabilização final
+  permanecem humanos
+- qualquer exceção — incluindo adicionar `Co-Authored-By` para agente — precisa
+  ser decisão humana explícita e contextual, deliberada pelo responsável do
+  repositório ou pela governança da trilha
 
 ## Regra 15: AIJL Como Padrão de Segurança para Agentes
 
