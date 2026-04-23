@@ -34,13 +34,10 @@
 - **Deploy:** ghcr.io/jader-germano/jpglabs-portfolio-backend:latest → k8s
 - **Status:** ⏸️ Awaiting VPS SSH + k8s deploy
 
-### 3. knowledge-hub-app
-- **Repo:** `~/code/pessoal/jpglabs/knowledge-hub-app`
-- **URL:** https://hub.jpglabs.com.br
-- **Stack:**Nest.js 15 + Supabase + NextAuth + Recharts + PWA
-- **Features:** Knowledge vault viewer (Obsidian markdown), Finance dashboard (income / expenses / goals), PWA manifest
-- **Vault sync:** `scripts/sync-vault.sh` → GitHub → k8s CronJob every 5 min
-- **Status:** ✅ Scaffolded — needs `npm install`, Supabase migration, .env fill, k8s deploy
+### 3. knowledge-hub-app ⚠️ LEGADO ARQUIVADO
+- **Repo:** nunca criado no disco
+- **Substituído por:** openclaude-hub (https://chat.jpglabs.com.br)
+- **Status:** ⛔ Descontinuado em 2026-04-16 — funcionalidade absorvida pelo openclaude-hub
 
 ### 4. jpglabs-portifolio-mobile
 - **Repo:** `~/code/pessoal/jpglabs-portifolio-mobile` (also symlinked at `~/code/pessoal/jpglabs/jpglabs-portifolio-mobile`)
@@ -178,11 +175,27 @@ After SSH works — run in order:
 CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 ```
 
-### VPS Ollama Models (confirmed 2026-04-07)
-| Model | Purpose | Access |
-|-------|---------|--------|
-| `deepseek-r1:7b` | Reasoning (large) | http://VPS_IP:11434 |
-| `nemotron-3-super` | NVIDIA Nemotron 3 Super — general / reasoning | http://VPS_IP:11434 |
+### VPS Ollama Models (confirmed 2026-04-23)
+Hardware real: AMD EPYC 9355P, 8 vCPU, 31 GiB RAM, 287 GB free, CPU-only.
+Ollama 0.20.3 com KEEP_ALIVE=24h, NUM_PARALLEL=2, NUM_THREADS=8,
+FLASH_ATTENTION=1, NUM_CTX=4096, MAX_LOADED_MODELS=2.
+
+| Model | Size | Type | Purpose | Eval tok/s |
+|-------|------|------|---------|------------|
+| `qwen3-coder:30b` | 18 GB | MoE A3B | **Coding default** | 27.3 |
+| `gpt-oss:20b` | 13 GB | MoE MXFP4 | **Reasoning/tool-use (Apache-2.0)** | 20.4 |
+| `phi4:14b` | 9.1 GB | denso | Math/reasoning | 11.9 |
+| `qwen2.5:32b-instruct-q4_K_M` | 19 GB | denso | General PT top | — |
+| `qwen2.5-coder:14b` | 9.0 GB | denso | Coding fallback | — |
+| `qwen2.5-coder:7b` | 4.7 GB | denso | Coding fast | — |
+| `deepseek-coder-v2:16b` | 8.9 GB | MoE | Coding MoE alt | — |
+| `gemma4:26b` | 17 GB | denso | Multilíngue pesado | — |
+| `gemma4:e4b` | 9.6 GB | — | Multilíngue leve | — |
+
+**Fonte de verdade:** `jpglabs/docs/infrastructure/docs/vps-ollama-roster-2026-04-23.md`
+**Descartados:** MiniMax M2.7 (185 GB Q6), GLM 4.5/5.1, Kimi K2.5, Llama
+3.3 70B Q4 (40 GB > 27 GiB livre), `deepseek-r1:7b` (não mantido),
+`nemotron-3-super` (licença NVIDIA restritiva + redundante com `gpt-oss`).
 
 **Ollama endpoint (VPS):** `http://187.77.227.151:11434`
 **SSH access:** `ssh root@187.77.227.151` (key `~/.ssh/id_ed25519`) — Tailscale peer: `jpglabs-vps-tailnet`; fallback público: `jpglabs-vps` (187.77.227.151)
@@ -193,7 +206,7 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 |---------|-----|--------|-------|
 | Traefik | — | ✅ Running | — |
 | Open WebUI | chat.jpglabs.com.br | ✅ 200 | — |
-| Ollama | :11434 (VPS) | ✅ Running | nemotron-3-super + deepseek-r1:7b disponíveis |
+| Ollama | :11434 (VPS) | ✅ Running | 9 modelos — ver seção VPS Ollama Models (2026-04-23) |
 | Banana Slides | :3000 (frontend) :5000 (backend) | ✅ Running | /docker/banana-slides · Gemini API · docker-compose.prod.yml |
 | Portfolio | jpglabs.com.br | ❌ 526/404 | CF SSL strict + container route miss |
 | n8n | n8n.jpglabs.com.br | ❌ 404 | Traefik route miss / container down |
@@ -301,6 +314,7 @@ CF Zone ID: bfdbc0633bf650f8451c3bed27d7965e
 | 2026-03-28 | `jpglabs/docs` became the canonical cross-agent hub for rules, ownership, manifests, and session handoff |
 | 2026-03-31 | Shared Docker MCP stack configured for Codex, Claude Desktop, Claude Code, and Gemini with `git`, `filesystem`, `playwright`, `fetch`, `context7`, `memory`, `sequentialthinking`, `ast-grep`, and `semgrep` |
 | 2026-03-31 | Shared volume `shared-memory` created for MCP memory; open legacy sessions may still persist to `claude-memory` until clients restart |
+| 2026-04-18 | `claude-memory` merged into `shared-memory`, backup saved in `~/code/tmp/docker-memory-backup-20260418`, stale `Created` containers removed, and the legacy volume pruned; `mcp/memory:latest` remains the active shared image |
 | 2026-03-31 | FrankMD local notes root expanded to `~/code`, including visible path `~/code/memoria-compartilhada` |
 | 2026-03-31 | PiPhone VPS telemetry path verified as `baseURL + /vps/telemetry`; real devices prefer remote bundled URLs over loopback |
 | 2026-03-31 | `jader@jpglabs.com.br` mail plan remains VPS `docker-mailserver` plus Cloudflare DNS/certbot; DNS is live with MX/SPF/DMARC/DKIM, but SMTP/IMAP ports still time out publicly |

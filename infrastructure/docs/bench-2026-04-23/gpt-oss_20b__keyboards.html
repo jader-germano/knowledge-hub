@@ -1,0 +1,202 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>KeyForge – Teclados Mecânicos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --neon:#0ff;
+    --neon-shadow:0 0 8px var(--neon),0 0 16px var(--neon);
+    --key-bg:#111;
+    --key-hover:#222;
+    --key-active:#333;
+  }
+  body{
+    margin:0;
+    font-family: 'Orbitron', sans-serif;
+    background:var(--bg);
+    color:#eee;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+  }
+  h1{
+    margin-top:2rem;
+    font-size:3rem;
+    text-shadow:var(--neon-shadow);
+  }
+  .tagline{
+    font-size:1.4rem;
+    margin-bottom:2rem;
+    text-shadow:var(--neon-shadow);
+  }
+  /* 3D Cube */
+  .cube-container{
+    perspective:800px;
+    width:200px;
+    height:200px;
+    margin:2rem;
+    position:relative;
+  }
+  .cube{
+    width:100%;
+    height:100%;
+    position:absolute;
+    transform-style:preserve-3d;
+    transform:translateZ(-100px);
+    animation:spin 10s linear infinite;
+  }
+  .cube.paused{animation-play-state:paused;}
+  .face{
+    position:absolute;
+    width:200px;
+    height:200px;
+    background:rgba(255,255,255,0.1);
+    border:2px solid var(--neon);
+    box-sizing:border-box;
+    backface-visibility:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:2rem;
+    color:var(--neon);
+    text-shadow:var(--neon-shadow);
+  }
+  .face.front{transform:rotateY(0deg) translateZ(100px);}
+  .face.back{transform:rotateY(180deg) translateZ(100px);}
+  .face.right{transform:rotateY(90deg) translateZ(100px);}
+  .face.left{transform:rotateY(-90deg) translateZ(100px);}
+  .face.top{transform:rotateX(90deg) translateZ(100px);}
+  .face.bottom{transform:rotateX(-90deg) translateZ(100px);}
+  @keyframes spin{
+    from{transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg);}
+    to{transform:rotateX(360deg) rotateY(360deg) rotateZ(360deg);}
+  }
+  .controls{
+    margin-top:1rem;
+  }
+  .controls button{
+    background:var(--key-bg);
+    border:none;
+    color:#0ff;
+    padding:0.5rem 1rem;
+    margin:0 0.5rem;
+    cursor:pointer;
+    font-size:1rem;
+    border-radius:4px;
+    transition:background 0.3s;
+  }
+  .controls button:hover{background:var(--key-hover);}
+  .controls button:active{background:var(--key-active);}
+  /* Keycap Grid */
+  .keypad{
+    display:grid;
+    grid-template-columns:repeat(4,80px);
+    gap:10px;
+    margin:2rem;
+  }
+  .keycap{
+    width:80px;
+    height:80px;
+    background:var(--key-bg);
+    border:2px solid var(--neon);
+    border-radius:8px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:1.2rem;
+    color:var(--neon);
+    cursor:pointer;
+    transition:transform 0.2s,background 0.2s;
+  }
+  .keycap:hover{transform:scale(1.1);}
+  .keycap:active{background:var(--key-active);}
+</style>
+</head>
+<body>
+<h1>KeyForge</h1>
+<p class="tagline">Teclados Mecânicos de Alto Desempenho</p>
+
+<div class="cube-container">
+  <div class="cube" id="cube">
+    <div class="face front">F</div>
+    <div class="face back">B</div>
+    <div class="face right">R</div>
+    <div class="face left">L</div>
+    <div class="face top">T</div>
+    <div class="face bottom">D</div>
+  </div>
+</div>
+<div class="controls">
+  <button id="pauseBtn">Pause</button>
+  <button id="resumeBtn">Resume</button>
+</div>
+
+<div class="keypad">
+  <button class="keycap" data-key="Esc">Esc</button>
+  <button class="keycap" data-key="Ctrl">Ctrl</button>
+  <button class="keycap" data-key="Alt">Alt</button>
+  <button class="keycap" data-key="Del">Del</button>
+  <button class="keycap" data-key="F1">F1</button>
+  <button class="keycap" data-key="F2">F2</button>
+  <button class="keycap" data-key="F3">F3</button>
+  <button class="keycap" data-key="F4">F4</button>
+  <button class="keycap" data-key="1">1</button>
+  <button class="keycap" data-key="2">2</button>
+  <button class="keycap" data-key="3">3</button>
+  <button class="keycap" data-key="4">4</button>
+  <button class="keycap" data-key="Q">Q</button>
+  <button class="keycap" data-key="W">W</button>
+  <button class="keycap" data-key="E">E</button>
+  <button class="keycap" data-key="R">R</button>
+</div>
+
+<script>
+  // 3D Cube Controls
+  const cube = document.getElementById('cube');
+  document.getElementById('pauseBtn').onclick = () => cube.classList.add('paused');
+  document.getElementById('resumeBtn').onclick = () => cube.classList.remove('paused');
+
+  // Sound Generation
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playClick(freq=440){
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.frequency.value = freq;
+    osc.type = 'square';
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.15);
+  }
+
+  // Keycap Click
+  document.querySelectorAll('.keycap').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const key = btn.dataset.key;
+      // Map some keys to different frequencies
+      const freqMap = {Esc:400, Ctrl:420, Alt:440, Del:460, F1:480, F2:500, F3:520, F4:540, '1':560, '2':580, '3':600, '4':620, Q:640, W:660, E:680, R:700};
+      playClick(freqMap[key]||440);
+    });
+  });
+
+  // Neon glow animation for header
+  const h1 = document.querySelector('h1');
+  let glow = 0;
+  function animateGlow(){
+    glow = (glow + 0.05) % (2*Math.PI);
+    const intensity = Math.sin(glow)*0.5 + 0.5;
+    h1.style.textShadow = `0 0 ${intensity*20}px var(--neon),0 0 ${intensity*40}px var(--neon)`;
+    requestAnimationFrame(animateGlow);
+  }
+  animateGlow();
+</script>
+</body>
+</html>
+```

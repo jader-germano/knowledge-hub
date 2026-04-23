@@ -1,0 +1,525 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeyForge - Teclados Mecânicos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #00ffea;
+            font-family: 'Exo 2', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 234, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 150, 0.1) 0%, transparent 20%);
+            z-index: -1;
+        }
+
+        .cyber-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 255, 234, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 234, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 2px solid #00ffea;
+            margin-bottom: 3rem;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 5px #00ffea; }
+            50% { box-shadow: 0 0 20px #00ffea, 0 0 30px #ff0096; }
+            100% { box-shadow: 0 0 5px #00ffea; }
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #00ffea, #ff0096);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 234, 0.5);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #00ffea;
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff0096;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00ffea, #ff0096, #00ffea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 300% 300%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .keyboard-canvas {
+            width: 100%;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #00ffea;
+            border-radius: 10px;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .key {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(145deg, #222, #000);
+            border: 1px solid #00ffea;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #00ffea;
+            text-shadow: 0 0 5px #00ffea;
+            box-shadow: 0 0 10px rgba(0, 255, 234, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .key:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #00ffea;
+        }
+
+        .key.active {
+            background: linear-gradient(145deg, #00ffea, #ff0096);
+            color: #000;
+            box-shadow: 0 0 20px #00ffea;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .feature-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #00ffea;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 255, 234, 0.3);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #00ffea, #ff0096);
+        }
+
+        .feature-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #00ffea;
+        }
+
+        .sound-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .sound-btn {
+            background: linear-gradient(145deg, #00ffea, #ff0096);
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 234, 0.5);
+        }
+
+        .sound-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 255, 234, 0.8);
+        }
+
+        .keyboard-demo {
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .keyboard-demo h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #00ffea;
+        }
+
+        .keyboard-demo p {
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid #00ffea;
+            margin-top: 3rem;
+        }
+
+        .neon-text {
+            animation: neon-pulse 2s infinite;
+        }
+
+        @keyframes neon-pulse {
+            0% { text-shadow: 0 0 5px #00ffea; }
+            50% { text-shadow: 0 0 20px #00ffea, 0 0 30px #ff0096; }
+            100% { text-shadow: 0 0 5px #00ffea; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            
+            .keyboard-canvas {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cyber-grid"></div>
+    <div class="container">
+        <header>
+            <div class="logo">KeyForge</div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Produtos</a></li>
+                    <li><a href="#features">Recursos</a></li>
+                    <li><a href="#contact">Contato</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section class="hero" id="home">
+            <h1 class="neon-text">Teclados Mecânicos de Alta Performance</h1>
+            <p>Transforme sua experiência de digitação com nossos teclados mecânicos premium, projetados para jogadores e profissionais que exigem o melhor.</p>
+            
+            <div class="keyboard-canvas" id="keyboardCanvas">
+                <!-- Canvas para animação de teclado -->
+            </div>
+            
+            <div class="sound-controls">
+                <button class="sound-btn" id="soundBtn">🔊 Ativar Som</button>
+                <button class="sound-btn" id="animateBtn">✨ Animar Teclado</button>
+            </div>
+        </section>
+
+        <section class="keyboard-demo">
+            <h2>Experiência Interativa</h2>
+            <p>Clique nas teclas abaixo para simular uma digitação em tempo real</p>
+            <div class="keyboard-demo-canvas" id="demoCanvas"></div>
+        </section>
+
+        <section class="features" id="features">
+            <div class="feature-card">
+                <h3>Switches Premium</h3>
+                <p>Switches de alta qualidade com diferentes tipos de resposta para todos os estilos de digitação.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Design Cyberpunk</h3>
+                <p>Estilo futurista com iluminação neon e acabamentos especiais para sua estação de trabalho.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Personalização</h3>
+                <p>Teclados totalmente personalizáveis com RGB programável e design único para cada usuário.</p>
+            </div>
+        </section>
+
+        <footer id="contact">
+            <p>© 2023 KeyForge - Todos os direitos reservados</p>
+            <p>Teclados mecânicos para o futuro</p>
+        </footer>
+    </div>
+
+    <script>
+        // Inicialização do canvas para animação de teclado
+        const canvas = document.getElementById('keyboardCanvas');
+        const demoCanvas = document.getElementById('demoCanvas');
+        const soundBtn = document.getElementById('soundBtn');
+        const animateBtn = document.getElementById('animateBtn');
+        
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Desenhar teclado virtual
+            function drawKeyboard() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                const keys = [
+                    {x: 50, y: 50, w: 40, h: 40, label: 'Q'},
+                    {x: 100, y: 50, w: 40, h: 40, label: 'W'},
+                    {x: 150, y: 50, w: 40, h: 40, label: 'E'},
+                    {x: 200, y: 50, w: 40, h: 40, label: 'R'},
+                    {x: 250, y: 50, w: 40, h: 40, label: 'T'},
+                    {x: 300, y: 50, w: 40, h: 40, label: 'Y'},
+                    {x: 350, y: 50, w: 40, h: 40, label: 'U'},
+                    {x: 400, y: 50, w: 40, h: 40, label: 'I'},
+                    {x: 450, y: 50, w: 40, h: 40, label: 'O'},
+                    {x: 500, y: 50, w: 40, h: 40, label: 'P'},
+                    
+                    {x: 75, y: 100, w: 40, h: 40, label: 'A'},
+                    {x: 125, y: 100, w: 40, h: 40, label: 'S'},
+                    {x: 175, y: 100, w: 40, h: 40, label: 'D'},
+                    {x: 225, y: 100, w: 40, h: 40, label: 'F'},
+                    {x: 275, y: 100, w: 40, h: 40, label: 'G'},
+                    {x: 325, y: 100, w: 40, h: 40, label: 'H'},
+                    {x: 375, y: 100, w: 40, h: 40, label: 'J'},
+                    {x: 425, y: 100, w: 40, h: 40, label: 'K'},
+                    {x: 475, y: 100, w: 40, h: 40, label: 'L'},
+                    
+                    {x: 100, y: 150, w: 40, h: 40, label: 'Z'},
+                    {x: 150, y: 150, w: 40, h: 40, label: 'X'},
+                    {x: 200, y: 150, w: 40, h: 40, label: 'C'},
+                    {x: 250, y: 150, w: 40, h: 40, label: 'V'},
+                    {x: 300, y: 150, w: 40, h: 40, label: 'B'},
+                    {x: 350, y: 150, w: 40, h: 40, label: 'N'},
+                    {x: 400, y: 150, w: 40, h: 40, label: 'M'},
+                ];
+                
+                keys.forEach(key => {
+                    const keyElement = document.createElement('div');
+                    keyElement.className = 'key';
+                    keyElement.style.left = key.x + 'px';
+                    keyElement.style.top = key.y + 'px';
+                    keyElement.style.width = key.w + 'px';
+                    keyElement.style.height = key.h + 'px';
+                    keyElement.textContent = key.label;
+                    canvas.appendChild(keyElement);
+                });
+            }
+            
+            drawKeyboard();
+        }
+        
+        // Animação de teclado interativa
+        let animationActive = false;
+        let animationInterval;
+        
+        animateBtn.addEventListener('click', () => {
+            if (!animationActive) {
+                animationActive = true;
+                animateBtn.textContent = '⏹️ Parar Animação';
+                animateKeys();
+            } else {
+                animationActive = false;
+                animateBtn.textContent = '✨ Animar Teclado';
+                clearInterval(animationInterval);
+            }
+        });
+        
+        function animateKeys() {
+            const keys = document.querySelectorAll('.key');
+            let activeKey = 0;
+            
+            animationInterval = setInterval(() => {
+                keys.forEach((key, index) => {
+                    if (index === activeKey) {
+                        key.classList.add('active');
+                        key.style.animation = 'pulse 0.5s infinite';
+                    } else {
+                        key.classList.remove('active');
+                        key.style.animation = 'none';
+                    }
+                });
+                
+                activeKey = (activeKey + 1) % keys.length;
+            }, 300);
+        }
+        
+        // Controle de som
+        let soundEnabled = false;
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        soundBtn.addEventListener('click', () => {
+            if (!soundEnabled) {
+                soundEnabled = true;
+                soundBtn.textContent = '🔇 Som Ativado';
+                playKeyboardSound();
+            } else {
+                soundEnabled = false;
+                soundBtn.textContent = '🔊 Ativar Som';
+            }
+        });
+        
+        function playKeyboardSound() {
+            if (!soundEnabled) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 220 + Math.random() * 220;
+            gainNode.gain.value = 0.1;
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.1);
+            
+            setTimeout(() => {
+                if (soundEnabled) playKeyboardSound();
+            }, 500);
+        }
+        
+        // Efeito de hover nos botões
+        const buttons = document.querySelectorAll('.sound-btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.style.transform = 'scale(1.05)';
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Animação de entrada para elementos
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.feature-card, .hero').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+        
+        // Redimensionamento responsivo
+        window.addEventListener('resize', () => {
+            if (canvas) {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+        });
+    </script>
+</body>
+</html>
+```

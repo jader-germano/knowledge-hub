@@ -1,0 +1,206 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Pinball Simples</title>
+<style>
+  body{margin:0;background:#000;color:#fff;font-family:Arial,Helvetica,sans-serif;}
+  canvas{display:block;margin:auto;background:#111;}
+  #score{position:absolute;top:10px;left:10px;font-size:24px;}
+</style>
+</head>
+<body>
+<div id="score">Pontos: 0</div>
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+<script>
+const canvas=document.getElementById('gameCanvas');
+const ctx=canvas.getContext('2d');
+const scoreEl=document.getElementById('score');
+const gravity=0.3;
+const restitution=0.9;
+let score=0;
+
+// Ball
+const ball={
+  r:10,
+  x:canvas.width/2,
+  y:50,
+  vx:Math.random()*4-2,
+  vy:0
+};
+
+// Flippers
+const flipper={
+  length:80,
+  width:10,
+  left:{
+    pivot:{x:canvas.width/2-120,y:canvas.height-80},
+    angle:0, // rad
+    targetAngle:-Math.PI/4,
+    angularVel:0
+  },
+  right:{
+    pivot:{x:canvas.width/2+120,y:canvas.height-80},
+    angle:0,
+    targetAngle:Math.PI/4,
+    angularVel:0
+  }
+};
+
+// Bumpers
+const bumpers=[
+  {x:200,y:200,r:30},
+  {x:400,y:150,r:30},
+  {x:600,y:200,r:30}
+];
+
+// Controls
+const keys={left:false,right:false};
+window.addEventListener('keydown',e=>{
+  if(e.code==='ArrowLeft') keys.left=true;
+  if(e.code==='ArrowRight') keys.right=true;
+});
+window.addEventListener('keyup',e=>{
+  if(e.code==='ArrowLeft') keys.left=false;
+  if(e.code==='ArrowRight') keys.right=false;
+});
+
+// Helper functions
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+function rotatePoint(px,py,ox,oy,angle){
+  const dx=px-ox,dy=py-oy;
+  const nx=dx*Math.cos(angle)-dy*Math.sin(angle);
+  const ny=dx*Math.sin(angle)+dy*Math.cos(angle);
+  return {x:ox+nx,y:oy+ny};
+}
+function lineSegmentDistance(px,py,ax,ay,bx,by){
+  const vx=bx-ax,vy=by-ay;
+  const wx=px-ax,wy=py-ay;
+  const c1=wx*vx+wy*vy;
+  const c2=vx*vx+vy*vy;
+  let t=c1/c2;
+  t=clamp(t,0,1);
+  const projx=ax+t*vx,projy=ay+t*vy;
+  const dx=px-projx,dy=py-projy;
+  return Math.hypot(dx,dy);
+}
+function reflectVelocity(vx,vy,nx,ny){
+  const dot=vx*nx+vy*ny;
+  return {vx:vx-2*dot*nx,vy:vy-2*dot*ny};
+}
+
+// Game loop
+function update(){
+  // Ball physics
+  ball.vy+=gravity;
+  ball.x+=ball.vx;
+  ball.y+=ball.vy;
+
+  // Wall collisions
+  if(ball.x-ball.r<0){ball.x=ball.r;ball.vx=-ball.vx*restitution;}
+  if(ball.x+ball.r>canvas.width){ball.x=canvas.width-ball.r;ball.vx=-ball.vx*restitution;}
+  if(ball.y-ball.r<0){ball.y=ball.r;ball.vy=-ball.vy*restitution;}
+  if(ball.y+ball.r>canvas.height){
+    // Reset ball
+    ball.x=canvas.width/2;
+    ball.y=50;
+    ball.vx=Math.random()*4-2;
+    ball.vy=0;
+  }
+
+  // Flipper control
+  const spinSpeed=0.2;
+  if(keys.left){flipper.left.targetAngle=-Math.PI/4;}
+  else{flipper.left.targetAngle=0;}
+  if(keys.right){flipper.right.targetAngle=Math.PI/4;}
+  else{flipper.right.targetAngle=0;}
+  // Smooth rotation
+  flipper.left.angle+= (flipper.left.targetAngle-flipper.left.angle)*0.1;
+  flipper.right.angle+= (flipper.right.targetAngle-flipper.right.angle)*0.1;
+
+  // Flipper collision
+  [flipper.left,flipper.right].forEach(f=>{
+    const {pivot,angle} = f;
+    const end=rotatePoint(pivot.x+f.length,pivot.y,f.pivot.x,f.pivot.y,angle);
+    const dist=lineSegmentDistance(ball.x,ball.y,pivot.x,pivot.y,end.x,end.y);
+    if(dist<ball.r){
+      // Compute normal
+      const nx=pivot.y-end.y, ny=end.x-pivot.x;
+      const len=Math.hypot(nx,ny);
+      const normal={x:nx/len,y:ny/len};
+      const relV=reflectVelocity(ball.vx,ball.vy,normal.x,normal.y);
+      ball.vx=relV.vx*restitution;
+      ball.vy=relV.vy*restitution;
+      // Push ball out
+      const overlap=ball.r-dist;
+      ball.x+=normal.x*overlap;
+      ball.y+=normal.y*overlap;
+    }
+  });
+
+  // Bumper collision
+  bumpers.forEach(b=>{
+    const dx=ball.x-b.x,dy=ball.y-b.y;
+    const dist=Math.hypot(dx,dy);
+    if(dist<ball.r+b.r){
+      // Reflect
+      const nx=dx/dist,ny=dy/dist;
+      const relV=reflectVelocity(ball.vx,ball.vy,nx,ny);
+      ball.vx=relV.vx*restitution;
+      ball.vy=relV.vy*restitution;
+      // Score
+      score+=10;
+      scoreEl.textContent=`Pontos: ${score}`;
+      // Push ball out
+      const overlap=ball.r+b.r-dist;
+      ball.x+=nx*overlap;
+      ball.y+=ny*overlap;
+    }
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // Draw bumpers
+  bumpers.forEach(b=>{
+    ctx.beginPath();
+    ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+    ctx.fillStyle='#ff5555';
+    ctx.fill();
+    ctx.strokeStyle='#aa0000';
+    ctx.stroke();
+  });
+
+  // Draw flippers
+  [flipper.left,flipper.right].forEach(f=>{
+    const {pivot,angle} = f;
+    const end=rotatePoint(pivot.x+f.length,pivot.y,f.pivot.x,f.pivot.y,angle);
+    ctx.beginPath();
+    ctx.moveTo(pivot.x,pivot.y);
+    ctx.lineTo(end.x,end.y);
+    ctx.lineWidth=f.width;
+    ctx.strokeStyle='#00aa00';
+    ctx.lineCap='round';
+    ctx.stroke();
+  });
+
+  // Draw ball
+  ctx.beginPath();
+  ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);
+  ctx.fillStyle='#ffff00';
+  ctx.fill();
+  ctx.strokeStyle='#ffdd00';
+  ctx.stroke();
+}
+
+function loop(){
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
+```

@@ -1,0 +1,71 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeyForge - Teclados Mecânicos</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #ffcc66;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: hidden;
+        }
+        .header {
+            position: relative;
+            height: 10vh;
+            background-color: rgba(255, 204, 102, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            text-shadow: 5px 5px #000;
+            color: rgba(255, 204, 102, 0.8);
+        }
+        .content {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            height: 90vh;
+        }
+        canvas {
+            border: 1px solid #ffcc66;
+            box-shadow: 0 0 25px #ffcc66;
+        }
+    </style>
+</head>
+<body onload="init()">
+    <div class="header">
+        <h1>KeyForge</h1>
+        <audio id="backgroundAudio" loop autoplay src="https://www.soundjay.com/button/beep-07.wav"></audio>
+    </div>
+    <div class="content">
+        <canvas id="canvas3D" width="600" height="400"></canvas>
+        <script>
+            var canvas = document.getElementById('canvas3D');
+            var ctx = canvas.getContext('2d');
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2 + Math.sin(Date.now() * 0.001) * 50, canvas.height / 2 + Math.cos(Date.now() * 0.002) * 30, 40, 0, 2 * Math.PI);
+                ctx.fillStyle = 'rgba(255, 204, 102, 0.8)';
+                ctx.fill();
+                requestAnimationFrame(draw);
+            }
+            
+            function init() {
+                draw();
+            }
+        </script>
+    </div>
+</body>
+</html>
+```

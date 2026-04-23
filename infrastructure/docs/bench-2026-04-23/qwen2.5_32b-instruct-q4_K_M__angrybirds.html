@@ -1,0 +1,122 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Clone Angry Birds</title>
+<style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; background-color: #87CEEB; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.3.4/pixi.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p2.js/10.5.0/p2-min.js"></script>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<script>
+    const app = new PIXI.Application({width: 800, height: 600});
+    document.body.appendChild(app.view);
+    let world;
+    let bird;
+    let pigs = [];
+    let slingShot;
+
+    function setupPhysics() {
+        world = new p2.World();
+        world.gravity[1] = -9.81 * 30;
+        const groundBody = new p2.Body({ mass: 0 });
+        groundBody.addShape(new p2.Box({ width: 800, height: 5 }));
+        world.addBody(groundBody);
+    }
+
+    function setupGraphics() {
+        app.stage.interactive = true;
+        bird = new PIXI.Graphics();
+        bird.beginFill(0xFF3300);
+        bird.drawCircle(0, 0, 20);
+        bird.endFill();
+        app.stage.addChild(bird);
+
+        for (let i = 1; i <= 3; i++) {
+            const pig = new PIXI.Graphics();
+            pig.beginFill(0x654321);
+            pig.drawCircle(0, 0, 20);
+            pig.endFill();
+            pig.x = 300 + (i - 1) * 80;
+            pig.y = 200;
+            app.stage.addChild(pig);
+            pigs.push(pig);
+        }
+
+        slingShot = new PIXI.Graphics();
+        slingShot.lineStyle(4, 0x0000FF);
+        app.stage.addChild(slingShot);
+
+        app.stage.on('pointerdown', startDrag);
+        app.ticker.add(update);
+    }
+
+    function setupPhysicsBodies() {
+        const birdBody = new p2.Body({ mass: 1 });
+        birdBody.position[0] = 50;
+        birdBody.position[1] = 300;
+        world.addBody(birdBody);
+
+        pigs.forEach((pig, i) => {
+            const pigBody = new p2.Body({ mass: 1 });
+            pigBody.position[0] = pig.x + 400; // adjust based on canvas position
+            pigBody.position[1] = pig.y;
+            world.addBody(pigBody);
+        });
+
+        app.ticker.add(() => {
+            updatePhysics();
+        });
+    }
+
+    function startDrag(e) {
+        e.stopPropagation();
+        if (bird.getBounds().contains(e.data.global.x, e.data.global.y)) {
+            app.stage.on('pointermove', drag);
+            app.stage.on('pointerup', releaseBird);
+        }
+    }
+
+    function drag(e) {
+        bird.position = e.data.global;
+        updateSlingShotPosition(e.data.global.x, e.data.global.y);
+    }
+
+    function releaseBird() {
+        const velocity = new p2.Vec2(
+            (bird.x - 50) * 3,
+            (bird.y - 300) * 3
+        );
+        world.bodies[0].setVelocity(velocity);
+        app.stage.off('pointermove', drag);
+        app.stage.off('pointerup', releaseBird);
+    }
+
+    function updatePhysics() {
+        world.step(1 / 60);
+        bird.position = new PIXI.Point(world.bodies[0].position[0] - 400, world.bodies[0].position[1]);
+        pigs.forEach((pig, i) => {
+            pig.x = world.bodies[i + 1].position[0];
+            pig.y = world.bodies[i + 1].position[1];
+        });
+    }
+
+    function updateSlingShotPosition(x, y) {
+        slingShot.clear();
+        slingShot.lineStyle(4, 0x0000FF);
+        slingShot.moveTo(50 - 400, 300);
+        slingShot.lineTo(x - 400, y);
+    }
+
+    setupPhysics();
+    setupGraphics();
+    setupPhysicsBodies();
+</script>
+</body>
+</html>
+```

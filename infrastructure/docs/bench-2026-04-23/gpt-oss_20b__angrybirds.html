@@ -1,0 +1,168 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Clone de Angry Birds</title>
+<style>
+  body{margin:0;display:flex;flex-direction:column;align-items:center;background:#87CEEB;}
+  canvas{border:2px solid #000;background:#f0e68c;}
+  #restartBtn{margin-top:10px;padding:8px 16px;font-size:16px;}
+</style>
+</head>
+<body>
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+<button id="restartBtn">Reiniciar</button>
+<script>
+(() => {
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const restartBtn = document.getElementById('restartBtn');
+  const gravity = 0.5;
+  const elasticFactor = 0.15;
+  const maxDragDistance = 100;
+  const birdRadius = 15;
+  const pigRadius = 20;
+  const slingshot = {x:150, y:400};
+  let bird, pigs=[], score=0, dragging=false, launched=false, lastTime=0;
+
+  function init() {
+    score=0;
+    bird = {x:slingshot.x, y:slingshot.y, vx:0, vy:0, radius:birdRadius, color:'red', active:true};
+    pigs = [];
+    for(let i=0;i<5;i++){
+      pigs.push({x: 500 + Math.random()*200, y: 200 + Math.random()*200, radius:pigRadius, color:'green', hit:false});
+    }
+    launched=false;
+    dragging=false;
+    canvas.addEventListener('mousedown', onMouseDown);
+    canvas.addEventListener('mousemove', onMouseMove);
+    canvas.addEventListener('mouseup', onMouseUp);
+    canvas.addEventListener('mouseleave', onMouseUp);
+    restartBtn.onclick = init;
+  }
+
+  function onMouseDown(e){
+    if(launched) return;
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const dx = mx - bird.x;
+    const dy = my - bird.y;
+    if(Math.hypot(dx,dy) <= bird.radius){
+      dragging=true;
+    }
+  }
+  function onMouseMove(e){
+    if(!dragging) return;
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const dx = mx - slingshot.x;
+    const dy = my - slingshot.y;
+    const dist = Math.hypot(dx,dy);
+    if(dist > maxDragDistance){
+      const ratio = maxDragDistance/dist;
+      bird.x = slingshot.x + dx*ratio;
+      bird.y = slingshot.y + dy*ratio;
+    }else{
+      bird.x = mx;
+      bird.y = my;
+    }
+  }
+  function onMouseUp(e){
+    if(!dragging) return;
+    dragging=false;
+    const dx = slingshot.x - bird.x;
+    const dy = slingshot.y - bird.y;
+    bird.vx = dx * elasticFactor;
+    bird.vy = dy * elasticFactor;
+    launched=true;
+  }
+
+  function update(dt){
+    if(launched){
+      bird.vy += gravity;
+      bird.x += bird.vx;
+      bird.y += bird.vy;
+      // Ground collision
+      if(bird.y + bird.radius > canvas.height){
+        bird.y = canvas.height - bird.radius;
+        bird.vy = 0;
+        bird.vx *= 0.5;
+        if(Math.abs(bird.vx) < 1) bird.vx = 0;
+      }
+      // Off screen
+      if(bird.x > canvas.width + 50 || bird.y > canvas.height + 50){
+        resetBird();
+      }
+      // Pig collision
+      pigs.forEach(pig=>{
+        if(pig.hit) return;
+        const dist = Math.hypot(bird.x - pig.x, bird.y - pig.y);
+        if(dist < bird.radius + pig.radius){
+          pig.hit=true;
+          score += 10;
+        }
+      });
+    }
+  }
+
+  function resetBird(){
+    bird.x = slingshot.x;
+    bird.y = slingshot.y;
+    bird.vx = 0;
+    bird.vy = 0;
+    launched=false;
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // Draw slingshot
+    ctx.fillStyle="#8B4513";
+    ctx.fillRect(slingshot.x-5, slingshot.y-80,10,80);
+    ctx.fillRect(slingshot.x-30, slingshot.y-5,60,10);
+    // Draw elastic band
+    if(dragging){
+      ctx.strokeStyle="#000";
+      ctx.lineWidth=5;
+      ctx.beginPath();
+      ctx.moveTo(slingshot.x, slingshot.y);
+      ctx.lineTo(bird.x, bird.y);
+      ctx.stroke();
+    }
+    // Draw bird
+    ctx.fillStyle=bird.color;
+    ctx.beginPath();
+    ctx.arc(bird.x, bird.y, bird.radius,0,Math.PI*2);
+    ctx.fill();
+    // Draw pigs
+    pigs.forEach(pig=>{
+      if(pig.hit) return;
+      ctx.fillStyle=pig.color;
+      ctx.beginPath();
+      ctx.arc(pig.x, pig.y, pig.radius,0,Math.PI*2);
+      ctx.fill();
+    });
+    // Draw score
+    ctx.fillStyle="#000";
+    ctx.font="24px Arial";
+    ctx.fillText("Pontuação: "+score, 20, 30);
+  }
+
+  function loop(timestamp){
+    if(!lastTime) lastTime=timestamp;
+    const dt = (timestamp - lastTime)/16.666; // approx 60fps
+    lastTime=timestamp;
+    update(dt);
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  init();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
+```

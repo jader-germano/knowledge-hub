@@ -1,0 +1,242 @@
+# axis-llm-preset.yaml
+# ----------------------------------------------------------------------
+# Preset de roteamento LLM local para integração Axis.
+# Fonte de verdade do catálogo da VPS + capability routing.
+# Consumers (axis, openclaude, n8n workflows, etc.) leem este arquivo
+# para decidir qual modelo chamar por tarefa.
+#
+# Schema auto-explicativo — não depende de LiteLLM/OpenRouter.
+# Mantido em sincronia com: vps-ollama-roster-2026-04-23.md
+# ----------------------------------------------------------------------
+
+version: 1
+generated_at: "2026-04-23"
+source_of_truth: jpglabs/docs/infrastructure/docs/vps-ollama-roster-2026-04-23.md
+
+endpoints:
+  # Preferência: Tailscale (privado, sem expor 11434 publicamente).
+  # Fallback público só quando o peer Tailnet `srv1443703` estiver offline.
+  primary:
+    name: vps-tailnet
+    base_url: http://100.68.217.36:11434
+    openai_compat_url: http://100.68.217.36:11434/v1
+    transport: tailscale
+    health_check:
+      path: /v1/models
+      timeout_ms: 4000
+      expect_status: 200
+  fallback:
+    name: vps-public
+    base_url: http://187.77.227.151:11434
+    openai_compat_url: http://187.77.227.151:11434/v1
+    transport: public
+    condition: use_only_if_tailnet_peer_offline
+    health_check:
+      path: /v1/models
+      timeout_ms: 4000
+      expect_status: 200
+
+# Defaults efetivos do servidor (informativo — não precisa repassar em cada request).
+server_defaults:
+  num_ctx: 16384
+  keep_alive: 24h
+  num_parallel: 2
+  num_threads: 8
+  flash_attention: true
+  max_loaded_models: 2
+
+# Catálogo de modelos presentes na VPS — com metadados usáveis para decisão.
+models:
+  - id: qwen3-coder:30b
+    family: qwen3
+    arch: moe
+    active_params: 3B
+    total_params: 30B
+    quant: Q4_K_M
+    size_gb: 18
+    license: qwen
+    license_commercial_ok: true
+    eval_tok_s_cpu: 27.3
+    strengths: [coding, refactor, long-context, tool-use]
+    max_ctx_native: 262144
+
+  - id: gpt-oss:20b
+    family: gpt-oss
+    arch: moe
+    active_params: 3.6B
+    total_params: 21B
+    quant: MXFP4
+    size_gb: 13
+    license: apache-2.0
+    license_commercial_ok: true
+    eval_tok_s_cpu: 20.4
+    strengths: [reasoning, tool-use, agents]
+    max_ctx_native: 131072
+
+  - id: phi4:14b
+    family: phi
+    arch: dense
+    active_params: 14B
+    total_params: 14B
+    quant: Q4_K_M
+    size_gb: 9.1
+    license: mit
+    license_commercial_ok: true
+    eval_tok_s_cpu: 11.9
+    strengths: [math, reasoning, short-form]
+    max_ctx_native: 16384
+
+  - id: qwen2.5:32b-instruct-q4_K_M
+    family: qwen2.5
+    arch: dense
+    active_params: 32B
+    total_params: 32B
+    quant: Q4_K_M
+    size_gb: 19
+    license: qwen
+    license_commercial_ok: true
+    eval_tok_s_cpu: null   # a medir
+    strengths: [general, pt-br, instruction-following]
+    max_ctx_native: 131072
+
+  - id: qwen2.5-coder:14b
+    family: qwen2.5
+    arch: dense
+    active_params: 14B
+    total_params: 14B
+    quant: Q4_K_M
+    size_gb: 9.0
+    license: qwen
+    license_commercial_ok: true
+    eval_tok_s_cpu: null
+    strengths: [coding, fill-in-middle]
+    max_ctx_native: 131072
+
+  - id: qwen2.5-coder:7b
+    family: qwen2.5
+    arch: dense
+    active_params: 7B
+    total_params: 7B
+    quant: Q4_K_M
+    size_gb: 4.7
+    license: qwen
+    license_commercial_ok: true
+    eval_tok_s_cpu: null
+    strengths: [coding, fast, cheap]
+    max_ctx_native: 131072
+
+  - id: deepseek-coder-v2:16b
+    family: deepseek-coder-v2
+    arch: moe
+    active_params: 2.4B
+    total_params: 16B
+    quant: Q4_K_M
+    size_gb: 8.9
+    license: deepseek-custom
+    license_commercial_ok: review_first
+    eval_tok_s_cpu: null
+    strengths: [coding, moe-fast]
+    max_ctx_native: 131072
+
+  - id: gemma4:26b
+    family: gemma
+    arch: dense
+    active_params: 26B
+    total_params: 26B
+    quant: Q4_K_M
+    size_gb: 17
+    license: gemma-terms
+    license_commercial_ok: review_first
+    eval_tok_s_cpu: null
+    strengths: [multilingual, pt-br]
+    max_ctx_native: 8192
+
+  - id: gemma4:e4b
+    family: gemma
+    arch: dense
+    active_params: 4B
+    total_params: 4B
+    quant: Q4_K_M
+    size_gb: 9.6
+    license: gemma-terms
+    license_commercial_ok: review_first
+    eval_tok_s_cpu: null
+    strengths: [multilingual-light, fast]
+    max_ctx_native: 8192
+
+# Roteamento por capability — Axis usa isto para decidir qual modelo invocar.
+# Consumer pede `capability`, preset resolve para `primary` e prepara `fallback_chain`.
+routing:
+  coder:
+    primary: qwen3-coder:30b
+    fallback_chain: [qwen2.5-coder:14b, deepseek-coder-v2:16b, qwen2.5-coder:7b]
+    reason: "MoE A3B + licença comercial-ok + 27 tok/s (2.3x phi4)"
+  reasoning:
+    primary: gpt-oss:20b
+    fallback_chain: [phi4:14b, qwen2.5:32b-instruct-q4_K_M]
+    reason: "Apache-2.0 + tool-use nativo + MoE"
+  tool_use:
+    primary: gpt-oss:20b
+    fallback_chain: [qwen3-coder:30b]
+    reason: "gpt-oss foi treinado p/ function calling; qwen3-coder aceita OpenAI tool format"
+  math:
+    primary: phi4:14b
+    fallback_chain: [qwen2.5:32b-instruct-q4_K_M, gpt-oss:20b]
+    reason: "phi-4 ganha surpreendentemente em math bench apesar de denso 14B"
+  general_ptbr:
+    primary: qwen2.5:32b-instruct-q4_K_M
+    fallback_chain: [gemma4:26b, qwen3-coder:30b]
+    reason: "Qwen2.5 tem PT-BR forte; fallback gemma quando precisar estilo menos técnico"
+  fast_cheap:
+    primary: qwen2.5-coder:7b
+    fallback_chain: [gemma4:e4b]
+    reason: "Quando latência importa mais que qualidade"
+
+# Política operacional para o consumer.
+policy:
+  license_guard:
+    production: ["apache-2.0", "mit"]  # whitelist estrita pra qualquer path comercial
+    development: "allow_all_with_review"
+    block_list_reasons:
+      - "MiniMax M2.7 licença não-comercial (vídeo cGIXyqjZSD8)"
+      - "Kimi K2.5 após caso Cursor/Composer 2"
+  circuit_breaker:
+    fail_fast_on_health_check: true
+    pre_flight_required: true  # espelha implementação já presente no OpenClaude
+  retry:
+    max_attempts: 2
+    backoff_ms: [500, 1500]
+  model_load:
+    avoid_cold_load_churn: true
+    note: "MAX_LOADED_MODELS=2 — escolher 2 hot models por sessão idealmente"
+
+# Exemplo mínimo de uso — curl direto OpenAI-compatible.
+examples:
+  curl_openai_compat: |
+    curl -sS http://100.68.217.36:11434/v1/chat/completions \
+      -H 'Content-Type: application/json' \
+      -d '{
+        "model": "qwen3-coder:30b",
+        "messages": [{"role":"user","content":"Refactor this Python into async"}],
+        "temperature": 0.2,
+        "max_tokens": 2048
+      }'
+
+  node_openai_sdk: |
+    import OpenAI from 'openai'
+    const client = new OpenAI({
+      baseURL: 'http://100.68.217.36:11434/v1',
+      apiKey: 'ollama'  // required by SDK but unused by server
+    })
+    const resp = await client.chat.completions.create({
+      model: 'qwen3-coder:30b',
+      messages: [{role:'user', content:'...'}]
+    })
+
+  python_openai_sdk: |
+    from openai import OpenAI
+    client = OpenAI(base_url='http://100.68.217.36:11434/v1', api_key='ollama')
+    resp = client.chat.completions.create(
+        model='qwen3-coder:30b',
+        messages=[{'role':'user','content':'...'}]
+    )

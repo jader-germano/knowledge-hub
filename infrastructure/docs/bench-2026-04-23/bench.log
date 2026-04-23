@@ -1,0 +1,20 @@
+[2026-04-23T12:24:29+00:00] START bench
+[2026-04-23T12:24:29+00:00] BEGIN model=qwen3-coder:30b task=keyboards
+[2026-04-23T12:32:24+00:00] DONE model=qwen3-coder:30b task=keyboards rc=0 eval_count=4715 eval_dur=463985804308 total_dur=475191850700 load_dur=7937478231
+[2026-04-23T12:32:24+00:00] BEGIN model=qwen3-coder:30b task=pinball
+[2026-04-23T12:34:40+00:00] DONE model=qwen3-coder:30b task=pinball rc=0 eval_count=2131 eval_dur=134290270964 total_dur=136412120167 load_dur=202368791
+[2026-04-23T12:34:40+00:00] BEGIN model=qwen3-coder:30b task=angrybirds
+[2026-04-23T12:38:07+00:00] DONE model=qwen3-coder:30b task=angrybirds rc=0 eval_count=2898 eval_dur=204836876336 total_dur=207132333620 load_dur=178266724
+[2026-04-23T12:38:07+00:00] BEGIN model=gpt-oss:20b task=keyboards
+[2026-04-23T12:40:07+00:00] DONE model=gpt-oss:20b task=keyboards rc=0 eval_count=2362 eval_dur=110188265220 total_dur=119818917104 load_dur=6504565685
+[2026-04-23T12:40:07+00:00] BEGIN model=gpt-oss:20b task=pinball
+[2026-04-23T12:42:03+00:00] DONE model=gpt-oss:20b task=pinball rc=0 eval_count=2464 eval_dur=114009065406 total_dur=116019928064 load_dur=204170501
+[2026-04-23T12:42:03+00:00] BEGIN model=gpt-oss:20b task=angrybirds
+[2026-04-23T12:43:38+00:00] DONE model=gpt-oss:20b task=angrybirds rc=0 eval_count=2049 eval_dur=92638184458 total_dur=94451580683 load_dur=206744828
+[2026-04-23T12:43:38+00:00] BEGIN model=qwen2.5:32b-instruct-q4_K_M task=keyboards
+[2026-04-23T12:46:13+00:00] DONE model=qwen2.5:32b-instruct-q4_K_M task=keyboards rc=0 eval_count=589 eval_dur=118720110108 total_dur=155374656985 load_dur=24170627544
+[2026-04-23T12:46:13+00:00] BEGIN model=qwen2.5:32b-instruct-q4_K_M task=pinball
+[2026-04-23T12:48:35+00:00] DONE model=qwen2.5:32b-instruct-q4_K_M task=pinball rc=0 eval_count=647 eval_dur=133987066186 total_dur=141995410970 load_dur=110912575
+[2026-04-23T12:48:35+00:00] BEGIN model=qwen2.5:32b-instruct-q4_K_M task=angrybirds
+[2026-04-23T12:52:15+00:00] DONE model=qwen2.5:32b-instruct-q4_K_M task=angrybirds rc=0 eval_count=969 eval_dur=210689317108 total_dur=219657532655 load_dur=104467000
+[2026-04-23T12:52:15+00:00] END bench
