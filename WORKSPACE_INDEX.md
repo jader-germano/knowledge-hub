@@ -56,6 +56,11 @@
   - Papel no workspace: alternativa aberta e agnóstica ao Claude Code integrada ao hub
   - Contexto: `projects/openclaude/PROJECT_CONTEXT.md`
 
+- `openclaude-hub`
+  - Nicho: web UI gateway multi-provider para CLIs de coding (WebSocket → gRPC/CLI); rebrand visual em curso como `Axis`
+  - Papel no workspace: superfície web autenticada que absorveu o legado `knowledge-hub-app`; deploy canônico em `chat.jpglabs.com.br`
+  - Contexto: `projects/openclaude-hub/PROJECT_CONTEXT.md`
+
 - `jpglabs-dashboard`
   - Nicho: dashboard operacional do JPGLabs para trilhas, infra, MCP e ações pre-prompt
   - Papel no workspace: cockpit local-first de coordenação do workspace

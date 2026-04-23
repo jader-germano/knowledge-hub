@@ -45,6 +45,9 @@ repositories:
   - id: openclaude
     path: /Users/philipegermano/code/openclaude
     role: open-source-coding-agent-cli
+  - id: openclaude-hub
+    path: /Users/philipegermano/code/jpglabs/openclaude-hub
+    role: web-ui-gateway-for-ai-coding-clis
   - id: jpglabs-dashboard
     path: /Users/philipegermano/code/jpglabs/jpglabs-dashboard
     role: local-first-operator-dashboard
