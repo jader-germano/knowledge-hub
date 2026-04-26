@@ -3,6 +3,264 @@
 Fechamento compartilhado mais recente entre agentes para o workspace
 `/Users/philipegermano/code`.
 
+## Session Handoff - 2026-04-26 15:29 -0300
+
+### Session Metadata
+
+- **Timestamp:** 2026-04-26 15:29:25 -0300
+- **Provider:** Claude Code (claude-sonnet)
+- **Repositório:** `red-cartesian-motion` (novo) + `jpglabs-dashboard`, `openclaude-hub`, `portfolio-backend`
+- **Branch ativa:** `main` em todos os repos afetados
+- **Objetivo:** GitLab CI AI Code Audit pipeline — Jobs A+B, Ollama na VPS, validação end-to-end
+
+### Estado do workspace após sessão
+
+- **Runner GitLab VPS registrado:** `jpglabs-vps-dashboard` (ID 52881696, tag `vps`, shell executor)
+  - Projeto: `jader-germano/jpglabs-dashboard`
+  - Status: online
+- **`red-cartesian-motion` publicado:** `gitlab.com/jader-germano/red-cartesian-motion` (público)
+  - Tag `v0.1.0` criada
+  - `include.yml` é a entrada correta para `include: project:`
+- **Variáveis de projeto** em `jader-germano/jpglabs-dashboard`:
+  - `OLLAMA_HOST=http://localhost:11434` ✅
+  - `AUDIT_AI_MODEL=deepseek-coder-v2:16b` ✅
+  - `GITLAB_TOKEN` — existe mas retorna 401; precisa ser PAT classic (scope: `api`)
+- **Pipeline validado:** MR `!2` jpglabs-dashboard — audit-static ✅, audit-ai ✅, artifact audit-report.md gerado
+
+### Pendências para próxima sessão
+
+1. Criar PAT GitLab (scope `api`) → atualizar `GITLAB_TOKEN` → ativa comentário automático no MR
+2. Configurar `docs`, `portfolio-mobile`, `imap-server` quando repos estiverem em main
+3. Trilha Supabase/jpglabs-saas (sessão separada — kubectl secret + scale deployment)
+
+---
+
+## Session Handoff - 2026-04-22 20:48 -0300
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-22 20:48:48 -0300`
+- Data da sessão: `2026-04-22`
+- Feature/session id: `fix/openclaude-hub-supabase-session-bridge-2026-04-22`
+- Provider: `Codex`
+- Repositório: `/Users/philipegermano/code/openclaude-hub`
+- Branch ativa: `main`
+- Objetivo aprovado: continuar a sessão do Claude e depurar o serviço
+  `openclaude-hub`, validando o deploy em produção e fechando o gap entre o
+  fluxo novo de auth Supabase e o guard legado baseado em cookie.
+
+### Delivery Contract
+
+- Entregáveis explícitos da sessão:
+  - implementar `POST /auth/refresh` no router novo de auth
+  - fazer o fluxo novo emitir e limpar o cookie `hub_session` para manter
+    compatibilidade com `requireAuth`
+  - permitir que o shell SPA carregue quando existir apenas `refresh_token`,
+    para o client reidratar a sessão após expiração do access token
+  - validar o slice com testes focados, typecheck, lint e smoke em produção
+- O que ficou fora do escopo:
+  - commit, push ou abertura de PR
+  - refatorar o login page para eliminar o `401` de `/api/providers` em estado
+    anônimo
+  - executar o OAuth Google ponta a ponta com uma conta real
+
+### Prototype And Evidence
+
+- Esta sessão foi correção de backend/auth e interoperabilidade de sessão, não
+  uma entrega visual nova de feature.
+- Evidências principais:
+  - `/Users/philipegermano/code/openclaude-hub/server/routes/auth.routes.new.ts`
+  - `/Users/philipegermano/code/openclaude-hub/server/services/auth-flow.service.ts`
+  - `/Users/philipegermano/code/openclaude-hub/server/middleware/auth.middleware.ts`
+  - `/Users/philipegermano/code/openclaude-hub/tests/routes/auth.routes-new.test.ts`
+  - `/Users/philipegermano/code/openclaude-hub/tests/services/auth-flow.test.ts`
+  - `systemctl status openclaude-hub` na VPS com serviço ativo após deploy
+  - `curl https://chat.jpglabs.com.br/auth/login-page`
+  - `curl -X POST https://chat.jpglabs.com.br/auth/refresh`
+  - Playwright validando o redirect do botão Google até `accounts.google.com`
+
+### Summary
+
+- O hub em produção estava com o fluxo novo de auth parcialmente montado:
+  `exchange` criava `refresh_token`, mas o client dependia de `/auth/refresh`
+  e o servidor ainda protegia a SPA com `hub_session`.
+- Foi implementado `AuthFlow.refresh(...)` com rotação de refresh token na
+  mesma family, emissão de novo access token e reutilização do contrato de
+  cookies do fluxo novo.
+- `makeAuthRoutesNew(...)` agora sombreia também `POST /auth/refresh`, além de
+  `exchange`, `me` e `logout`, e passa a setar/limpar `hub_session`.
+- `requireAuth(...)` agora libera o shell SPA quando existe `refresh_token`,
+  preservando o boot client-side após F5 ou expiração do access token.
+- O patch foi sincronizado direto para `/opt/openclaude-hub` na VPS via
+  `rsync` e o serviço `openclaude-hub` foi reiniciado com sucesso.
+- Continua aberto um ruído não bloqueante no login anônimo:
+  `GET /api/providers` retorna `401` porque a superfície authenticated ainda
+  inicializa hooks cedo demais no app React.
+
+### Validation
+
+- Builds executados:
+  - nenhum build de frontend foi necessário para este slice; a mudança é de
+    backend TypeScript servido por `node --import tsx`
+- Testes executados:
+  - `bun test tests/services/auth-flow.test.ts tests/routes/auth.routes-new.test.ts`
+  - `npm run typecheck`
+  - `npm run lint`
+- Cobertura atingida na fatia entregue:
+  - contrato de `exchange`, `refresh`, `logout` e domínio `AuthFlow.refresh`
+    cobertos com testes automatizados
+- Gaps de cobertura remanescentes e justificativa técnica:
+  - OAuth Google ponta a ponta em produção não foi completado por exigir conta
+    real/interação humana
+  - o comportamento client-side de `useProviders` no estado anônimo não foi
+    coberto nesta fatia
+- Validação em macOS:
+  - Playwright abriu `https://chat.jpglabs.com.br/auth/login-page`
+  - botão Google redirecionou corretamente para `accounts.google.com`
+  - `curl` validou `POST /auth/refresh` em produção, incluindo limpeza de
+    cookies
+  - `curl` validou que `GET /` com `refresh_token` falso devolve o shell SPA e
+    `GET /api/providers` continua `401`
+- Validação em iOS:
+  - não aplicável
+
+### Commands Executed
+
+- `bun test tests/services/auth-flow.test.ts tests/routes/auth.routes-new.test.ts`
+  - Action: validar o contrato novo de auth e a rotação de refresh token.
+  - Result: `26 pass`, `0 fail`.
+- `npm run typecheck`
+  - Action: validar a integridade TypeScript após o patch.
+  - Result: concluído sem erros.
+- `npm run lint`
+  - Action: conferir regressões estáticas no repo após a correção.
+  - Result: `0 errors`; permaneceram `8` warnings preexistentes fora do slice.
+- `rsync -az --delete ... /Users/philipegermano/code/openclaude-hub/ root@100.68.217.36:/opt/openclaude-hub/`
+  - Action: sincronizar o patch diretamente na VPS.
+  - Result: código atualizado em `/opt/openclaude-hub`.
+- `systemctl restart openclaude-hub`
+  - Action: aplicar o novo backend em produção.
+  - Result: serviço voltou `active`.
+- `curl -X POST https://chat.jpglabs.com.br/auth/refresh`
+  - Action: validar o contrato novo em produção.
+  - Result: `401` com limpeza explícita de `refresh_token`, `csrf_token` e
+    `hub_session`.
+- `Playwright CLI open/click snapshot`
+  - Action: validar a tela de login e o redirect OAuth Google.
+  - Result: redirect até `accounts.google.com` confirmado.
+
+### Files Created
+
+- `/Users/philipegermano/code/daily/2026-04-22.md`
+
+### Files Modified
+
+- `/Users/philipegermano/code/openclaude-hub/server/middleware/auth.middleware.ts`
+- `/Users/philipegermano/code/openclaude-hub/server/routes/auth.routes.new.ts`
+- `/Users/philipegermano/code/openclaude-hub/server/services/auth-flow.service.ts`
+- `/Users/philipegermano/code/openclaude-hub/server/services/jwt-issuer.service.ts`
+- `/Users/philipegermano/code/openclaude-hub/tests/routes/auth.routes-new.test.ts`
+- `/Users/philipegermano/code/openclaude-hub/tests/services/auth-flow.test.ts`
+- `/Users/philipegermano/code/jpglabs/docs/agents/AGENT_BRIDGE.md`
+
+### Change Tree
+
+```text
+/Users/philipegermano/code
+├── daily
+│   └── 2026-04-22.md [new]
+├── jpglabs
+│   └── docs
+│       └── agents
+│           └── AGENT_BRIDGE.md [modified]
+└── openclaude-hub
+    ├── server
+    │   ├── middleware
+    │   │   └── auth.middleware.ts [modified]
+    │   ├── routes
+    │   │   └── auth.routes.new.ts [modified]
+    │   └── services
+    │       ├── auth-flow.service.ts [modified]
+    │       └── jwt-issuer.service.ts [modified]
+    └── tests
+        ├── routes
+        │   └── auth.routes-new.test.ts [modified]
+        └── services
+            └── auth-flow.test.ts [modified]
+```
+
+### Versioning Proposal
+
+- Branch: `fix/openclaude-hub-supabase-session-bridge`
+- Commit: `fix(auth): bridge supabase refresh with session middleware`
+- Review request: confirmar o diff local e decidir se o deploy direto para a
+  VPS deve ser seguido de commit/push para sincronizar Git com o estado já
+  aplicado em produção.
+- Distinção MCP desta sessão:
+  - servidores apenas disponíveis no catálogo: `sonarqube`, `semgrep`,
+    `sequentialthinking`, `figma`, entre outros do Docker MCP
+  - servidores configurados no baseline do workspace: `git`, `filesystem`,
+    `desktop-commander`, `playwright`, `fetch`, `context7`, `memory`,
+    `sequentialthinking`
+  - servidores realmente validados nesta sessão: uso real de `playwright`;
+    catálogo Docker MCP apenas relido, sem `dry-run` novo do gateway
+
+### Language Policy
+
+- Títulos estruturais mantidos em English por interoperabilidade.
+- Conteúdo narrativo mantido em `pt-BR`.
+- Paths, comandos, cookies, rotas HTTP, nomes de serviços e símbolos técnicos
+  preservados em English.
+
+### References And Glossary
+
+- `/Users/philipegermano/code/WORKSPACE_BOOTSTRAP.md` — relido para respeitar
+  o bootstrap, preflight e contrato de fechamento do workspace.
+- `/Users/philipegermano/code/openclaude-hub/CLAUDE.md` — relido para comandos
+  e arquitetura do hub.
+- `/Users/philipegermano/code/jpglabs/docs/projects/openclaude/PROJECT_CONTEXT.md`
+  — usado para contextualizar a trilha no ecossistema OpenClaude.
+- `/Users/philipegermano/.claude/projects/-Users-philipegermano-code-openclaude/96d83c2f-28e5-4a18-b0b0-64c426a3a607.jsonl`
+  — usado para reconstruir o ponto em que a sessão do Claude parou.
+- `/Users/philipegermano/code/openclaude-hub/server/routes/auth.routes.new.ts`
+  — conferido e corrigido o contrato HTTP do auth novo.
+- `/Users/philipegermano/code/openclaude-hub/server/middleware/auth.middleware.ts`
+  — conferida a proteção do shell/API.
+- `https://chat.jpglabs.com.br/auth/login-page` — validada a tela pública em
+  produção.
+- `https://chat.jpglabs.com.br/auth/refresh` — validado o contrato de refresh
+  e a limpeza de cookies em produção.
+- Glossário canônico: nenhum termo novo foi promovido a `GLOSSARY.md` nesta
+  sessão.
+
+Glossário multilíngue: não aplicável nesta sessão.
+
+### Risks And Gaps
+
+- O deploy direto via `rsync` já está em produção, mas o repositório local
+  ainda não foi commitado/pushado; existe risco de drift entre Git e VPS até
+  consolidar a versão.
+- O fluxo OAuth Google completo ainda não foi validado com uma conta real após
+  o patch de sessão.
+- O login page ainda gera `401` anônimo em `/api/providers`; é ruído de
+  frontend, não bloqueio do auth bridge.
+
+### Next Actions
+
+- Fazer um login Google real em `https://chat.jpglabs.com.br` e confirmar que
+  o callback não volta mais para o login após `window.location.replace("/")`.
+- Commitar e empurrar o patch para alinhar o Git com o estado que já está
+  rodando na VPS.
+- Opcional: refatorar a superfície React autenticada para evitar fetches de
+  `providers` no estado anônimo.
+
+### Handoff Notes
+
+- A correção foi aplicada e validada em produção via deploy direto.
+- O estado Git local do repo ainda contém os arquivos alterados não commitados.
+- A worktree também continua com não versionados locais em `.idea/`, `logs/`
+  e `.playwright-cli/`; não foram tocados nesta sessão.
+
 ## Session Handoff - 2026-04-13 15:25 -0300
 
 ### Session Metadata
@@ -10684,3 +10942,798 @@ code
 - Não remover nem mover `/root/build` sem inventário explícito dos consumers reais.
 - Se a próxima rodada exigir validação visual de `.docx`, investigar o `Abort trap: 6` do `soffice` antes de automatizar render PDF.
 <!-- session-bridge:ops-taxonomy-remediation-and-docx-2026-04-14:end -->
+
+
+<!-- session-bridge:docs-daily-technical-closure-2026-04-18-session:start -->
+## 2026-04-18 — daily technical closure
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-18 10:06:32 -0300`
+- Feature/session id: `automation/fechamento-tecnico-diario-2026-04-18`
+- Repositório: ``workspace root /Users/philipegermano/code` (fechamento canônico armazenado em `projects/docs/sessions/`)`
+- Branch ativa: ``ops/portfolio-gitlab-worktree-isolation-2026-04-13` em `/Users/philipegermano/code/jpglabs/docs` (`/Users/philipegermano/code` não é um repositório Git)`
+- Provider: `Codex`
+- Objetivo aprovado: revisar o trabalho do dia nos workspaces configurados, atualizar a entrada atual do Diário de Bordo no Notion com resumo técnico, referências, comandos, inventário de arquivos e espelhar o mesmo handoff em `AGENT_BRIDGE.md`.
+
+### Summary
+
+- O trabalho corroborado de `18/04` ficou concentrado em três frentes de produto e uma frente documental auxiliar: fundação de autenticação compartilhada no `openclaude-hub`, baseline de auth/client no `jpglabs-portfolio`, expansão de superfície autenticada e integração operacional no `jpglabs-dashboard`, e ajustes locais de memória/CI no repo `docs`.
+- No `openclaude-hub`, a trilha `feat/shared-auth-realm-s1a` avançou de forma consistente ao longo do dia: o histórico Git do dia mostra a sequência de schema expand-only, `JWKS cache`, `RefreshStore`, `CSRF middleware`, setup Supabase staging, documentação de OAuth multi-provider e o commit de topo `1a7e25c`, que fecha `POST /auth/exchange`, `GET /auth/me` e `POST /auth/logout` com verificação de JWT Supabase.
+- Além do que já foi commitado, a worktree atual do `openclaude-hub` ainda carrega a costura operacional desse slice: `server/app.ts` monta a nova rota antes do legado, `server/bootstrap/auth.factory.ts` passa a construir o bundle com `JwksCache`, `JwtIssuer`, `RefreshStore`, `SupabaseJwtVerifier` e `UserResolver`, `.env.example` ganha `REFRESH_PEPPER_V1`, `SUPABASE_URL`/`SUPABASE_STAGING_URL` e `COOKIE_DOMAIN`, e o repo começa a explicitar adapters `Drizzle` dedicados para `sessions`, `revoked_tokens` e `users`.
+- No `jpglabs-portfolio`, a trilha homóloga `feat/shared-auth-realm-s1a` confirmou um primeiro marco formal com o commit `a7bfef3`, que introduziu baseline de `Vitest` com teste canário. Sobre esse baseline, a worktree aberta do dia adiciona `@supabase/supabase-js`, um cliente de exchange/logout para o hub, um `fetch interceptor` com refresh single-flight e CSRF para verbos mutáveis, além do `supabase.ts` para sessão persistente no frontend.
+- No `jpglabs-dashboard`, não houve commit hoje, mas houve volume material de implementação local: o app deixou de ser apenas overview estático e passou a ganhar shell autenticado com `NextAuth`, página de login, rotas dedicadas para `access`, `product`, `portfolio`, `teams` e `cv`, endpoints `/api/dashboard/overview` e `/api/integrations/*`, contratos internos para overview e testes mínimos de política e integração. A validação local mostrou que essa expansão já compila e executa com `test`, `lint` e `build` verdes.
+- No repo `docs`, o delta do dia é auxiliar, não central: `scripts/sync-memory.sh`, `memory/AGENTS.md`, `memory/PI_MEMORY.md`, `projects/infrastructure/DEPRECATED.md`, `memory/SECRETS_ROTATION_LOG.md` e `roadmap/knowledge-hub-app.md` indicam continuidade de ajustes operacionais/documentais, mas sem commit do dia que permita tratar a trilha como fechada.
+- O segundo `cwd` configurado na automação, `/Users/philipegermano/code/jpglabs-knowledge-hub`, permaneceu inerte mais uma vez: não há evidência material útil nessa superfície para o fechamento de hoje. Isso continua sendo ruído de configuração da automação e não trabalho do dia.
+
+### Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+### Risks And Gaps
+
+- `openclaude-hub` está tecnicamente forte em teste, mas ainda carrega `8` warnings de lint e uma costura local não commitada em torno do bundle de auth.
+- `jpglabs-portfolio` só fechou baseline unitário e primitives de auth; ainda falta a ligação com callback/UI real e smoke test integrado com o hub.
+- `jpglabs-dashboard` já está validado localmente, porém continua com um delta largo totalmente não commitado e sem remote operacional; o risco principal é governança de entrega.
+- O repo `docs` teve atividade auxiliar do dia, mas sem commit que permita tratá-la como slice consolidado.
+- O `cwd` `/Users/philipegermano/code/jpglabs-knowledge-hub` continua inerte e segue poluindo a automação com lookup sem valor.
+- Se o Notion bloquear novamente payloads grandes via Cloudflare, o fallback continuará sendo `create` mínimo + `replace_content` incremental.
+
+### Next Actions
+
+- Executar um smoke test real de `Supabase staging -> /auth/exchange -> /auth/me -> /auth/logout` no `openclaude-hub` antes de avançar a S1A.
+- Conectar a UI/callback do `jpglabs-portfolio` ao hub usando os primitives já criados e cobrir refresh queue em teste dedicado.
+- Criar branch e staging explícitos para o `jpglabs-dashboard` antes de deixar a fatia crescer mais.
+- Remover o `cwd` inerte `jpglabs-knowledge-hub` da automação e substituir por uma superfície real do workspace quando houver autorização para mexer na agenda.
+
+### Handoff Notes
+
+- `openclaude-hub` e `jpglabs-portfolio` compartilham a mesma trilha `feat/shared-auth-realm-s1a`; tratar os dois como slice acoplado de auth compartilhada, não como frentes independentes.
+- O `jpglabs-dashboard` já está operacionalmente mais avançado do que o histórico Git mostra; evitar qualquer rebase/pull cego sobre essa worktree.
+- O fechamento de hoje precisa manter a distinção entre o que foi corroborado por commit (`openclaude-hub`, `jpglabs-portfolio`) e o que foi corroborado por worktree + validação local (`jpglabs-dashboard`, `docs`).
+- A página do Notion de `18/04/2026` pode não existir de saída; se precisar ser criada, o report local continua sendo a fonte de verdade para qualquer retry.
+<!-- session-bridge:docs-daily-technical-closure-2026-04-18-session:end -->
+
+
+<!-- session-bridge:docs-daily-technical-closure-2026-04-18-session-2:start -->
+## 2026-04-18-2 — daily technical closure
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-18 21:34:25 -0300`
+- Feature/session id: `automation/fechamento-tecnico-diario-2026-04-18-r2`
+- Repositório: `workspace root /Users/philipegermano/code` com sincronização canônica em `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `ops/portfolio-gitlab-worktree-isolation-2026-04-13` em `/Users/philipegermano/code/jpglabs/docs`
+- Provider: `Codex`
+- Objetivo aprovado: revisar o delta do dia posterior à última execução da automação, atualizar a entrada atual do Diário de Bordo no Notion e espelhar o mesmo handoff em `AGENT_BRIDGE.md`.
+
+### Summary
+
+- O delta mais sólido pós-`10:02 -0300` concentrou-se em duas trilhas já commitadas e uma trilha local ainda aberta. No `openclaude-hub`, o commit `6e29f56` consolidou a fundação S1A de autenticação compartilhada com `Drizzle repos`, `buildAuthBundle()`, rotas novas `/auth/exchange`, `/auth/me` e `/auth/logout`, além dos `envs` de `Supabase` e `refresh pepper`. Em seguida, o commit `c278307` registrou o plano formal da sprint com escopo explícito para `JWKS cache`, `JwtIssuer`, `RefreshStore`, `CSRF` e verificação de JWT Supabase.
+- No `jpglabs-portfolio`, a manhã fechou a primeira interface de OAuth Supabase com `3` providers, `AuthCallback`, cliente de auth e `fetch interceptor` no commit `19a44ef`. À noite, a trilha migrou para a branch `feat/cartesian-motion-design`: o commit `6f9c664` passou a direcionar `/` para o portfólio real, tratou falha de OAuth no callback e apontou `.env.production` para `chat.jpglabs.com.br`; o commit `da76a13` adicionou tokens visuais e tipografia de `Cartesian Motion`, com `tokens.css`, fontes e ajustes globais.
+- O `jpglabs-dashboard` segue como a principal fatia aberta do dia. A validação local mostra que o shell autenticado, `NextAuth`, páginas `access/product/portfolio/teams/cv`, endpoints `/api/dashboard/overview` e integrações já compilam e passam em `test`, `lint` e `build`; porém todo esse volume continua sem commit e diretamente sobre `main`, o que torna governança e rastreabilidade o maior risco atual, não quebra de execução.
+- No hub documental, `jpglabs/docs` manteve atividade operacional com atualização de `current-deploy-truth`, ajustes em memória compartilhada e evolução pesada de `scripts/sync-memory.sh`; houve também um runbook novo de `cloudflare-tunnel-cutover` ainda não consolidado em Git. Em paralelo, `FrankMD` recebeu edições documentais sobre topologia MCP e o hub `jpglabs-knowledge-hub`, mas sem commit nem validação nesta rodada; tratei essa superfície como trilha auxiliar, não como entrega fechada.
+- O segundo workspace configurado da automação, `/Users/philipegermano/code/jpglabs-knowledge-hub`, continua praticamente inerte. Há apenas o diretório `.codex/` tocado no início da manhã, sem repositório Git e sem trabalho material suficiente para entrar como frente principal do fechamento.
+
+### Glossário multilíngue
+
+Glossário multilíngue: não aplicável nesta sessão.
+
+### Risks And Gaps
+
+- `jpglabs-dashboard` permanece com worktree grande e sem commit sobre `main`; isso é risco operacional imediato de perda de contexto e merge acidental.
+- `jpglabs-portfolio` já fechou o redesign e builda, mas o bundle principal está maior do que o desejável para entrada pública; sem code splitting, a regressão de performance é plausível.
+- `openclaude-hub` mantém warnings de lint que não quebram entrega, mas enfraquecem a prontidão para review rigoroso.
+- `FrankMD` e `jpglabs/docs` têm trilhas documentais paralelas sem normalização clara entre hub auxiliar e hub canônico; há risco de drift semântico se isso continuar sem reconciliação.
+- `jpglabs-knowledge-hub` segue como workspace configurado mas sem atividade material. Mantê-lo na automação assim gera ruído recorrente de fechamento.
+
+### Next Actions
+
+- Criar uma branch própria para `/Users/philipegermano/code/jpglabs/jpglabs-dashboard` e consolidar a worktree atual em commits menores, antes de qualquer nova expansão.
+- Tratar code splitting ou `manualChunks` em `/Users/philipegermano/code/jpglabs/jpglabs-portfolio` para reduzir o bundle da entrada `Cartesian Motion`.
+- Decidir se a trilha documental de `FrankMD` deve ser absorvida por `/Users/philipegermano/code/jpglabs/docs` ou explicitamente tratada como espelho secundário.
+- Revisar se `/Users/philipegermano/code/jpglabs-knowledge-hub` ainda deve permanecer no escopo desta automação.
+
+### Handoff Notes
+
+- Esta rodada complementa o fechamento das `10:06 -0300`; não substitui a leitura histórica anterior, mas atualiza o estado do dia com os commits e validações posteriores.
+- Ao sincronizar para o Notion, manter a mesma página diária já criada e substituir o conteúdo pelo fechamento consolidado mais recente desta rodada.
+- Se a próxima rodada atacar `jpglabs-dashboard`, o primeiro passo não deve ser código novo: deve ser governança de branch e recorte de commit.
+<!-- session-bridge:docs-daily-technical-closure-2026-04-18-session-2:end -->
+
+
+<!-- session-bridge:docs-mcp-atlassian-runtime-parity-2026-04-18-session:start -->
+## 2026-04-18 — mcp atlassian runtime parity
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-18 23:21:40 -0300`
+- Feature/session id: `docs/mcp-atlassian-runtime-parity-2026-04-18-session`
+- Repositório: `workspace root /Users/philipegermano/code` com superfície canônica em `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `ops/portfolio-gitlab-worktree-isolation-2026-04-13` em `/Users/philipegermano/code/jpglabs/docs`
+- Provider: `Codex`
+- Objetivo aprovado: validar por que Claude Desktop/Claude Code conseguem operar Jira enquanto o Codex continua bloqueado no lane `atlassian`, documentar o estado real do host e fechar a sessão com handoff canônico.
+
+### Summary
+
+- A avaliação do host confirmou que `claude-desktop`, `claude-code` e `codex` compartilham o mesmo baseline `MCP_DOCKER`; portanto, a diferença de comportamento em Jira não vem do bloco `MCP_DOCKER` em si.
+- A evidência relevante está no lado do Claude: `/Users/philipegermano/.claude.json` registra `claude.ai Atlassian Rovo` como integração já conectada, e o agente local `jira-sync-manager` foi escrito explicitamente sobre `mcp__claude_ai_Atlassian_Rovo__*`. Isso indica uma segunda lane, nativa do ecossistema Claude, fora do gateway Docker compartilhado.
+- No Codex, o lane Docker `atlassian` segue indisponível. O `docker mcp secret ls` ainda quebra porque o diretório/socket `docker-secrets-engine` não existe neste host, então secrets do Docker Desktop, inclusive o novo `agent-secret`, não são resolvidos pelo gateway. Sem secrets resolvidos, o `dry-run` do `atlassian` morre em `initialize: EOF` e não expõe tools.
+- Também descartei o fallback mais simples por API direta via Keychain: `security find-generic-password -s 'jpglabs-atlassian-mcp' -a 'jader.germano' -w` retornou vazio nesta conta. Portanto, não houve caminho autenticado e seguro para criar tasks Jira a partir do Codex nesta sessão.
+- O resultado prático é uma assimetria de provider: Jira/Confluence continuam utilizáveis via lane nativa do Claude (`Atlassian Rovo`), mas ainda não podem ser tratados como capacidade Docker MCP compartilhada e funcional no Codex deste host.
+
+### Glossário multilíngue
+
+Glossário multilíngue: não aplicável nesta sessão.
+
+### Risks And Gaps
+
+- O `agent-secret` pode até existir no Docker Desktop, mas permanece inutilizável para o Codex enquanto o `docker-secrets-engine` não expuser `engine.sock`.
+- `claude-code` e `claude-desktop` seguem com capacidade Jira/Confluence assimétrica em relação ao Codex; isso aumenta risco de falsa sensação de paridade entre providers.
+- Como o fallback `jpglabs-atlassian-mcp` não existe no Keychain desta conta, qualquer automação Codex que dependa de Jira continuará bloqueada até correção explícita do segredo/runtime.
+- A projeção derivada do sidecar para o grafo continua sensível ao falso negativo `Docker Desktop is not running` quando executada a partir deste runtime; isso precisa ser tratado como ruído conhecido, não como sinal de fechamento incompleto.
+
+### Next Actions
+
+- Se a meta for paridade real de provider, abrir uma task para restaurar o Docker Desktop secrets engine e repetir `docker mcp secret ls` + `dry-run` do `atlassian`.
+- Se a meta for apenas continuidade operacional imediata, executar futuras criações/updates Jira pelo Claude nativo (`Atlassian Rovo`) até o lane Docker voltar a funcionar no Codex.
+- Se quiser materializar isso em Jira, os dois tickets candidatos desta sessão são:
+- `Restore Docker Desktop secrets engine for Codex MCP Atlassian lane`
+- `Validate and document provider parity between Codex Docker MCP and Claude Atlassian Rovo`
+- Nenhum deles foi criado nesta sessão por ausência de caminho autenticado funcional no Codex.
+
+### Handoff Notes
+
+- A frase operacional correta para este host não é "Atlassian funciona no Docker MCP"; é "Atlassian funciona no Claude por lane nativa, e continua quebrado no Codex via Docker".
+- `docker mcp server inspect atlassian` não é evidência suficiente de saúde; ele só prova catálogo e schema estáticos. O critério real continua sendo `dry-run` com tools expostos e autenticação resolvida.
+- O novo `agent-secret` não muda nada para o Codex enquanto o secrets engine não responder. O problema atual é plumbing do Docker Desktop, não ausência nominal de segredo.
+<!-- session-bridge:docs-mcp-atlassian-runtime-parity-2026-04-18-session:end -->
+
+
+<!-- session-bridge:docs-daily-technical-closure-2026-04-19-session:start -->
+## 2026-04-19 — daily technical closure
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-19 21:35:30 -0300`
+- Feature/session id: `automation/fechamento-tecnico-diario-2026-04-19`
+- Repositório: `workspace root /Users/philipegermano/code` com sincronização canônica em `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `ops/portfolio-gitlab-worktree-isolation-2026-04-13` em `/Users/philipegermano/code/jpglabs/docs`
+- Provider: `Codex`
+- Objetivo aprovado: revisar o trabalho do dia nos workspaces configurados, atualizar a entrada atual do Diário de Bordo no Notion com resumo técnico, referências, comandos, inventário de arquivos e espelhar o mesmo handoff em `AGENT_BRIDGE.md`.
+
+### Summary
+
+- Não encontrei evidência material suficiente para afirmar progresso de produto novo em `2026-04-19` após a última automação de `2026-04-18 21:40:26 -0300`. O que existe hoje, de forma defensável, é um delta operacional mínimo e sem commits novos nos repositórios auditados.
+- A busca por histórico de shell do próprio dia retornou `__COUNT__=0`, então não há base confiável para reconstruir comandos executados manualmente fora desta automação. Isso reduz a capacidade de narrar “trabalho do dia” com o mesmo grau de precisão alcançado em `2026-04-18`.
+- O único toque diretamente observável em arquivo sob `/Users/philipegermano/code` com timestamp de hoje e sem ruído de `node_modules`, `.venv`, cache ou `.git` foi `openclaude/.claude/settings.local.json`. Sem diff versionado, sem sessão registrada e sem validação associada, tratei isso como ajuste operacional local de baixa confiança, não como entrega técnica consolidada.
+- Também apareceram sinais de atividade operacional em superfícies não versionadas ou não confiáveis para fechamento diário estrito, como `.mcp.json`, scripts de renderização MCP e artefatos de banco local (`mailpit.db`). Esses itens foram deliberadamente excluídos do corpo principal do fechamento porque o risco de superinterpretar manutenção automática ou toque incidental é maior do que o valor de listá-los como “trabalho”.
+- O resultado desta rodada, portanto, é um fechamento honesto: dia com baixa atividade material corroborável, sem novos testes ou builds de produto rastreáveis, e com a recomendação de melhorar a instrumentação da própria automação caso se queira um diário mais preciso quando o volume de Git estiver baixo.
+
+### Glossário multilíngue
+
+- `Glossário multilíngue: não aplicável nesta sessão.`
+
+### Risks And Gaps
+
+- a maior lacuna desta rodada é observabilidade: sem `session logs` do dia e sem histórico útil em shell, o fechamento fica restrito a Git, `mtime` e memória da automação
+- `jpglabs/docs` já está com worktree suja; qualquer rodada futura precisa continuar separando rigorosamente os artefatos de fechamento do restante do delta documental pendente
+- o `cwd` `/Users/philipegermano/code/jpglabs-knowledge-hub` continua poluindo a automação sem gerar evidência material útil
+- ajustes locais fora de Git, como `openclaude/.claude/settings.local.json`, permanecem difíceis de auditar e podem desaparecer do diário se não houver session logging ou commit correlato
+
+### Next Actions
+
+- remover ou substituir o `cwd` inerte `jpglabs-knowledge-hub` quando houver autorização para ajustar a automação
+- melhorar a instrumentação do fechamento diário com uma fonte confiável de comandos/sessões quando o dia não gerar commits
+- se houver atividade real em `2026-04-20`, voltar a priorizar Git + testes + sessão registrada como base do fechamento, usando `mtime` apenas como fallback
+
+### Handoff Notes
+
+- esta sessão deliberadamente não recicla o conteúdo robusto de `2026-04-18`; ela registra um dia de baixa atividade corroborável
+- se um provider posterior descobrir evidência melhor para `2026-04-19` (por exemplo logs de sessão externos ou commit tardio com timestamp compatível), o correto é atualizar esta entrada, não sobrescrever o fechamento anterior de `2026-04-18`
+- no Notion, a página de `19/04/2026` deve ser criada com o mesmo princípio: registrar explicitamente a baixa atividade e as limitações de evidência, em vez de forçar uma narrativa de progresso inexistente
+<!-- session-bridge:docs-daily-technical-closure-2026-04-19-session:end -->
+
+
+<!-- session-bridge:docs-daily-technical-closure-2026-04-20-session:start -->
+## 2026-04-20 — daily technical closure
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-20 21:36:20 -0300`
+- Feature/session id: `automation/fechamento-tecnico-diario-2026-04-20`
+- Repositório: `workspace root /Users/philipegermano/code` com sincronização canônica em `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `ops/portfolio-gitlab-worktree-isolation-2026-04-13` em `/Users/philipegermano/code/jpglabs/docs`; os commits auditados do dia ficaram concentrados em branches de produto já abertas, sobretudo `feat/shared-auth-realm-s1a`
+- Provider: `Codex`
+- Objetivo aprovado: revisar o trabalho material de `2026-04-20` nos workspaces configurados, consolidar o fechamento técnico no Notion e espelhar o mesmo handoff em `AGENT_BRIDGE.md` usando o template canônico
+
+### Summary
+
+- O trabalho material do dia ficou concentrado em duas frentes. Em `openclaude-hub`, a branch `feat/shared-auth-realm-s1a` evoluiu de um fix estrutural de cookies (`sameSite` derivado de `secureCookies`) para suporte a `.env.local`, rebrand visual `Cartesian Red` no client Axis e, por fim, a fatia S1A de autenticação client-side: `LoginPage` com OAuth `GitHub/Google/Apple`, `AuthContext` com token em memória, `Supabase client` sem `localStorage`, `AuthCallback` trocando o `access_token` do Supabase por JWT próprio via `/auth/exchange` e `fetch interceptor` com mutex/retry para `401`. O próprio commit final registra que `/auth/refresh` ainda degrada para logout em `404`, deixando explícito que a continuação natural é a Sprint `1B`.
+- Em `jpglabs-portfolio`, a linha do dia saiu de configuração local `cross-subdomain localhost` para uma exploração visual forte da linguagem `Cartesian Red`. O protótipo `d9` virou showcase canônico com motion, motifs e coord plot; o `d10` trouxe a homepage do portfólio para a mesma gramática; depois houve ajuste fino de axes e paleta segundo a referência `d8-canonical`, extração dos tokens para o package compartilhado `@jpglabs/cartesian-red` e correção da física perceptual do tilt para girar contra o cursor. Além dos commits, a worktree atual mostra a próxima fatia já em andamento: `CartesianBackground` virou componente mais rico, com modos `ambient` e `showcase`, testes novos e adoção dessa linguagem nas páginas de produto.
+- Fora dessas duas frentes, a auditoria não encontrou progresso novo defensável em `portfolio-backend`, `portfolio-mobile`, `mcp-agent-bridge`, `openclaude`, `trading-bot` ou no segundo `cwd` da automação (`/Users/philipegermano/code/jpglabs-knowledge-hub`). `docs`, `jpglabs-dashboard` e `FrankMD` seguem com worktrees sujas, mas sem `mtime` de `2026-04-20`; tratei isso como risco herdado e não como entrega do dia.
+- A maior limitação observacional continua sendo rastreabilidade de comandos humanos fora das sessões persistidas. A leitura de `~/.zsh_history` para `2026-04-20` retornou `__COUNT__=0`, então os comandos registrados abaixo são os auditáveis nesta automação e nas validações executadas agora, não uma reconstrução completa da atividade interativa do usuário ao longo do dia.
+
+### Glossário multilíngue
+
+Glossário multilíngue: não aplicável nesta sessão.
+
+### Risks And Gaps
+
+- `openclaude-hub` não saiu totalmente verde neste runtime porque a suíte que sobe servidor/socket encontra restrição de bind (`EPERM`); isso impede afirmar com confiança total se houve regressão funcional nas rotas E2E ou apenas limitação do sandbox
+- `jpglabs-portfolio` encerrou o dia com worktree aberta já validada localmente, mas ainda sem commit para a fatia do novo `CartesianBackground` e do package compartilhado
+- `jpglabs/docs`, `jpglabs-dashboard` e `FrankMD` continuam com worktrees sujas herdadas; como não houve `mtime` novo em `2026-04-20`, elas entram neste fechamento como risco de governança, não como progresso do dia
+- a ausência de histórico útil em `~/.zsh_history` mantém baixa a observabilidade de comandos manuais fora das sessões persistidas
+- a projeção derivada do grafo MCP Memory não foi aplicada porque o sync final encontrou `Docker Desktop is not running`; o sidecar JSON local existe e pode ser reprojetado depois
+
+### Next Actions
+
+- validar `openclaude-hub` fora deste sandbox, em runtime que permita bind de portas, para separar definitivamente falha ambiental de possível regressão nas rotas de auth
+- consolidar e commitar a worktree atual de `jpglabs-portfolio`, especialmente `CartesianBackground` e o restante do package `packages/cartesian-red`
+- revisar se o `cwd` secundário `/Users/philipegermano/code/jpglabs-knowledge-hub` ainda agrega valor à automação ou se só aumenta ruído operacional
+
+### Handoff Notes
+
+- trate `2026-04-20` como dia dominado por duas trilhas: `S1A OAuth` em `openclaude-hub` e `Cartesian Red`/tokens compartilhados em `jpglabs-portfolio`
+- não reclassifique `docs`, `dashboard` ou `FrankMD` como entrega do dia sem nova evidência temporal; nesta rodada eles foram apenas risco herdado
+- o Notion continua sendo diário, não board de execução; qualquer continuação de roadmap deve permanecer em `Jira + Confluence`
+- o sidecar canônico desta sessão já existe em `/Users/philipegermano/code/jpglabs/docs/memory/events/2026-04-20/docs-daily-technical-closure-2026-04-20-session.json`; se for necessário reprojetar o grafo depois, basta repetir a projeção derivada quando `Docker Desktop` estiver saudável
+<!-- session-bridge:docs-daily-technical-closure-2026-04-20-session:end -->
+
+
+<!-- session-bridge:docs-daily-technical-closure-2026-04-21-session:start -->
+## 2026-04-21 — daily technical closure
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-21 21:37:30 -0300`
+- Feature/session id: `automation/fechamento-tecnico-diario-2026-04-21`
+- Repositório: `workspace root /Users/philipegermano/code` com sincronização canônica em `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `ops/portfolio-gitlab-worktree-isolation-2026-04-13` em `/Users/philipegermano/code/jpglabs/docs`
+- Provider: `Codex`
+- Objetivo aprovado: revisar o delta posterior ao fechamento anterior, atualizar a entrada atual do Diário de Bordo e espelhar o mesmo handoff em `AGENT_BRIDGE.md`.
+
+### Summary
+
+- Não encontrei delta técnico material novo após o fechamento anterior de `2026-04-20 21:30:38 -0300`. A única atividade diretamente observável no intervalo foi a persistência dos próprios artefatos documentais do fechamento de `20/04` dentro de `jpglabs/docs`, o que não deve ser reinterpretado como trabalho novo do dia.
+- O estado relevante para continuidade continua concentrado em worktrees já abertas antes desta rodada. `jpglabs-portfolio` segue como a frente mais concreta, com WIP em `CartesianBackground`, páginas públicas e scaffolding do package `packages/cartesian-red`; `jpglabs-dashboard` permanece com uma worktree ampla e suja em `main`; `jpglabs/docs` e `FrankMD` continuam com pendências documentais e operacionais igualmente herdadas.
+- Como não houve evidência nova suficiente em Git ou `mtime`, tratei essas superfícies como risco de continuidade e não como entrega de `21/04`. Isso evita duplicar o fechamento robusto de ontem e preserva o diário como trilha factual, não narrativa inflada.
+- Os comandos registrados abaixo são os desta automação de auditoria e sincronização. Eles explicam como o fechamento foi validado hoje, não tentam reconstruir retroativamente uma sessão de desenvolvimento que não deixou trilha material suficiente neste dia.
+
+### Glossário multilíngue
+
+Glossário multilíngue: não aplicável nesta sessão.
+
+### Risks And Gaps
+
+- a maior lacuna desta rodada é observabilidade: sem commits, sem session log útil e sem `mtime` material fora dos próprios artefatos do fechamento anterior, o diário de hoje precisa assumir postura conservadora
+- `jpglabs-dashboard`, `jpglabs-portfolio`, `jpglabs/docs` e `FrankMD` seguem com worktrees sujas; isso é relevante para continuidade, mas não foi promovido a trabalho novo de `21/04`
+- se houver atividade real fora de Git em dias semelhantes, a automação continuará subestimando progresso até existir uma fonte mais confiável de session logging ou histórico operacional
+
+### Next Actions
+
+- retomar a frente mais concreta em aberto, hoje `jpglabs-portfolio`, e commitar slices menores para melhorar rastreabilidade do próximo fechamento
+- estabilizar a governança de worktree em `jpglabs-dashboard` e `jpglabs/docs` antes de ampliar mais o delta aberto
+- reforçar instrumentação de sessão quando o dia não gerar commits, para reduzir falsos negativos em fechamentos futuros
+
+### Handoff Notes
+
+- esta sessão fecha `21/04/2026` como dia sem delta técnico material novo após o encerramento de `20/04`
+- não reusar o resumo robusto de `20/04` nem reinterpretar as worktrees herdadas como progresso de `21/04` sem evidência posterior a `2026-04-20 21:30:38 -0300`
+- o próximo agente deve partir do pressuposto de que os pontos de continuidade continuam sendo as worktrees abertas já conhecidas, principalmente `jpglabs-portfolio` e `jpglabs-dashboard`
+<!-- session-bridge:docs-daily-technical-closure-2026-04-21-session:end -->
+
+<!-- session-bridge:portfolio-auth-theme-analysis-2026-04-22-session:start -->
+## 2026-04-22 — portfolio auth and theme analysis
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-22 21:04:24 -0300`
+- Feature/session id: `analysis/portfolio-auth-theme-split-2026-04-22`
+- Repositório: análise cruzada em `/Users/philipegermano/code/jpglabs/jpglabs-portfolio` e `/Users/philipegermano/code/jpglabs/portfolio-backend`
+- Branch ativa: não verificada; o preflight em `/Users/philipegermano/code/jpglabs` não encontrou `.git` no path documental consultado
+- Provider: `Codex`
+- Objetivo aprovado: analisar o mesmo fluxo de acesso/OAuth no webapp de portfólio, separar a lane ativa da lane legada e avaliar também o controle de cor/tema
+
+### Summary
+
+- A análise confirmou que hoje existem duas superfícies diferentes sendo confundidas no incidente. `https://jpglabs.com.br` é a lane atual em `Next.js` (`portfolio-backend`), enquanto `https://portifolio.jpglabs.com.br` é a lane legada em `Vite + Supabase` (`jpglabs-portfolio`).
+- Na lane atual (`jpglabs.com.br`), o problema é anterior ao clique no provider: `GET /api/auth/providers`, `GET /api/auth/session` e `GET /api/auth/signin` retornam `500` com a mensagem padrão do `NextAuth` de erro de configuração. O código mostra `NextAuth(authOptions)` sem `secret` explícito em `[route.ts](/Users/philipegermano/code/jpglabs/portfolio-backend/app/api/auth/[...nextauth]/route.ts:1)` e consumo de `process.env.NEXTAUTH_SECRET` no middleware em `[middleware.ts](/Users/philipegermano/code/jpglabs/portfolio-backend/middleware.ts:6)`, o que torna `NEXTAUTH_SECRET` ausente/inválido a hipótese principal. Uma hipótese secundária é falha de bootstrap em provider/env no módulo `[lib/auth.ts](/Users/philipegermano/code/jpglabs/portfolio-backend/lib/auth.ts:133)`, especialmente Apple.
+- Na lane legada (`portifolio.jpglabs.com.br`), o fluxo OAuth/Supabase tem dois problemas estruturais. Primeiro, usuário sem `profile` cai em `isPending`, então `isAuthenticated` fica falso e o callback expira em 8s em vez de mostrar estado de aprovação; isso está em `[AuthContext.tsx](/Users/philipegermano/code/jpglabs/jpglabs-portfolio/src/context/AuthContext.tsx:154)` e `[AuthCallback.tsx](/Users/philipegermano/code/jpglabs/jpglabs-portfolio/src/pages/AuthCallback.tsx:27)`. Segundo, `.env.production` não define `VITE_HUB_URL`, enquanto o código faz fallback para `http://localhost:8787` em `[AuthContext.tsx](/Users/philipegermano/code/jpglabs/jpglabs-portfolio/src/context/AuthContext.tsx:11)`; isso quebra qualquer integração real com o hub em produção.
+- O controle de cor no legado existe só no nível de tokens. O DS canônico declara `dark` e `light` via `:root[data-theme="..."]` em `[packages/cartesian-red/tokens.css](/Users/philipegermano/code/jpglabs/jpglabs-portfolio/packages/cartesian-red/tokens.css:45)`, mas o documento raiz fixa apenas `<html class="dark">` em `[index.html](/Users/philipegermano/code/jpglabs/jpglabs-portfolio/index.html:2)` e não há writer de `data-theme` no app. Além disso, várias telas ainda usam cores literais (`#08090a`, `#111214`, `blue-*`, `gray-*`) fora dos tokens, o que torna o controle de cor parcial e inconsistente.
+
+### Risks And Gaps
+
+- O `500` do `jpglabs.com.br` não foi confirmado com log de servidor; a hipótese mais forte é configuração do `NextAuth`, mas ainda falta validação no runtime/deploy real.
+- O callback `500` capturado no screenshot do Supabase pode envolver allowlist/provider no painel Supabase além do problema local de `pending`; a análise atual cobriu o cliente e os envs do repo.
+- Não houve build nem teste automatizado nesta sessão; a evidência é de inspeção de código e reprodução HTTP/browser.
+
+### Next Actions
+
+- Priorizar a correção da lane atual primeiro: validar `NEXTAUTH_SECRET`, `NEXTAUTH_URL` e envs de provider no deploy do `portfolio-backend`, porque `jpglabs.com.br` está quebrado antes mesmo do OAuth começar.
+- Depois, na lane legada, corrigir o contrato de `pending approval` no callback e implantar um writer real de `data-theme` antes de tentar usar a light theme como controle de cor.
+
+### Handoff Notes
+
+- A skill `teams` foi usada nesta análise com suporte de dois subagentes; o consenso convergiu para separar claramente a lane `NextAuth/Next.js` da lane `Supabase/Vite`.
+- Não houve alteração de código de produto nesta sessão; apenas diagnóstico e registro operacional.
+<!-- session-bridge:portfolio-auth-theme-analysis-2026-04-22-session:end -->
+
+
+<!-- session-bridge:docs-daily-technical-closure-2026-04-23-session:start -->
+## 2026-04-23 — daily technical closure
+
+### Session Metadata
+
+- Timestamp completo do fechamento: `2026-04-23 21:40:23 -0300`
+- Feature/session id: `automation/fechamento-tecnico-diario-2026-04-23`
+- Repositório: `workspace root /Users/philipegermano/code` com sincronização canônica em `/Users/philipegermano/code/jpglabs/docs`
+- Branch ativa: `ops/portfolio-gitlab-worktree-isolation-2026-04-13` em `/Users/philipegermano/code/jpglabs/docs`; workspaces auditados com delta material hoje: `jpglabs/docs@ops/portfolio-gitlab-worktree-isolation-2026-04-13`, `jpglabs/jpglabs-dashboard@main`, `jpglabs/jpglabs-portfolio@feat/consolidation-phase-2`, `jpglabs/openclaude-hub@main` e `jpglabs/portfolio-backend@feat/cleanup-migrated-ui`
+- Provider: `Codex`
+- Objetivo aprovado: revisar o trabalho material de `2026-04-23` nos workspaces configurados, atualizar a entrada atual do Diário de Bordo no Notion com resumo técnico, referências, comandos, arquivos criados/modificados e espelhar o mesmo handoff em `AGENT_BRIDGE.md` usando o template canônico
+
+### Summary
+
+- O dia ficou distribuído em cinco frentes materiais e coerentes entre si. Em `jpglabs/docs`, a manhã consolidou governança do workspace, registrou `openclaude-hub` como contexto canônico sob `jpglabs/` e produziu documentação de infraestrutura para o roster Ollama do dia, preset Axis e bench replay. O merge `8f3c1e8` indica que a trilha documental já foi promovida para `main`, mas a worktree atual do repo continua suja com material adicional não consolidado; por isso o preflight permitiu auditoria, mas bloqueou qualquer `git pull --ff-only`.
+- Em `jpglabs-dashboard`, o dia começou com a absorção do backend do `knowledge-hub-app` para dentro do cockpit local-first: contratos `memory-envelope`, `pi-runtime`, rota read-only `/api/memory`, integração `finance` via Supabase e rotas REST específicas. Na sequência, a UI foi empurrada para a linguagem `Cartesian Red`, com tokens próprios, `Fraunces` + `IBM Plex`, navegação reagrupada, páginas `guardian`, `instances`, `finance` e um catálogo de protótipos copiado do portfólio para dentro do próprio dashboard. O build fechou com sucesso, mas expôs um warning de tracing em `/api/memory` porque a rota toca filesystem/path resolution de forma ampla demais e acaba puxando `next.config.ts` para a NFT list.
+- Em `jpglabs-portfolio` e `portfolio-backend`, a tarde/noite foi uma consolidação de fronteira: o frontend absorveu praticamente toda a UI migrável do backend, incluindo helpers auth-aware, componentes visuais, dashboards internos e a home integrada no `App.tsx`; em paralelo, o backend foi amputado da superfície pública e reposicionado como API-only, removendo páginas e componentes transferidos. O trade-off apareceu na validação: `portfolio-backend` passou em `test` e `build`, enquanto `jpglabs-portfolio` buildou, mas quebrou no smoke test por mock incorreto de `localStorage` e falhou no lint com problemas reais de pureza React em `LanguageProvider`, `AuthContext` e `SessionTimeoutManager`.
+- Em `openclaude-hub`, o foco continuou sendo auth hardening do Axis: lookup de refresh token por fingerprint HMAC, shell que sobe mesmo quando resta só `refresh_token`, rota `/auth/refresh` e bypass explícito via env para sessões controladas. O slice está tecnicamente consistente em `lint` e `typecheck`, e a parte de domínio/persistência passou; o que permaneceu vermelho foi a camada de rota testada por `supertest`, que neste runtime não consegue subir `app.listen(0)` e cai em `TypeError: null is not an object (evaluating 'app.address().port')` ou `Failed to start server. Is port 0 in use?`. O padrão é compatível com bloqueio de bind efêmero do sandbox, não com falha lógica já isolada no domínio.
+- A automação diária precisou ainda lidar com o delta das skills compartilhadas. O sync padrão confirmou atualização de `/.claude/skills`, mas falhou ao tocar `~/.claude/agents` e `~/.codex/skills` por permissão do sandbox. Em vez de esconder isso, o fechamento registra a realidade: o workspace ficou consistente apenas na superfície gravável deste runtime, e a paridade completa de mirrors permanece pendente de um ambiente com acesso aos diretórios pessoais completos.
+
+### Glossário multilíngue
+
+Glossário multilíngue: não aplicável nesta sessão.
+
+### Risks And Gaps
+
+- `jpglabs-portfolio` saiu do dia com regressão concreta de qualidade: smoke test quebrado, `lint` vermelho e bundle principal grande. Essa é a principal pendência técnica nova do fechamento.
+- `jpglabs-dashboard` está funcional, mas o warning de NFT/tracing em `/api/memory` merece correção antes de a rota virar baseline estável do build.
+- `jpglabs-dashboard` continua sem remote configurado. Os commits do dia existem só no filesystem local.
+- `openclaude-hub` não teve regressão lógica comprovada no domínio, mas a camada de rota HTTP segue sem harness confiável neste sandbox; é preciso reexecutar esses testes num runtime que permita bind efêmero.
+- `portfolio-backend` buildou e testou, mas ainda depende de secrets explícitos para ser secure-by-default em runtime real; o log deixou isso claro.
+- `jpglabs/docs` continua com worktree suja. O merge já foi feito, porém ainda existe material documental local não consolidado.
+- o sync de skills compartilhadas ficou parcial por limitação do sandbox. A automação não conseguiu garantir paridade entre `/.claude/skills`, `~/.claude/agents` e `~/.codex/skills`.
+
+### Next Actions
+
+- corrigir imediatamente os erros de `jpglabs-portfolio` em `LanguageProvider`, `AuthContext` e `SessionTimeoutManager`, porque hoje eles já impedem o repositório de fechar em `lint` e `test`
+- decidir e configurar o remote de `jpglabs-dashboard`, depois empurrar a cadeia de commits do dia para remover o risco de perda local
+- revisar a implementação de `/api/memory` no `jpglabs-dashboard` para reduzir o blast radius do trace de build
+- reexecutar os testes de rota do `openclaude-hub` em ambiente que permita `app.listen(0)` para diferenciar definitivamente limitação de sandbox de bug de integração HTTP
+
+### Handoff Notes
+
+- o fechamento de `23/04` combina a rodada documental/infra da manhã com os commits posteriores de consolidação frontend/backend que ainda não estavam refletidos no diário local
+- a página canônica do Diário de Bordo para hoje é `https://www.notion.so/34ca2cee2bcc81f1b825fac9352a83d7`
+- o próximo agente não deve repetir o sync amplo das skills sem considerar o sandbox atual; a única variante comprovadamente segura daqui foi `python3 /Users/philipegermano/code/.agents/scripts/sync_shared_skills.py --skip-agents --skip-codex`
+<!-- session-bridge:docs-daily-technical-closure-2026-04-23-session:end -->
+
+<!-- session-bridge:axis-post-deploy-fixes-2026-04-24-session:start -->
+## 2026-04-24 — Axis post-deploy fixes + tech review squad
+
+### Contexto operacional
+Sessão continuação da rodada 2026-04-23. Foco: estabilizar `chat.jpglabs.com.br` pós-merge do bypass, destravar dashboard, rodar `tech-review-squad` sobre a evolução do axis e preparar a próxima fase multi-provider (Ollama + Claude + Gemini + Codex).
+
+### Entregáveis consolidados
+- Axis (`chat.jpglabs.com.br`) voltou a servir com CSS + bypass client-side funcionando. Fixes em cascata: shim `window.__HUB_ENV__` com `VITE_AUTH_BYPASS`, `AuthContext` lendo shim, rota legacy `/auth/login-page` removida, middleware sem redirect, `<link rel="stylesheet">` no `client/index.html`, cache-bust `?v=$BUILD_ID` em `scripts/build-client.sh`. Commits: `797e523`, `9bfb18c`, `7071725`, `a862553` em `axis-backend/main`.
+- Dashboard sem auth via `proxy.ts` guard `isAuthDisabled()` + Dockerfile portável + `vendor/cartesian-red/` + `copy-prototypes` soft-skip. Repo GitLab `jpglabs-dashboard` criado (não existia). MR !1 aberto.
+- Portfolio-backend root retorna JSON API-only via `app/route.ts` (substitui 404).
+- Frontend SPA com nova rota `/all-pages` + menu item — entregável da tarde.
+- Tech review squad (7 reviewers) consolidada: 5 blockers, 8 decisões PO, 4 sprints propostas.
+
+### Decisões pendentes do PO (bloqueiam S1)
+- D1: Ollama na VPS atual (CPU-only) vs Groq/Together/Fireworks
+- D2: BYO key vs server-side only
+- D3: JWT custom + Supabase JWT — consolidar?
+- D4: URLs Ollama listadas parecem fictícias — validar antes de cachear
+- D5-D8: rotação automatizada, Supabase tier, troca de provider em thread, escopo do gRPC
+
+### Bloqueadores técnicos antes de desligar bypass
+- Secrets comprometidos (visíveis via `systemctl show`): `JWT_SECRET_CURRENT`, `REFRESH_PEPPER_V1`, `GITHUB_CLIENT_SECRET`, `DATABASE_URL`
+- Zero testes do `AUTH_BYPASS` on/off (server + client)
+- `IProviderAdapter` precisa ser extraído em `server/adapters/ports.ts` antes de adicionar providers novos
+- `auth.routes.ts` + `auth.routes.new.ts` em shadow "first-match wins" — consolidar
+- Rename físico `openclaude-hub` → `axis-backend` pendente em 7 superfícies (path local Mac, `/opt/`, systemd unit, container redis, docs dir, GitHub remote, DNS)
+
+### Próximos gates
+- Abrir ADR `IProviderAdapter` + fechar rename físico numa única sessão dedicada antes de S1
+- Validar URLs Ollama com user
+- Preparar runbook de rotação de secrets pra executar em janela (bypass → auth real em S3)
+
+### Handoff Notes
+- `daily/2026-04-24.md` recebeu entrada completa SESSION_CLOSE
+- `FrankMD/notes/history/april-2026/auth-bypass-k3s-cleanup-round.md` ganhou seção `2026-04-24 — Axis post-deploy fixes + tech review squad`
+- PPT `arch-local-vs-vps-2026-04-23.md` ainda não reflete a fase multi-provider — doc-owner flagou contradição entre "axis fora do escopo" vs "migrar axis pra pod está em o-que-sobra"
+- CLAUDE.md do repo axis também está com drift (menciona Caddy, não cita bypass nem cache-bust)
+- User pediu `/compact` após fechamento — Claude Code não dispara compact via tool, usuário precisa rodar manualmente na próxima interação
+<!-- session-bridge:axis-post-deploy-fixes-2026-04-24-session:end -->
+
+<!-- session-bridge:axis-ollama-urls-validation-2026-04-24-session:start -->
+## 2026-04-24 (tarde) — Correção: URLs Ollama validadas
+
+WebFetch confirmou que `docs.ollama.com` é a documentação oficial do Ollama (branding e links `github.com/ollama/ollama-python` + `ollama-js` confirmam). As rotas `/integrations/openclaw`, `/integrations/codex`, `/integrations/claude-code` e `/api/introduction` retornam conteúdo real descrevendo o comando `ollama launch <integration>` (feature nova no runtime) + modelos cloud/local + headless mode.
+
+**Impacto:** D4 da tech-review-squad resolvida. URLs podem ser citadas sem flag TBD em `docs/projects/axis-backend/references.md`. A fase Sprint A (IProviderAdapter + Ollama piloto) fica destravada na frente documental.
+
+**Aprendizado operacional:** flag "parece fictício" em futuras reviews deve vir de WebFetch/curl empírico, não de "termo não reconhecido no treino do agente". Regra implícita a adicionar em `tech-review-squad` skill.
+<!-- session-bridge:axis-ollama-urls-validation-2026-04-24-session:end -->
+
+<!-- session-bridge:axis-po-decisions-2026-04-24-session:start -->
+## 2026-04-24 (fim) — Decisões D1–D8 do PO resolvidas
+
+Todas as 8 decisões pendentes da tech-review-squad foram respondidas pelo PO, fechando os bloqueadores de decisão pra Sprint A/B/C/D.
+
+### Resoluções
+
+- **D1 — Ollama na VPS (CPU-only)**: aceito como **fallback + dev + testes de routing**. Produção interativa usa Groq/Together/Fireworks pra não frustrar UX com 3-8 tok/s.
+- **D2 — BYO key vs server-only**: **server-only no v1**, BYO key fica no backlog da fase 2 (Supabase Vault pra encryption at rest quando entrar).
+- **D3 — JWT custom + Supabase JWT**: **consolidar em Supabase JWT** + `app_metadata.role_version`. Elimina issuer próprio e simplifica RLS.
+- **D4 — URLs Ollama**: validadas como oficiais (resolução documentada na bridge anterior).
+- **D5 — Rotação de secrets**: **Infisical Cloud dev tier** ($0 até 5 users, UI + audit + CLI). Fica na Sprint D4. Alternativa: SOPS+age se quiser zero dep externa.
+- **D6 — Supabase tier**: **free**. Implica RPO ~24h via dump diário, sem PITR. Dump semanal pra R2/B2 como defense-in-depth (infra-architect review).
+- **D7 — Troca de provider mid-thread**: **summarization do histórico** ao cross-provider. Cada provider tem context window diferente; summarization normaliza.
+- **D8 — gRPC como harness central**: **aceito como harness**, mas escopo (interno apenas vs público com grpc-web na frente) fica pendente de confirmação final na próxima sessão.
+
+### Próxima sessão — ordem aprovada
+
+1. ✅ Validar URLs Ollama — feito (D4)
+2. Fechar rename físico openclaude-hub → axis-backend (7 superfícies listadas pelo docs-owner)
+3. Extrair `IProviderAdapter` em `server/adapters/ports.ts` + refatorar `anthropic-stream.ts` implementando + resolver escopo gRPC (D8 interno vs público)
+4. Começar Sprint A: Ollama adapter piloto usando `ollama launch` pattern (`http://localhost:11434/v1` OpenAI-compat)
+
+### Harness pattern confirmado pelo PO
+
+- Gosta do harness Claude Code + Codex (SessionStart hook, AGENTS.md, MCP nativo, skills, subagentes)
+- `ollama launch {claude,codex,openclaw}` expõe Anthropic-compat e OpenAI-compat APIs apontando pra `localhost:11434` — mesmo shape de adapter serve pra axis com `baseURL` diferente
+- Axis vira harness próprio que orquestra esses providers via `IProviderAdapter`
+
+### Axis handoff (backlog explícito)
+
+Injeção server-side do `session-handoff-loader.sh` em `POST /api/chat/sessions` fica no backlog da fase multi-provider, a ser implementado junto com o routing per-session.
+<!-- session-bridge:axis-po-decisions-2026-04-24-session:end -->
+
+<!-- session-bridge:axis-final-locks-2026-04-24-session:start -->
+## 2026-04-24 (fechamento final) — D5 + D8 fechadas
+
+- **D5 confirmado**: Infisical Cloud dev tier. Setup ~1h na Sprint D4. Quando passar de 5 users, migração pra self-hosted na VPS sem mudar adapters.
+- **D8 confirmado com escopo faseado**:
+  - **Sprint A-C (agora)**: gRPC **interno** — `IProviderAdapter` + adapters (Anthropic refactor, Ollama piloto, Gemini, Codex) falam gRPC dentro do axis. SPA e outros clientes continuam com WS/HTTP atual.
+  - **Backlog pós-MVP**: transformar em **harness público** — Envoy/grpc-web proxy na frente, SPA vira gRPC client, agentes externos (Claude Code, Codex, Pi, n8n) ganham gRPC adapters. Destrava axis como hub de verdade.
+
+### Backlog formal (para próximas sessões)
+
+1. Rename físico openclaude-hub → axis-backend (7 superfícies)
+2. Sprint A — `IProviderAdapter` ports.ts + Anthropic refactor + Ollama piloto (gRPC interno)
+3. Sprint B — Gemini + Codex adapters + schema `user_sessions` + selector UI
+4. Sprint C — auth real, desligar bypass, CSRF WS, session-provider binding
+5. Sprint D — Infisical migration + rotação completa de secrets
+6. Backlog (pós-MVP) — gRPC público + Envoy grpc-web proxy + agent adapters externos
+7. Backlog (pós-MVP) — axis handoff server-side injection (`session-handoff-loader.sh` em `POST /api/chat/sessions`)
+8. Backlog — BYO key com Supabase Vault
+<!-- session-bridge:axis-final-locks-2026-04-24-session:end -->
+
+<!-- session-bridge:docker-mcp-quality-lane-2026-04-24-session:start -->
+## 2026-04-24 — Docker MCP quality lane baseline
+
+### Contexto operacional
+
+Sessão Codex focada em conectar o workspace ao baseline Docker MCP de
+`/Users/philipegermano/code/config/mcp` e diagnosticar a lane de qualidade para
+desenvolvimento de software (`sonarqube`, lint/Semgrep e `sequentialthinking`).
+
+### Entregáveis consolidados
+
+- Paths da stack auxiliar corrigidos de `/Users/philipegermano/code/docker/`
+  para `/Users/philipegermano/code/config/docker/` em `Makefile`,
+  `bootstrap.sh`, `healthcheck.sh` e `docker-compose.yml`.
+- `.mcp.json` default realinhado ao baseline estável: `atlassian` removido do
+  default por depender da Secrets Engine local quebrada.
+- Criado `config/docker/.env` com defaults não secretos da stack `quality`.
+- Criado `scripts/smoke-mcp-quality.sh` + targets:
+  - `make smoke-mcp-quality` — estrito; falha se `semgrep/lint` não expuser tools.
+  - `make smoke-mcp-quality-diagnose` — permite bloqueio atual de `semgrep` para validar `sonarqube` e `sequentialthinking`.
+- Documentação curta atualizada em `config/mcp/README.md`,
+  `config/docker/secrets/README.md` e `jpglabs/docs/MCP_SETUP.md`.
+
+### Validação
+
+- Baseline Docker MCP dry-run: 83 tools; `sequentialthinking` expôs 1 tool.
+- `sonarqube` overlay dry-run: 17 tools via `docker-mcp-quality.yaml`.
+- Compose `quality`: sintaxe validada pelo smoke usando `config/docker/.env` e
+  `config/docker/secrets/sonarqube_db_password`.
+- `semgrep`: bloqueado; dry-run retorna `Unauthorized` e 0 tools.
+- `docker mcp secret ls`: bloqueado por timeout em
+  `resolver.v1.ResolverService/GetSecrets`.
+- `make smoke-mcp-quality` falha corretamente no lint; `make smoke-mcp-quality-diagnose` passa.
+
+### Riscos e bloqueios
+
+- Sem Docker MCP Secrets/OAuth Engine saudável, não há forma secure-by-default
+  de injetar `sonarqube.token` nem de estabilizar `semgrep` remoto.
+- Não promover `semgrep`, `sonarqube` ou `atlassian` para `.mcp.json` default
+  até dry-run limpo sem timeout/Unauthorized.
+
+### Próximo passo recomendado
+
+Restaurar a Secrets/OAuth Engine do Docker Desktop no host, confirmar
+`docker mcp secret ls`, sincronizar `sonarqube.token`, revalidar/autorizar
+`semgrep` e exigir `make smoke-mcp-quality` verde antes de declarar a lane de
+lint como fechada.
+<!-- session-bridge:docker-mcp-quality-lane-2026-04-24-session:end -->
+
+<!-- session-bridge:secrets-manager-bitwarden-realignment-2026-04-25-session:start -->
+## 2026-04-25 — Secrets Manager Bitwarden realignment
+
+### Contexto operacional
+
+Sessão Codex curta para validar o operator/skill `secrets-manager` e corrigir
+drift de governança: a fonte primária de secrets deve ser Bitwarden, não
+1Password.
+
+### Entregáveis consolidados
+
+- `/Users/philipegermano/code/.agents/operators/secrets-manager.md` atualizado
+  para usar `Bitwarden CLI (bw)` como source of truth primária.
+- Instruções substituídas de `op` para `bw status`, `BW_SESSION`,
+  `bw list items`, `bw get password` e `bw get item`.
+- Mirrors regenerados para `~/.claude/agents/secrets-manager.md` e
+  `~/.codex/skills/secrets-manager/SKILL.md`.
+- Drift adjacente em `n8n-workflow-specialist` corrigido para guardar
+  `N8N_ENCRYPTION_KEY` no Bitwarden.
+
+### Validação
+
+- `bw --version` validou Bitwarden CLI `2026.3.0`.
+- `bw status` validou runtime configurado sem ler secrets; vault atual está
+  locked.
+- Busca final por referências a `1Password`/`op` nas superfícies gerenciadas
+  retornou zero ocorrências.
+- `sync_shared_skills.py` regenerou 28 Claude skill wrappers, 10 flat agents e
+  30 Codex skill wrappers.
+
+### Próximo passo recomendado
+
+Quando uma tarefa precisar de credencial real, desbloquear Bitwarden por sessão
+com `BW_SESSION` e manter a regra de nunca ecoar valor de secret em stdout,
+logs, issue, PR ou documentação.
+<!-- session-bridge:secrets-manager-bitwarden-realignment-2026-04-25-session:end -->
+
+<!-- session-bridge:mcp-agent-bridge-catalog-channels-2026-04-25-session:start -->
+## 2026-04-25 — MCP Agent Bridge catalog + channels plan
+
+### Contexto operacional
+
+Sessão Codex para avançar o plano de disponibilização contínua de skills,
+operators e reviewers locais por MCP, com consumo por qualquer harness
+autorizado e observabilidade por dashboard, n8n e canais de mensagem.
+
+### Entregáveis consolidados
+
+- `mcp-agent-bridge` ganhou tool `agent_catalog` para listar artefatos locais:
+  `skill:*`, `operator:*` e `reviewer:*`.
+- `mcp-agent-bridge` ganhou tool `agent_dispatch_prompt` para gerar prompt de
+  dispatch seguro sem executar job.
+- Configuração passou a expor `WORKSPACE_ROOT`, `.agents/skills`,
+  `.agents/operators` e `.agents/reviewers`.
+- Contrato de providers passou a incluir `openclaw` como consumidor via
+  adaptador OpenClaw/Ollama; schema MCP de `session_open` agora usa a constante
+  central `PROVIDERS`.
+- Plano persistente criado:
+  `/Users/philipegermano/code/docs/superpowers/plans/2026-04-25-agent-orchestration-channels.md`.
+- Roadmap do `jpglabs-dashboard` atualizado com Trilha 5 para catálogo, health
+  e canais.
+
+### Validação
+
+- `npm test`: 10 arquivos, 33 testes passando.
+- `npx tsc --noEmit`: passou.
+- Smoke local do catálogo confirmou `operator:secrets-manager` com
+  `secret_policy: sensitive` e `risk_level: high`, sem exposição de secrets.
+
+### Decisões arquiteturais
+
+- `mcp-agent-bridge` permanece como plano de controle; OpenClaw/Ollama é
+  adaptador auxiliar/local-first.
+- Próximo corte técnico deve ser HTTP adapter local para consumidores sem MCP
+  nativo (`dashboard`, `n8n`, Slack/Discord/WhatsApp adapters).
+- Slack e Discord entram primeiro como notificações one-way com redaction.
+- WhatsApp fica condicionado a Meta WhatsApp Business Cloud API ou BSP confiável,
+  com consentimento, webhook verificado, templates e token no 1Password.
+- Execução de jobs fica bloqueada até existir fila, audit log, approval gate e
+  kill switch.
+
+### Próximo passo recomendado
+
+Implementar HTTP adapter local no `mcp-agent-bridge` com `GET /health`,
+`GET /agents`, `POST /dispatch-prompt` e autenticação bearer via 1Password.
+Depois conectar leitura read-only no `jpglabs-dashboard` e notificações
+Slack/Discord com redaction centralizada.
+<!-- session-bridge:mcp-agent-bridge-catalog-channels-2026-04-25-session:end -->
+
+<!-- session-bridge:secrets-manager-onepassword-reversal-2026-04-25-session:start -->
+## 2026-04-25 — Secrets Manager voltou para 1Password
+
+### Contexto operacional
+
+O owner corrigiu a decisão anterior: a fonte primária de secrets voltou a ser
+1Password, não Bitwarden. Esta seção supersede o handoff anterior de
+realinhamento para Bitwarden.
+
+### Entregáveis consolidados
+
+- `/Users/philipegermano/code/.agents/operators/secrets-manager.md` atualizado
+  para usar 1Password CLI (`op`) como source of truth primária.
+- `n8n-workflow-specialist` atualizado: `N8N_ENCRYPTION_KEY` deve ficar em
+  1Password.
+- Mirrors regenerados para:
+  - `~/.claude/agents/secrets-manager.md`
+  - `~/.codex/skills/secrets-manager/SKILL.md`
+  - `~/.codex/skills/n8n-workflow-specialist/SKILL.md`
+- Plano de orquestração de canais atualizado para guardar
+  `AGENT_BRIDGE_HTTP_TOKEN`, `N8N_API_KEY` e tokens de canais em 1Password.
+
+### Validação
+
+- `op --version`: 1Password CLI `2.34.0`.
+- `op account list`: CLI instalado, mas a integração com o desktop app não
+  respondeu; antes de ler secrets, abrir/desbloquear/reiniciar o app 1Password.
+- Busca final por referências operacionais a Bitwarden/bw nas superfícies
+  gerenciadas atuais retornou zero ocorrências.
+- Smoke do catálogo confirmou `operator:secrets-manager` com descrição
+  `1Password/Keychain`, `secret_policy: sensitive` e `risk_level: high`.
+- `npm test`: 11 arquivos, 39 testes passando.
+- `npx tsc --noEmit`: passou.
+
+### Regra atual
+
+1Password é a fonte primária atual. Bitwarden não deve ser usado por
+`secrets-manager` ou skills dependentes salvo nova instrução explícita do owner.
+<!-- session-bridge:secrets-manager-onepassword-reversal-2026-04-25-session:end -->
+
+<!-- session-bridge:taxonomy-migration-guardrails-2026-04-25-session:start -->
+## 2026-04-25 — Taxonomy migration guardrails
+
+### Contexto operacional
+
+Sessão Codex para analisar o workspace antes de continuar correções da última
+migração de taxonomia e prosseguir com ações no `mcp-agent-bridge`.
+
+### Achados
+
+- `jpglabs/docs/projects/` tem 18 diretórios; o plano original cobria apenas 5.
+- Há diretórios já migrados/idempotentes (`docs`, `openclaude`, parte de
+  `jpglabs-dashboard`) e diretórios com target ausente (`PieCenter`,
+  `apple-study-checklist`, `knowledge-hub-app`, `pi-local-app`, `pibar-macos`,
+  `piphone-ios`, `playground-2`).
+- `infrastructure` tem decisão registrada para permanecer como slice do hub,
+  sem repo independente.
+- `jpglabs-dashboard` está limpo em git e já tem commit recente integrando
+  `agent-bridge` no overview.
+
+### Entregáveis no agent-bridge
+
+- `taxonomy_migrate` agora ignora `DEPRECATED.md` como payload de migração.
+- Dry-run retorna diagnóstico seguro: `source`, `already_present`, `conflicts`,
+  `deprecated_marker_exists`, `safe_to_execute` e `warnings`.
+- Execução falha fechado quando há conflito no destino e `overwrite` não foi
+  autorizado.
+- Reexecução idempotente pula arquivos byte-identical.
+- Source inexistente retorna erro explícito.
+- Schema MCP de `taxonomy_migrate` recebeu `overwrite`.
+- Testes de conflito, idempotência e marker adicionados.
+
+### Validação
+
+- `npm test` em `mcp-agent-bridge`: 11 arquivos, 43 testes passando.
+- `npx tsc --noEmit` em `mcp-agent-bridge`: passou.
+- `npm test` em `jpglabs-dashboard`: 13 testes passando.
+- `npx tsc --noEmit` em `jpglabs-dashboard` falhou por estado preexistente:
+  `tsconfig.tsbuildinfo` EPERM, `.next/dev/types` stale para rotas removidas e
+  testes tipados como `ProcessEnv` sem `NODE_ENV`.
+
+### Próximo passo recomendado
+
+Não executar migração real sem novo dry-run. Primeiro lote seguro candidato:
+`imap-server`, `portfolio-backend`, `portfolio-mobile`, `openclaude-hub` e
+complemento idempotente de `jpglabs-dashboard`, desde que o target exista,
+`safe_to_execute: true` e `conflicts: []`.
+<!-- session-bridge:taxonomy-migration-guardrails-2026-04-25-session:end -->
+
+<!-- session-bridge:taxonomy-migration-first-batch-2026-04-25-session:start -->
+## 2026-04-25 — Taxonomy migration first safe batch
+
+### Contexto operacional
+
+Continuidade da sessao de guardrails: executar somente o primeiro lote que
+passou no dry-run com `safe_to_execute: true`, `conflicts: []`, target
+confirmado e sem `overwrite`.
+
+### Entregaveis
+
+- `imap-server`: 5 arquivos copiados para
+  `/Users/philipegermano/code/jpglabs/imap-server/docs`; target nao e repo git
+  isolado.
+- `portfolio-backend`: 7 arquivos copiados para
+  `/Users/philipegermano/code/jpglabs/portfolio-backend/docs`.
+- `portfolio-mobile`: 6 arquivos copiados para
+  `/Users/philipegermano/code/jpglabs/portfolio-mobile/docs`.
+- `openclaude-hub`: 6 arquivos copiados para
+  `/Users/philipegermano/code/jpglabs/openclaude-hub/docs`; worktree ja tinha
+  sujeira nao relacionada em `.idea/`, `.playwright-cli/` e `logs/`.
+- `jpglabs-dashboard`: 11 arquivos processados em
+  `/Users/philipegermano/code/jpglabs/jpglabs-dashboard/docs`, com 5 arquivos
+  ja idempotentes.
+- Origens receberam/atualizaram `DEPRECATED.md` como marcador de governanca.
+
+### Validacao
+
+- Dry-run pos-execucao confirmou estado idempotente para todos os cinco
+  projetos.
+- `conflicts: []` em todo o lote.
+- `DEPRECATED.md` nao foi copiado como payload.
+- `npm test` em `mcp-agent-bridge`: 11 arquivos, 43 testes passando.
+- `npx tsc --noEmit` em `mcp-agent-bridge`: passou.
+- `sync-memory.sh local-sync`: memoria compartilhada local atualizada.
+
+### Proximo passo recomendado
+
+Revisar/commitar docs adicionados nos repos de destino. Em seguida, priorizar
+novo dry-run para `FrankMD`, `jpglabs-saas` e revisao do target de `jpglabs`.
+Manter targets ausentes como `blocked` e `infrastructure` como slice do hub ate
+decisao explicita de ownership.
+<!-- session-bridge:taxonomy-migration-first-batch-2026-04-25-session:end -->
+
+<!-- session-bridge:dashboard-n8n-axis-agent-flow-2026-04-25-session:start -->
+## 2026-04-25 — Dashboard + n8n/Axis agent flow
+
+### Contexto operacional
+
+Sessao Codex para reativar o caminho do dashboard com secrets de GitHub/Google
+no 1Password e validar se os agents locais podem subir para automacoes n8n com
+visualizacao de flow e fila diaria hands-on pelo Axis.
+
+### Entregaveis
+
+- `jpglabs-dashboard` ganhou snapshot `n8n` no overview e componente
+  `AgentOrchestrationFlow` na home.
+- Flow visivel modela `.agents -> mcp-agent-bridge -> n8n -> Axis/peers` e
+  `bridge/n8n -> dashboard`.
+- `jpglabs-dashboard` ganhou `npm run sync-auth-env`, que busca
+  `JPGLabs Dashboard · GitHub OAuth` e `JPGLabs Dashboard · Google OAuth` no
+  1Password e atualiza `.env.local` sem imprimir valores.
+- Workflows n8n importaveis criados:
+  - `agent-bridge-catalog-sync.json`
+  - `agent-dispatch-approval.json`
+  - `axis-daily-hands-on.json`
+- `n8n-import-all.sh` corrigido para `automation/n8n-workflows` e atualizado
+  para importar os workflows de agentes.
+
+### Validacao
+
+- 1Password no shell Codex: `op account list`, `op vault list`, `op item list`
+  e `op whoami` falham porque o CLI nao conecta ao app desktop.
+- Dashboard auth config local: `NEXTAUTH_SECRET` OK; GitHub/Google continuam
+  disabled ate materializar `AUTH_GITHUB_*` e `AUTH_GOOGLE_*`.
+- Docker MCP: `n8n` aparece listado, mas secrets/OAuth engine ainda timeout e
+  `n8n.api_key` ausente.
+- n8n runtime: `127.0.0.1:5678` nao responde; rota VPS
+  `https://n8n.srv1443703.hstgr.cloud` tambem nao conectou.
+- Smoke bridge HTTP com token local temporario validou `/health`,
+  `/agents?query=dev-lead` e `/dispatch-prompt`.
+- Workflows JSON parse: OK.
+- `npm test` no dashboard: 15 testes passando.
+- `npm run build` no dashboard: passou, com warning NFT preexistente em
+  `src/app/api/memory/route.ts`.
+- Dev server dashboard ativo em `http://localhost:3003`.
+
+### Proximo passo recomendado
+
+1. Restaurar 1Password desktop integration para o shell Codex.
+2. Rodar `npm run sync-auth-env` no dashboard e confirmar GitHub/Google
+   `enabled:true` em `/api/auth/config`.
+3. Recuperar n8n local/VPS e configurar `N8N_API_KEY`.
+4. Importar workflows com
+   `/Users/philipegermano/code/jpglabs/docs/scripts/n8n-import-all.sh`.
+5. Implementar endpoint Axis para `AXIS_AGENT_TASK_WEBHOOK_URL` com HMAC,
+   idempotencia, fila, approval gate e audit log.
+<!-- session-bridge:dashboard-n8n-axis-agent-flow-2026-04-25-session:end -->
